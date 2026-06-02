@@ -350,7 +350,23 @@ const popularRoutes = [
 ];
 
 // ===== State =====
-let state = {lang:'fr',tripType:'roundtrip',flights:[],rawFlights:[],filtered:[],sortBy:'original',filterStops:'all',filterLuggage:false,filterAirlines:[],searchDone:false};
+const state = {
+  lang: 'fr',
+  tripType: 'roundtrip',
+  searchDone: false,
+  flights: [],       // Processed base flights
+  filtered: [],      // After filters/sorts applied
+  rawFlights: [],    // Stored raw output for dynamic tab swapping
+  visibleCount: 15,  // Pagination for results
+  
+  // Sort
+  sortBy: 'best',
+  
+  // Filters
+  filterStops: 'all', // all, direct, 1stop
+  filterLuggage: false,
+  filterAirlines: []
+};
 const $ = id => document.getElementById(id);
 let globalAirports = [];
 const getApt = iata => (globalAirports.find(a => a.iata === iata) || airports.find(a => a.iata === iata));
@@ -607,6 +623,7 @@ function applySort() {
   }
 
   state.filtered=r;
+  state.visibleCount = 15;
   renderFlights();
 }
 
@@ -639,7 +656,26 @@ function renderFlights() {
     return;
   }
   if(cnt) cnt.textContent=`${state.filtered.length} ${t.results_found}`;
-  c.innerHTML=state.filtered.map((f,i)=>buildCard(f,i)).join('');
+  
+  const visibleFlights = state.filtered.slice(0, state.visibleCount);
+  let html = visibleFlights.map((f,i) => buildCard(f,i)).join('');
+  
+  if (state.filtered.length > state.visibleCount) {
+    html += `
+      <div style="text-align:center; margin:24px 0 48px;">
+        <button onclick="showMoreFlights()" style="background:var(--primary); color:#fff; border:none; padding:12px 32px; border-radius:30px; font-weight:600; font-family:'Inter',sans-serif; cursor:pointer; font-size:15px; box-shadow:0 4px 12px rgba(10,54,157,0.25);">
+          ${state.lang === 'fr' ? 'Afficher plus de résultats' : (state.lang === 'ar' ? 'عرض المزيد من النتائج' : 'Show more results')}
+        </button>
+      </div>
+    `;
+  }
+  
+  c.innerHTML = html;
+}
+
+function showMoreFlights() {
+  state.visibleCount += 15;
+  renderFlights();
 }
 
 function buildCard(f, idx) {
