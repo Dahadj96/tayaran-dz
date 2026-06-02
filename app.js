@@ -933,10 +933,12 @@ function setupAutocomplete(inputId, dropdownId) {
 
     // Add click events to items
     dropdown.querySelectorAll('.ac-item').forEach(item => {
-      item.addEventListener('mousedown', (e) => {
+      const handleSelect = (e) => {
         e.preventDefault(); // prevent input blur before selection
         selectItem(matches[parseInt(item.dataset.idx)]);
-      });
+      };
+      item.addEventListener('mousedown', handleSelect);
+      item.addEventListener('click', handleSelect); // Mobile fallback
     });
   }
 
