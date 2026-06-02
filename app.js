@@ -931,14 +931,18 @@ function setupAutocomplete(inputId, dropdownId) {
 
     dropdown.classList.add('open');
 
-    // Add click events to items
+    // Add click/touch events to items — mobile-safe
     dropdown.querySelectorAll('.ac-item').forEach(item => {
+      let selected = false; // guard against double-fire
       const handleSelect = (e) => {
-        e.preventDefault(); // prevent input blur before selection
+        e.preventDefault();
+        e.stopPropagation();
+        if (selected) return;
+        selected = true;
         selectItem(matches[parseInt(item.dataset.idx)]);
       };
+      item.addEventListener('touchend', handleSelect, { passive: false });
       item.addEventListener('mousedown', handleSelect);
-      item.addEventListener('click', handleSelect); // Mobile fallback
     });
   }
 
@@ -962,7 +966,7 @@ function setupAutocomplete(inputId, dropdownId) {
   });
 
   input.addEventListener('blur', () => {
-    // Delayed hide so clicks register
+    // Delayed hide — 350ms gives mobile touchend time to fire before dropdown closes
     setTimeout(() => {
       dropdown.classList.remove('open');
       
@@ -972,7 +976,7 @@ function setupAutocomplete(inputId, dropdownId) {
       if (val.length === 3 && db.some(a => a.iata === val)) {
         setInputValue(inputId, val);
       }
-    }, 150);
+    }, 350);
   });
 
   input.addEventListener('keydown', (e) => {
@@ -1411,17 +1415,20 @@ document.addEventListener('DOMContentLoaded', ()=>{
   // Dates - Setup custom Google Flights style picker
   setupCalendar();
 
-  // Form submit
-  $('search-form')?.addEventListener('submit',e=>{
-    e.preventDefault();doSearch();
-    setTimeout(()=>document.querySelector('.main')?.scrollIntoView({behavior:'smooth',block:'start'}),200);
-  });
+  // Unified search trigger — prevents double-firing on mobile
+  let searchPending = false;
+  function triggerSearch(e) {
+    if (e) e.preventDefault();
+    if (searchPending) return; // guard against double-fire from form+button
+    searchPending = true;
+    doSearch();
+    setTimeout(() => { searchPending = false; }, 1000);
+    setTimeout(() => document.querySelector('.main')?.scrollIntoView({behavior:'smooth',block:'start'}), 200);
+  }
 
-  // Direct button click (Robust fallback for mobile Safari)
-  $('search-btn')?.addEventListener('click', e => {
-    e.preventDefault();doSearch();
-    setTimeout(()=>document.querySelector('.main')?.scrollIntoView({behavior:'smooth',block:'start'}),200);
-  });
+  $('search-form')?.addEventListener('submit', triggerSearch);
+  $('search-btn')?.addEventListener('click', triggerSearch);
+  $('search-btn')?.addEventListener('touchend', triggerSearch, { passive: false });
 
   // Setup custom autocomplete
   setupAutocomplete('input-from', 'ac-from');
