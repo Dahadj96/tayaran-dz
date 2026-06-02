@@ -15,40 +15,36 @@ const path = require('path');
 const fs = require('fs');
 
 let puppeteerModule = null;
-let chromiumModule = null;
 
 async function getPuppeteer() {
   if (!puppeteerModule) {
-    if (process.env.VERCEL) {
-      puppeteerModule = require('puppeteer-core');
-      chromiumModule = require('@sparticuz/chromium');
-    } else {
-      puppeteerModule = (await import('puppeteer-core')).default;
-    }
+    puppeteerModule = (await import('puppeteer')).default;
   }
   return puppeteerModule;
 }
 
-async function getLaunchOptions() {
-  if (process.env.VERCEL) {
-    // Vercel Serverless Chromium config
-    return {
-      args: chromiumModule.args,
-      defaultViewport: chromiumModule.defaultViewport,
-      executablePath: await chromiumModule.executablePath(),
-      headless: chromiumModule.headless,
-      ignoreHTTPSErrors: true,
-    };
-  }
-
-  // Local fallback
+function getLaunchOptions() {
   const opts = {
     headless: 'new',
-    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-features=AsyncDns']
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-gpu',
+      '--disable-features=AsyncDns',
+      '--single-process'
+    ]
   };
-  const chromeExe = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
-  if (fs.existsSync(chromeExe)) {
-    opts.executablePath = chromeExe;
+  // Railway / cloud: use env variable if set
+  if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+    opts.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+  }
+  // Local Windows fallback
+  else {
+    const chromeExe = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
+    if (fs.existsSync(chromeExe)) {
+      opts.executablePath = chromeExe;
+    }
   }
   return opts;
 }
@@ -204,7 +200,7 @@ async function fetchMondialBooking(from, to, departDate, returnDate, pax) {
     const targetUrl = `https://vols.mondialbooking.com/flights/results?${encodedSearch}=`;
 
     const puppeteer = await getPuppeteer();
-    const launchOptions = await getLaunchOptions();
+    const launchOptions = getLaunchOptions();
     const browser = await puppeteer.launch(launchOptions);
     const page = await browser.newPage();
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36');
@@ -401,7 +397,7 @@ async function fetchVolz(from, to, departDate, returnDate, pax) {
     const targetUrl = `https://volz.app/en/flights?${query}`;
 
     const puppeteer = await getPuppeteer();
-    const launchOptions = await getLaunchOptions();
+    const launchOptions = getLaunchOptions();
     const browser = await puppeteer.launch(launchOptions);
     const page = await browser.newPage();
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36');
@@ -707,14 +703,10 @@ app.get('/api/flights/book', (req, res) => {
   res.json({ redirectUrl });
 });
 
-// ===== EXPORT FOR VERCEL OR START LOCALLY =====
-if (process.env.VERCEL) {
-  module.exports = app;
-} else {
-  app.listen(PORT, '127.0.0.1', () => {
-    console.log(`================================================================`);
-    console.log(`🚀 TayaranDZ Aggregator Server running at http://127.0.0.1:${PORT}`);
-    console.log(`💼 Unified CORS-free API endpoints active.`);
-    console.log(`================================================================`);
-  });
-}
+// ===== START SERVER =====
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`================================================================`);
+  console.log(`🚀 TayaranDZ Aggregator Server running on port ${PORT}`);
+  console.log(`💼 Unified CORS-free API endpoints active.`);
+  console.log(`================================================================`);
+});
