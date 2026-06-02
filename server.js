@@ -154,6 +154,23 @@ function formatTimeSafe(str) {
   return str.substring(0, 5);
 }
 
+// Calculate if a flight arrives on the next day (+1, +2, etc.)
+function calculateDayShift(depIso, arrIso) {
+  if (!depIso || !arrIso) return 0;
+  try {
+    const dDate = new Date(depIso);
+    const aDate = new Date(arrIso);
+    // Reset time components to exactly midnight local time to measure calendar days difference
+    dDate.setHours(0, 0, 0, 0);
+    aDate.setHours(0, 0, 0, 0);
+    const diffTime = aDate.getTime() - dDate.getTime();
+    const diffDays = Math.round(diffTime / (1000 * 3600 * 24));
+    return diffDays > 0 ? diffDays : 0;
+  } catch (e) {
+    return 0;
+  }
+}
+
 function getJourneySubpath(pathArray) {
   if (pathArray && pathArray[0] === 'journey' && pathArray.length > 2) {
     return pathArray.slice(2);
@@ -330,13 +347,18 @@ async function fetchMondialBooking(from, to, departDate, returnDate, pax) {
       // Extract true operating airline for codeshare grouping
       const operatingAirline = firstSeg?.operatingAirline || airline;
 
+      const departureIso = getValueByPath(offer, config.providers.mondial.departurePath) || '';
+      const arrivalIso = getValueByPath(offer, config.providers.mondial.arrivalPath) || '';
+      
       const outbound = {
         flightNo: normalizeFlightNumber(airline, flightNum),
         operatingAirline: operatingAirline,
         origin: realOrigin,
         destination: realDest,
-        departure: formatTimeSafe(departure),
-        arrival: formatTimeSafe(arrival),
+        departureDate: departureIso.split('T')[0], // Needed for deduplication
+        departure: formatTimeSafe(departureIso),
+        arrival: formatTimeSafe(arrivalIso),
+        arrivalDayShift: calculateDayShift(departureIso, arrivalIso),
         duration: realDuration
       };
 
@@ -353,13 +375,18 @@ async function fetchMondialBooking(from, to, departDate, returnDate, pax) {
         const rFirstSeg = ret?.flightSegments?.[0];
         const rLastSeg = ret?.flightSegments?.slice(-1)?.[0];
         const rOperatingAirline = rFirstSeg?.operatingAirline || rAirline;
+        const rDepartureIso = getValueByPath(ret, getJourneySubpath(config.providers.mondial.departurePath)) || '';
+        const rArrivalIso = getValueByPath(ret, getJourneySubpath(config.providers.mondial.arrivalPath)) || '';
+        
         returnLeg = {
           flightNo: normalizeFlightNumber(rAirline, rFlightNum),
           operatingAirline: rOperatingAirline,
           origin: rFirstSeg?.departureAirportCode || to.toUpperCase(),
           destination: rLastSeg?.arrivalAirportCode || from.toUpperCase(),
-          departure: formatTimeSafe(rDeparture),
-          arrival: formatTimeSafe(rArrival),
+          departureDate: rDepartureIso.split('T')[0],
+          departure: formatTimeSafe(rDepartureIso),
+          arrival: formatTimeSafe(rArrivalIso),
+          arrivalDayShift: calculateDayShift(rDepartureIso, rArrivalIso),
           duration: normalizeDuration(rDurationMins),
           stops: rStops
         };
@@ -545,8 +572,10 @@ async function fetchVolz(from, to, departDate, returnDate, pax) {
           operatingAirline: rOperatingAirline,
           origin: sIn.departure?.iataCode || to.toUpperCase(),
           destination: sInLast.arrival?.iataCode || from.toUpperCase(),
+          departureDate: (sIn.departure?.at || '').split('T')[0],
           departure: formatTimeSafe(sIn.departure?.at),
           arrival: formatTimeSafe(sInLast.arrival?.at),
+          arrivalDayShift: calculateDayShift(sIn.departure?.at, sInLast.arrival?.at),
           duration: rDuration,
           stops: sIn.numberOfStops || jIn.segments.length - 1
         };
@@ -564,8 +593,10 @@ async function fetchVolz(from, to, departDate, returnDate, pax) {
           operatingAirline: operatingAirline,
           origin: realOrigin,
           destination: realDest,
+          departureDate: (sOut.departure?.at || '').split('T')[0],
           departure: formatTimeSafe(sOut.departure?.at),
           arrival: formatTimeSafe(sOutLast.arrival?.at),
+          arrivalDayShift: calculateDayShift(sOut.departure?.at, sOutLast.arrival?.at),
           duration: duration
         },
         returnLeg: rLeg,
@@ -606,11 +637,11 @@ app.get('/api/flights/search', async (req, res) => {
     const combinedMap = new Map();
 
     const getComboKey = (flight) => {
-      // Use the true operating airline + departure and arrival times
-      // This is the safest way to group codeshares without mixing up distinct flights
-      let key = `${flight.outbound.operatingAirline}-${flight.outbound.departure}-${flight.outbound.arrival}`;
+      // Use the true operating airline + departure Date and Time + arrival Time
+      // Adding departureDate ensures flights from different days at the exact same hour are never merged
+      let key = `${flight.outbound.operatingAirline}-${flight.outbound.departureDate}T${flight.outbound.departure}-${flight.outbound.arrival}`;
       if (flight.isRoundTrip && flight.returnLeg) {
-        key += `__${flight.returnLeg.operatingAirline}-${flight.returnLeg.departure}-${flight.returnLeg.arrival}`;
+        key += `__${flight.returnLeg.operatingAirline}-${flight.returnLeg.departureDate}T${flight.returnLeg.departure}-${flight.returnLeg.arrival}`;
       }
       return key;
     };
