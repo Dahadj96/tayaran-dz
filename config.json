@@ -1,0 +1,22 @@
+{
+  "port": 5000,
+  "enableMockFallback": false,
+  "providers": {
+    "mondial": {
+      "offersPath": ["data","offers"],
+      "flightNumberPath": ["journey","0","flightSegments","0","flightNumber"],
+      "departurePath": ["journey","0","flight","flightInfo","departureTime"],
+      "arrivalPath": ["journey","0","flight","flightInfo","arrivalTime"],
+      "airlinePath": ["journey","0","flightSegments","0","operatingAirline"],
+      "pricePath": ["fare","totalFare"]
+    },
+    "volz": {
+      "offersPath": ["data"],
+      "flightNumberPath": ["itineraries","0","segments","0","flightNumber"],
+      "departurePath": ["itineraries","0","segments","0","departure","at"],
+      "arrivalPath": ["itineraries","0","segments","0","arrival","at"],
+      "airlinePath": ["itineraries","0","segments","0","carrier"],
+      "pricePath": ["price","total"]
+    }
+  }
+}
