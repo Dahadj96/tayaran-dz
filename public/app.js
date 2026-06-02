@@ -663,7 +663,7 @@ function renderFlights() {
   if (state.filtered.length > state.visibleCount) {
     html += `
       <div style="text-align:center; margin:24px 0 48px;">
-        <button onclick="showMoreFlights()" style="background:var(--primary); color:#fff; border:none; padding:12px 32px; border-radius:30px; font-weight:600; font-family:'Inter',sans-serif; cursor:pointer; font-size:15px; box-shadow:0 4px 12px rgba(10,54,157,0.25);">
+        <button onclick="showMoreFlights()" style="background:var(--blue); color:#fff; border:none; padding:12px 32px; border-radius:30px; font-weight:600; font-family:'Inter',sans-serif; cursor:pointer; font-size:15px; box-shadow:0 4px 12px rgba(26,115,232,0.3); transition:background 0.2s;" onmouseover="this.style.background='var(--blue-dk)'" onmouseout="this.style.background='var(--blue)'">
           ${state.lang === 'fr' ? 'Afficher plus de résultats' : (state.lang === 'ar' ? 'عرض المزيد من النتائج' : 'Show more results')}
         </button>
       </div>
