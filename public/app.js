@@ -499,10 +499,36 @@ function processFlights(rawList) {
   }
 }
 
+// Helper to extract IATA from raw input if user doesn't tap autocomplete
+function extractIATA(val) {
+  if (!val) return '';
+  const match = val.match(/\(([A-Z]{3})\)/);
+  if (match) return match[1].toUpperCase();
+  
+  const cleanVal = val.trim().toLowerCase();
+  if (!cleanVal) return '';
+
+  const db = globalAirports.length > 0 ? globalAirports : airports;
+  
+  if (cleanVal.length === 3) {
+    const exact = db.find(a => a.iata.toLowerCase() === cleanVal);
+    if (exact) return exact.iata;
+  }
+  
+  const cityMatch = db.find(a => 
+    (a.city.fr && a.city.fr.toLowerCase() === cleanVal) ||
+    (a.city.en && a.city.en.toLowerCase() === cleanVal) ||
+    (a.city.ar && a.city.ar === cleanVal)
+  );
+  if (cityMatch) return cityMatch.iata;
+  
+  return val.toUpperCase().trim();
+}
+
 // ===== Search =====
 async function doSearch() {
-  const from = ($('input-from')?.value || '').match(/\(([A-Z]{3})\)/)?.[1] || ($('input-from')?.value || '').toUpperCase().trim();
-  const to = ($('input-to')?.value || '').match(/\(([A-Z]{3})\)/)?.[1] || ($('input-to')?.value || '').toUpperCase().trim();
+  const from = extractIATA($('input-from')?.value);
+  const to = extractIATA($('input-to')?.value);
   
   if (!from || !to) return;
   
@@ -520,7 +546,7 @@ async function doSearch() {
   const totalPax = adults + children;
 
   try {
-    const url = `http://localhost:5000/api/flights/search?from=${from}&to=${to}&departDate=${departStr}&returnDate=${returnStr}&pax=${totalPax}`;
+    const url = `/api/flights/search?from=${from}&to=${to}&departDate=${departStr}&returnDate=${returnStr}&pax=${totalPax}`;
     const response = await fetch(url);
     if (!response.ok) throw new Error('Backend query failed');
     const data = await response.json();
@@ -931,12 +957,18 @@ function setupAutocomplete(inputId, dropdownId) {
 
     dropdown.classList.add('open');
 
-    // Add click events to items
+    // Add click/touch events to items — mobile-safe
     dropdown.querySelectorAll('.ac-item').forEach(item => {
-      item.addEventListener('mousedown', (e) => {
-        e.preventDefault(); // prevent input blur before selection
+      let selected = false; // guard against double-fire
+      const handleSelect = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (selected) return;
+        selected = true;
         selectItem(matches[parseInt(item.dataset.idx)]);
-      });
+      };
+      item.addEventListener('touchend', handleSelect, { passive: false });
+      item.addEventListener('mousedown', handleSelect);
     });
   }
 
@@ -960,7 +992,7 @@ function setupAutocomplete(inputId, dropdownId) {
   });
 
   input.addEventListener('blur', () => {
-    // Delayed hide so clicks register
+    // Delayed hide — 350ms gives mobile touchend time to fire before dropdown closes
     setTimeout(() => {
       dropdown.classList.remove('open');
       
@@ -970,7 +1002,7 @@ function setupAutocomplete(inputId, dropdownId) {
       if (val.length === 3 && db.some(a => a.iata === val)) {
         setInputValue(inputId, val);
       }
-    }, 150);
+    }, 350);
   });
 
   input.addEventListener('keydown', (e) => {
@@ -1409,11 +1441,20 @@ document.addEventListener('DOMContentLoaded', ()=>{
   // Dates - Setup custom Google Flights style picker
   setupCalendar();
 
-  // Form
-  $('search-form')?.addEventListener('submit',e=>{
-    e.preventDefault();doSearch();
-    setTimeout(()=>document.querySelector('.main')?.scrollIntoView({behavior:'smooth',block:'start'}),200);
-  });
+  // Unified search trigger — prevents double-firing on mobile
+  let searchPending = false;
+  function triggerSearch(e) {
+    if (e) e.preventDefault();
+    if (searchPending) return; // guard against double-fire from form+button
+    searchPending = true;
+    doSearch();
+    setTimeout(() => { searchPending = false; }, 1000);
+    setTimeout(() => document.querySelector('.main')?.scrollIntoView({behavior:'smooth',block:'start'}), 200);
+  }
+
+  $('search-form')?.addEventListener('submit', triggerSearch);
+  $('search-btn')?.addEventListener('click', triggerSearch);
+  $('search-btn')?.addEventListener('touchend', triggerSearch, { passive: false });
 
   // Setup custom autocomplete
   setupAutocomplete('input-from', 'ac-from');
@@ -1460,7 +1501,7 @@ async function handleBookRedirect(event, provider, from, to, departDate, returnD
   showToast(t.toast_redirect);
 
   try {
-    const url = `http://localhost:5000/api/flights/book?provider=${provider}&from=${from}&to=${to}&departDate=${departDate}&returnDate=${returnDate}&pax=${pax}`;
+    const url = `/api/flights/book?provider=${provider}&from=${from}&to=${to}&departDate=${departDate}&returnDate=${returnDate}&pax=${pax}`;
     const response = await fetch(url, { signal: AbortSignal.timeout(3000) });
     if (!response.ok) throw new Error('API book redirect failed');
     const data = await response.json();
