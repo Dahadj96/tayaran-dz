@@ -690,7 +690,7 @@ function buildCard(f, idx) {
 
         <div class="card-arrival">
           <span style="height: 15px; display: block;"></span> <!-- balance tag height on arrival side -->
-          <div class="time-main">${leg.arrival}</div>
+          <div class="time-main">${leg.arrival}${leg.arrivalDayShift ? `<sup class="day-shift">+${leg.arrivalDayShift}</sup>` : ''}</div>
           <div class="time-sub">${dA?.city[state.lang] || leg.destination} (${leg.destination})</div>
         </div>
       </div>
