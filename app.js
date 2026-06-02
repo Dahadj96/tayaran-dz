@@ -1409,8 +1409,14 @@ document.addEventListener('DOMContentLoaded', ()=>{
   // Dates - Setup custom Google Flights style picker
   setupCalendar();
 
-  // Form
+  // Form submit
   $('search-form')?.addEventListener('submit',e=>{
+    e.preventDefault();doSearch();
+    setTimeout(()=>document.querySelector('.main')?.scrollIntoView({behavior:'smooth',block:'start'}),200);
+  });
+
+  // Direct button click (Robust fallback for mobile Safari)
+  $('search-btn')?.addEventListener('click', e => {
     e.preventDefault();doSearch();
     setTimeout(()=>document.querySelector('.main')?.scrollIntoView({behavior:'smooth',block:'start'}),200);
   });
