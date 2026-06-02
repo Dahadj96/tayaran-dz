@@ -326,9 +326,13 @@ async function fetchMondialBooking(from, to, departDate, returnDate, pax) {
       const lastSeg = offer.journey?.[0]?.flightSegments?.slice(-1)?.[0];
       const realOrigin = firstSeg?.departureAirportCode || from.toUpperCase();
       const realDest = lastSeg?.arrivalAirportCode || to.toUpperCase();
+      
+      // Extract true operating airline for codeshare grouping
+      const operatingAirline = firstSeg?.operatingAirline || airline;
 
       const outbound = {
         flightNo: normalizeFlightNumber(airline, flightNum),
+        operatingAirline: operatingAirline,
         origin: realOrigin,
         destination: realDest,
         departure: formatTimeSafe(departure),
@@ -348,8 +352,10 @@ async function fetchMondialBooking(from, to, departDate, returnDate, pax) {
         const rStops = ret?.flight?.stopQuantity || 0;
         const rFirstSeg = ret?.flightSegments?.[0];
         const rLastSeg = ret?.flightSegments?.slice(-1)?.[0];
+        const rOperatingAirline = rFirstSeg?.operatingAirline || rAirline;
         returnLeg = {
           flightNo: normalizeFlightNumber(rAirline, rFlightNum),
+          operatingAirline: rOperatingAirline,
           origin: rFirstSeg?.departureAirportCode || to.toUpperCase(),
           destination: rLastSeg?.arrivalAirportCode || from.toUpperCase(),
           departure: formatTimeSafe(rDeparture),
@@ -508,6 +514,9 @@ async function fetchVolz(from, to, departDate, returnDate, pax) {
       const carrier = sOut.carrier || sOut.operatingCarrier || 'XX';
       const flightNum = String(sOut.flightNumber || '');
       const duration = normalizeDuration(jOut.totalDuration || jOut.duration);
+      
+      // Extract true operating airline for codeshare grouping
+      const operatingAirline = sOut.operatingCarrier || carrier;
 
       // Use real IATA codes from segment data (fix #2)
       const realOrigin = sOut.departure?.iataCode || from.toUpperCase();
@@ -528,10 +537,12 @@ async function fetchVolz(from, to, departDate, returnDate, pax) {
         const sIn = jIn.segments[0];
         const sInLast = jIn.segments[jIn.segments.length - 1];
         const rCarrier = sIn.carrier || sIn.operatingCarrier || 'XX';
+        const rOperatingAirline = sIn.operatingCarrier || rCarrier;
         const rFlightNum = String(sIn.flightNumber || '');
         const rDuration = normalizeDuration(jIn.totalDuration || jIn.duration);
         rLeg = {
           flightNo: normalizeFlightNumber(rCarrier, rFlightNum),
+          operatingAirline: rOperatingAirline,
           origin: sIn.departure?.iataCode || to.toUpperCase(),
           destination: sInLast.arrival?.iataCode || from.toUpperCase(),
           departure: formatTimeSafe(sIn.departure?.at),
@@ -550,6 +561,7 @@ async function fetchVolz(from, to, departDate, returnDate, pax) {
         price: offer.price.acTotal || offer.price.grandTotal || offer.price.total,
         outbound: {
           flightNo: normalizeFlightNumber(carrier, flightNum),
+          operatingAirline: operatingAirline,
           origin: realOrigin,
           destination: realDest,
           departure: formatTimeSafe(sOut.departure?.at),
@@ -590,14 +602,15 @@ app.get('/api/flights/search', async (req, res) => {
 
     console.log(`[Aggregator] Found Mondial flights: ${mondialRaw.length}, Volz flights: ${volzRaw.length}`);
 
-    // Merge and deduplicate by outbound departure time + flight number
+    // Merge and deduplicate by departure and arrival times to handle codeshares correctly
     const combinedMap = new Map();
 
     const getComboKey = (flight) => {
-      let key = `${flight.airline}-${flight.outbound.flightNo}`;
-      // Fix: use flightNo instead of non-existent returnLeg.airline (fix #15)
+      // Use the true operating airline + departure and arrival times
+      // This is the safest way to group codeshares without mixing up distinct flights
+      let key = `${flight.outbound.operatingAirline}-${flight.outbound.departure}-${flight.outbound.arrival}`;
       if (flight.isRoundTrip && flight.returnLeg) {
-        key += `__${flight.returnLeg.flightNo}`;
+        key += `__${flight.returnLeg.operatingAirline}-${flight.returnLeg.departure}-${flight.returnLeg.arrival}`;
       }
       return key;
     };
