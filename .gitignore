@@ -1,0 +1,32 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug_error.log
+
+# Flight Caches
+mondial_flights.json
+volz_flights.json
+
+# Dependency directories
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Env files
+.env
+.env.test
+.env.production
+.env.local
+
+# Vercel output
+.vercel
+
+# Mac OS
+.DS_Store
