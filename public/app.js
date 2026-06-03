@@ -483,11 +483,15 @@ function renderAirlineFilterCards() {
     const priceStr = al.price.toLocaleString() + ' DZD';
     return `
       <button class="al-filter-card${isActive ? ' active' : ''}" onclick="filterByAirline('${al.code}')" aria-label="${al.name}" title="${al.name}">
-        <img class="al-filter-logo" src="${al.logo}" alt="${al.name}"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-        <span class="al-filter-logo-fb" style="display:none">${al.code}</span>
-        <div class="al-filter-name">${al.name}</div>
-        <div class="al-filter-price">${priceStr}</div>
+        <div class="al-filter-logo-wrap">
+          <img class="al-filter-logo" src="${al.logo}" alt="${al.name}"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <span class="al-filter-logo-fb" style="display:none">${al.code}</span>
+        </div>
+        <div class="al-filter-info">
+          <div class="al-filter-name">${al.name}</div>
+          <div class="al-filter-price">${priceStr}</div>
+        </div>
       </button>
     `;
   }).join('');

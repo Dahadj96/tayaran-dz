@@ -357,46 +357,54 @@ input,select{font-family:inherit;border:none;outline:none;font-size:14px}
 .airline-filter-row::-webkit-scrollbar{display:none}
 
 .al-filter-card{
-  display:flex;flex-direction:column;align-items:center;
-  gap:6px;
-  padding:10px 16px;
+  display:flex;flex-direction:row;align-items:center;
+  gap:10px;
+  padding:8px 14px;
   border:1.5px solid var(--border);
-  border-radius:var(--r-lg);
+  border-radius:40px;
   background:var(--bg);
   cursor:pointer;
   transition:all var(--t);
   flex-shrink:0;
-  min-width:100px;
-  position:relative;
+  white-space:nowrap;
 }
 .al-filter-card:hover:not(.active){
   background:var(--surface);
   border-color:var(--blue);
-  transform:translateY(-1px);
-  box-shadow:0 4px 12px rgba(26,115,232,0.1);
+  box-shadow:0 2px 8px rgba(26,115,232,0.1);
 }
 .al-filter-card.active{
   border-color:var(--blue);
   background:var(--blue-lt);
-  box-shadow:0 4px 12px rgba(26,115,232,0.15);
+  box-shadow:0 2px 10px rgba(26,115,232,0.18);
+}
+.al-filter-logo-wrap{
+  width:32px;height:32px;
+  border-radius:50%;
+  background:var(--surface-2);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  overflow:hidden;
+  border:1px solid var(--border);
 }
 .al-filter-logo{
-  width:48px;height:24px;object-fit:contain;
+  width:26px;height:26px;object-fit:contain;
 }
 .al-filter-logo-fb{
-  font-size:12px;font-weight:700;color:var(--text-2);
+  font-size:10px;font-weight:700;color:var(--text-2);
+}
+.al-filter-info{
+  display:flex;flex-direction:column;align-items:flex-start;gap:1px;
 }
 .al-filter-name{
-  font-size:11px;font-weight:500;color:var(--text-2);
-  text-align:center;white-space:nowrap;max-width:90px;
-  overflow:hidden;text-overflow:ellipsis;
+  font-size:12px;font-weight:600;color:var(--text);
+  line-height:1.2;
 }
-.al-filter-card.active .al-filter-name{color:var(--blue)}
+.al-filter-card.active .al-filter-name{color:var(--blue-dk)}
 .al-filter-price{
-  font-size:12px;font-weight:700;color:var(--blue);
-  white-space:nowrap;
+  font-size:11px;font-weight:500;color:var(--text-2);
 }
-.al-filter-card.active .al-filter-price{color:var(--blue-dk)}
+.al-filter-card.active .al-filter-price{color:var(--blue);font-weight:700;}
 
 /* ================================================================
    FILTER CHIPS ROW
