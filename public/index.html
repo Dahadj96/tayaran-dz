@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=6" />
+  <link rel="stylesheet" href="style.css?v=7" />
 </head>
 <body>
 
@@ -201,29 +201,8 @@
     </div>
   </div>
 
-  <!-- Sort tabs — Google Flights style "Best / Cheapest / Fastest" -->
-  <div class="sort-tabs" role="group" aria-label="Mode de tri" id="sort-tabs-row">
-    <button class="sort-tab active" data-sort="best" onclick="setSort('best','best')" id="tab-best">
-      <div class="st-label" data-i18n="tab_best">Meilleur</div>
-      <div class="st-price" id="tab-best-price">—</div>
-      <div class="st-detail" data-i18n="tab_best_sub">Prix · Durée</div>
-    </button>
-    <button class="sort-tab" data-sort="cheapest" onclick="setSort('cheapest','cheapest')" id="tab-cheapest">
-      <div class="st-label" data-i18n="tab_cheapest">Moins cher</div>
-      <div class="st-price" id="tab-cheap-price">—</div>
-      <div class="st-detail" data-i18n="tab_cheap_sub">Prix le plus bas</div>
-    </button>
-    <button class="sort-tab" data-sort="fastest" onclick="setSort('fastest','fastest')" id="tab-fastest">
-      <div class="st-label" data-i18n="tab_fastest">Plus rapide</div>
-      <div class="st-price" id="tab-fast-price">—</div>
-      <div class="st-detail" data-i18n="tab_fast_sub">Durée la plus courte</div>
-    </button>
-    <button class="sort-tab" data-sort="stops" onclick="setSort('stops','stops')" id="tab-direct">
-      <div class="st-label" data-i18n="tab_direct">Direct</div>
-      <div class="st-price" id="tab-direct-price">—</div>
-      <div class="st-detail" data-i18n="tab_direct_sub">Sans escale</div>
-    </button>
-  </div>
+  <!-- Airline filter cards — dynamically built from search results -->
+  <div class="airline-filter-row" id="airline-filter-row"></div>
 
   <!-- Filter chips -->
   <div class="filter-row">
@@ -312,8 +291,8 @@ document.addEventListener('click', e => {
   if (ald && !ald.contains(e.target) && alb && !alb.contains(e.target)) ald.classList.remove('open');
 });
 </script>
-<script src="airports-db.js?v=6" defer></script>
-<script src="airlines-db.js?v=6" defer></script>
-<script src="app.js?v=6" defer></script>
+<script src="airports-db.js?v=7" defer></script>
+<script src="airlines-db.js?v=7" defer></script>
+<script src="app.js?v=7" defer></script>
 </body>
 </html>

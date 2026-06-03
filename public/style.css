@@ -348,48 +348,55 @@ input,select{font-family:inherit;border:none;outline:none;font-size:14px}
 /* ================================================================
    SORT TABS — Google Flights style "Best / Cheapest / Fastest"
    ================================================================ */
-.sort-tabs{
-  display:flex;gap:8px;margin-bottom:16px;
+.airline-filter-row{
+  display:flex;gap:10px;margin-bottom:16px;
   overflow-x:auto;
   scrollbar-width:none;
-  padding-bottom:2px;
+  padding-bottom:4px;
 }
-.sort-tabs::-webkit-scrollbar{display:none}
+.airline-filter-row::-webkit-scrollbar{display:none}
 
-.sort-tab{
-  display:flex;flex-direction:column;
-  align-items:flex-start;
-  padding:12px 20px;
-  border:1px solid var(--border-dk);
+.al-filter-card{
+  display:flex;flex-direction:column;align-items:center;
+  gap:6px;
+  padding:10px 16px;
+  border:1.5px solid var(--border);
   border-radius:var(--r-lg);
   background:var(--bg);
-  transition:all var(--t);
   cursor:pointer;
-  min-width:130px;
+  transition:all var(--t);
   flex-shrink:0;
+  min-width:100px;
+  position:relative;
 }
-.sort-tab.active{
+.al-filter-card:hover:not(.active){
+  background:var(--surface);
+  border-color:var(--blue);
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(26,115,232,0.1);
+}
+.al-filter-card.active{
   border-color:var(--blue);
   background:var(--blue-lt);
+  box-shadow:0 4px 12px rgba(26,115,232,0.15);
 }
-.sort-tab:hover:not(.active){background:var(--surface)}
-
-.st-label{
-  font-size:13px;font-weight:500;
-  color:var(--text-2);
-  letter-spacing:0.1px;
+.al-filter-logo{
+  width:48px;height:24px;object-fit:contain;
 }
-.sort-tab.active .st-label{color:var(--blue)}
-
-.st-price{
-  font-size:14px;font-weight:700;
-  color:var(--text);margin-top:2px;
+.al-filter-logo-fb{
+  font-size:12px;font-weight:700;color:var(--text-2);
 }
-.sort-tab.active .st-price{color:var(--blue)}
-
-.st-detail{
-  font-size:11px;color:var(--text-3);margin-top:1px;
+.al-filter-name{
+  font-size:11px;font-weight:500;color:var(--text-2);
+  text-align:center;white-space:nowrap;max-width:90px;
+  overflow:hidden;text-overflow:ellipsis;
 }
+.al-filter-card.active .al-filter-name{color:var(--blue)}
+.al-filter-price{
+  font-size:12px;font-weight:700;color:var(--blue);
+  white-space:nowrap;
+}
+.al-filter-card.active .al-filter-price{color:var(--blue-dk)}
 
 /* ================================================================
    FILTER CHIPS ROW

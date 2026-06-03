@@ -406,7 +406,7 @@ function setLang(lang) {
   setInputValue('input-to', currentTo);
 
   renderPopular();
-  updateSortTabPrices();
+  renderAirlineFilterCards();
   if(state.searchDone) renderFlights();
   updatePax();
   if (typeof updateDateInputs === 'function') updateDateInputs();
@@ -434,7 +434,7 @@ function setTripType(type) {
   // Re-process active flights on dynamic tab toggle!
   if (state.searchDone && state.rawFlights && state.rawFlights.length > 0) {
     state.flights = processFlights(state.rawFlights);
-    updateSortTabPrices();
+    renderAirlineFilterCards();
     applySort();
   }
 }
@@ -459,20 +459,50 @@ function updatePax() {
 }
 
 // ===== Sort tab prices =====
-function updateSortTabPrices() {
-  if(!state.flights.length) return;
-  const all = [...state.flights];
-  const cheapest = Math.min(...all.map(minPrice));
-  const fastest  = Math.min(...all.map(f=>parseDur(f.duration)));
-  const fastestF = all.find(f=>parseDur(f.duration)===fastest);
-  const directFs = all.filter(f=>f.stops===0);
+// ===== Airline Filter Cards =====
+function renderAirlineFilterCards() {
+  const row = document.getElementById('airline-filter-row');
+  if (!row || !state.flights.length) { if(row) row.innerHTML=''; return; }
 
-  const fmt = p => p.toLocaleString() + ' DZD';
+  // Group cheapest price per airline across all flights
+  const airlineMap = new Map();
+  state.flights.forEach(f => {
+    const code = f.airline || 'XX';
+    const price = minPrice(f);
+    if (!airlineMap.has(code) || price < airlineMap.get(code).price) {
+      const al = airlines[code] || { name: code, logo: 'https://static.volz.app/assets/logos/airline_banners/' + code + '.png' };
+      airlineMap.set(code, { code, price, name: al.name, logo: al.logo });
+    }
+  });
 
-  const bp = $('tab-best-price');    if(bp) bp.textContent = fmt(cheapest);
-  const cp = $('tab-cheap-price');   if(cp) cp.textContent = fmt(cheapest);
-  const fp = $('tab-fast-price');    if(fp) fp.textContent = fastestF ? fmt(minPrice(fastestF)) : '—';
-  const dp = $('tab-direct-price');  if(dp) dp.textContent = directFs.length ? fmt(Math.min(...directFs.map(minPrice))) : '—';
+  // Sort cards cheapest first
+  const sorted = Array.from(airlineMap.values()).sort((a,b) => a.price - b.price);
+
+  row.innerHTML = sorted.map(al => {
+    const isActive = state.filterAirlines.includes(al.code);
+    const priceStr = al.price.toLocaleString() + ' DZD';
+    return `
+      <button class="al-filter-card${isActive ? ' active' : ''}" onclick="filterByAirline('${al.code}')" aria-label="${al.name}" title="${al.name}">
+        <img class="al-filter-logo" src="${al.logo}" alt="${al.name}"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <span class="al-filter-logo-fb" style="display:none">${al.code}</span>
+        <div class="al-filter-name">${al.name}</div>
+        <div class="al-filter-price">${priceStr}</div>
+      </button>
+    `;
+  }).join('');
+}
+
+function filterByAirline(code) {
+  const idx = state.filterAirlines.indexOf(code);
+  if (idx === -1) {
+    state.filterAirlines.push(code);
+  } else {
+    state.filterAirlines.splice(idx, 1);
+  }
+  renderAirlineFilterCards(); // update active states
+  state.visibleCount = 15;
+  applySort();
 }
 
 // ===== Process Roundtrip Flights Helper =====
@@ -575,13 +605,13 @@ async function doSearch() {
       state.rawFlights = [];
       state.flights = processFlights([]);
     }
-    updateSortTabPrices();
+    renderAirlineFilterCards();
     applySort();
   } catch (error) {
     console.log('[Aggregator Client] Backend offline or failed:', error.message);
     state.rawFlights = [];
     state.flights = processFlights([]);
-    updateSortTabPrices();
+    renderAirlineFilterCards();
     applySort();
   }
 }
