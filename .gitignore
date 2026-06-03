@@ -6,9 +6,11 @@ yarn-debug.log*
 yarn-error.log*
 debug_error.log
 
-# Flight Caches
-mondial_flights.json
+# Scraper Cache
 volz_flights.json
+mondial_flights.json
+popular_prices.json
+
 
 # Dependency directories
 node_modules/

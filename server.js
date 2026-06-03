@@ -23,6 +23,11 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ─────────────────────────────────────────────────────────────────────────────
+//  Constants
+// ─────────────────────────────────────────────────────────────────────────────
+const POPULAR_PRICES_FILE = path.join(__dirname, 'popular_prices.json');
+
+// ─────────────────────────────────────────────────────────────────────────────
 //  Puppeteer — lazy-loaded once on first use
 // ─────────────────────────────────────────────────────────────────────────────
 let puppeteerModule = null;
@@ -335,6 +340,53 @@ function aggregateResults(allProviderResults) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+//  Popular Prices Cache
+// ─────────────────────────────────────────────────────────────────────────────
+const popularRoutesKeys = [
+  'ALG-CDG', 'ALG-IST', 'ALG-DXB', 'ALG-LHR', 
+  'ALG-BCN', 'ALG-TUN', 'ORN-CDG', 'ALG-MAD'
+];
+
+function updatePopularPrices(mergedFlights, from, to) {
+  const routeKey = `${from}-${to}`;
+  if (!popularRoutesKeys.includes(routeKey)) return;
+
+  // Find the absolute cheapest price among all merged flights for this route
+  let cheapest = Infinity;
+  mergedFlights.forEach(flight => {
+    Object.values(flight.prices).forEach(price => {
+      if (price !== null && price < cheapest) {
+        cheapest = price;
+      }
+    });
+  });
+
+  if (cheapest === Infinity) return;
+
+  let cache = {};
+  if (fs.existsSync(POPULAR_PRICES_FILE)) {
+    try {
+      cache = JSON.parse(fs.readFileSync(POPULAR_PRICES_FILE, 'utf-8'));
+    } catch (e) {
+      console.error('[Popular Prices] Error reading cache:', e.message);
+    }
+  }
+
+  // Only update if it's a new route or cheaper than what we have, 
+  // OR just update it to keep it fresh (let's just update it to keep it fresh)
+  cache[routeKey] = {
+    price: cheapest,
+    updatedAt: new Date().toISOString()
+  };
+
+  try {
+    fs.writeFileSync(POPULAR_PRICES_FILE, JSON.stringify(cache, null, 2), 'utf-8');
+  } catch (e) {
+    console.error('[Popular Prices] Error writing cache:', e.message);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 //  API Routes
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -364,6 +416,10 @@ app.get('/api/flights/search', async (req, res) => {
     results.forEach(r => console.log(`[Aggregator] ${r.provider}: ${r.flights.length} flights`));
 
     const merged = aggregateResults(results);
+    
+    // Asynchronously update popular prices cache if applicable
+    updatePopularPrices(merged, from, to);
+
     res.json(merged);
   } catch (err) {
     console.error('[Aggregator] Fatal error:', err.message);
@@ -389,6 +445,24 @@ app.get('/api/flights/book', (req, res) => {
 
   const redirectUrl = provider.buildBookingUrl(from, to, departDate, returnDate, parseInt(pax) || 1);
   res.json({ redirectUrl });
+});
+
+/**
+ * GET /api/popular-prices
+ * Returns the cached cheapest prices for popular routes.
+ */
+app.get('/api/popular-prices', (req, res) => {
+  if (fs.existsSync(POPULAR_PRICES_FILE)) {
+    try {
+      const data = fs.readFileSync(POPULAR_PRICES_FILE, 'utf-8');
+      res.setHeader('Content-Type', 'application/json');
+      res.send(data);
+    } catch (e) {
+      res.json({});
+    }
+  } else {
+    res.json({});
+  }
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

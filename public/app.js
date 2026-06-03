@@ -1501,6 +1501,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
   window.addEventListener('load', () => {
     // Delay slightly to allow main thread to be fully idle
     setTimeout(loadGlobalAirports, 300);
+    // Fetch dynamic prices for popular routes
+    setTimeout(fetchPopularPrices, 400);
   });
 
   // Scroll
@@ -1537,6 +1539,30 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
   // Wait for user interaction to trigger search
 });
+
+async function fetchPopularPrices() {
+  try {
+    const res = await fetch('/api/popular-prices');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (Object.keys(data).length === 0) return;
+
+    let updated = false;
+    popularRoutes.forEach(route => {
+      const key = `${route.o}-${route.d}`;
+      if (data[key] && data[key].price) {
+        route.p = data[key].price;
+        updated = true;
+      }
+    });
+
+    if (updated) {
+      renderPopular();
+    }
+  } catch (err) {
+    console.warn('[Aggregator Client] Failed to fetch dynamic popular prices:', err.message);
+  }
+}
 
 // ===== Deep Link Booking redirect handler =====
 
