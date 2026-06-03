@@ -815,10 +815,17 @@ function buildCard(f, idx) {
         url: 'https://www.mondialbooking.com/fr/flights',
         btnLabel: t.book_mondial,
       },
+      {
+        price: f.prices.h24voyages,
+        isBest: false,
+        name: 'H24 Voyages',
+        url: 'https://vols.h24voyages.com',
+        btnLabel: 'Réserver',
+      },
     ]
     .filter(p => p.price !== undefined && p.price !== null)
     .sort((a, b) => a.price - b.price)
-    .map(p => `
+    .map((p, index) => `
       <div class="price-cell">
         <div class="prov-info">
           <div class="prov-name">${p.name.toLowerCase() === 'volz' ? 'Volz.app' : p.name}</div>
@@ -827,7 +834,7 @@ function buildCard(f, idx) {
         <div class="price-right-grid">
           <div class="price-spacer"></div>
           <div class="price-block">
-            <span class="price-num ${p.isBest ? 'best' : ''}">${p.price.toLocaleString()}<span class="price-cur">DZD</span></span>
+            <span class="price-num ${index === 0 ? 'best' : ''}">${p.price.toLocaleString()}<span class="price-cur">DZD</span></span>
           </div>
           <a href="${p.url}" target="_blank" rel="noopener"
              class="book-btn" onclick="handleBookRedirect(event, '${p.name.toLowerCase()}', '${outbound.origin}', '${outbound.destination}', '${dStr}', '${rStr}', ${totalPax}, '${p.url}')">
