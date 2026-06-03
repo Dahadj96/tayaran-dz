@@ -9,8 +9,12 @@ function lookupAirport(code) {
   if (!airportsData) {
     try {
       const dbContent = fs.readFileSync(path.join(__dirname, '../public/airports-db.js'), 'utf8');
-      const jsonStr = dbContent.replace(/^window\.globalAirportsData\s*=\s*/, '').replace(/;$/, '');
-      airportsData = JSON.parse(jsonStr);
+      const match = dbContent.match(/\[.*\]/s);
+      if (match) {
+        airportsData = JSON.parse(match[0]);
+      } else {
+        airportsData = [];
+      }
     } catch(e) {
       airportsData = [];
     }
@@ -58,11 +62,16 @@ module.exports = {
       stops: false,
       baggage: false,
       refundable: false,
-      datePickerRange1: [
-        `${departDate}T23:00:00.000Z`,
-        returnDate ? `${returnDate}T23:00:00.000Z` : null
-      ]
     };
+
+    if (returnDate) {
+      state.datePickerRange1 = [
+        `${departDate}T23:00:00.000Z`,
+        `${returnDate}T23:00:00.000Z`
+      ];
+    } else {
+      state.datePicker1 = `${departDate}T23:00:00.000Z`;
+    }
 
     const encodedState = encodeURIComponent(JSON.stringify(state));
     return `https://vols.h24voyages.com/flights/results?${encodedState}=`;
