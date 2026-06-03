@@ -10,6 +10,7 @@ debug_error.log
 volz_flights.json
 mondial_flights.json
 popular_prices.json
+h24_flights.json
 
 
 # Dependency directories
