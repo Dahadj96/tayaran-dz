@@ -596,7 +596,7 @@ async function doSearch() {
   state.filtered = [];
   
   const cnt = $('results-count');
-  if (cnt) cnt.innerHTML = `Recherche en cours <span class="loading-dots">...</span>`;
+  if (cnt) cnt.innerHTML = `<svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>Recherche en cours <span class="loading-dots">...</span>`;
 
   const departStr = toDateString(calendarState.departDate);
   const returnStr = state.tripType === 'roundtrip' ? toDateString(calendarState.returnDate) : '';
@@ -717,7 +717,7 @@ function renderFlights() {
     return;
   }
   if(cnt) {
-    cnt.innerHTML = `${state.filtered.length} ${t.results_found}` + (activeEventSource ? ` <span style="font-size: 0.8em; color: var(--text-light); margin-left: 8px;">(Recherche en cours <span class="loading-dots">...</span>)</span>` : '');
+    cnt.innerHTML = `${state.filtered.length} ${t.results_found}` + (activeEventSource ? ` <span style="font-size: 0.8em; color: var(--text-light); margin-left: 8px;"><svg class="spinner" viewBox="0 0 50 50"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle></svg>(Recherche en cours <span class="loading-dots">...</span>)</span>` : '');
   }
   
   const visibleFlights = state.filtered.slice(0, state.visibleCount);
