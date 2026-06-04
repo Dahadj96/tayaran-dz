@@ -383,24 +383,11 @@ input,select{font-family:inherit;border:none;outline:none;font-size:14px}
 .airline-filter-row{
   display:flex;gap:10px;
   overflow-x:auto;
-  padding-bottom:10px;
+  scrollbar-width:none;
+  padding-bottom:4px;
   scroll-behavior: smooth;
 }
-/* Elegant thin scrollbar for webkit */
-.airline-filter-row::-webkit-scrollbar {
-  height: 6px;
-}
-.airline-filter-row::-webkit-scrollbar-track {
-  background: var(--surface);
-  border-radius: 8px;
-}
-.airline-filter-row::-webkit-scrollbar-thumb {
-  background: var(--border-dk);
-  border-radius: 8px;
-}
-.airline-filter-row::-webkit-scrollbar-thumb:hover {
-  background: var(--text-4);
-}
+.airline-filter-row::-webkit-scrollbar{display:none}
 
 .al-filter-card{
   display:flex;flex-direction:row;align-items:center;
