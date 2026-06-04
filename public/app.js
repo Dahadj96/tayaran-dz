@@ -496,6 +496,8 @@ function renderAirlineFilterCards() {
       </button>
     `;
   }).join('');
+  
+  setTimeout(updateAirlineScrollButtons, 50);
 }
 
 function filterByAirline(code) {
@@ -1792,3 +1794,27 @@ async function handleBookRedirect(event, provider, from, to, departDate, returnD
   }
   window.open(deepLink, '_blank');
 }
+
+// ===== Airline Scroll Buttons =====
+function scrollAirlineFilters(amount) {
+  const row = document.getElementById('airline-filter-row');
+  if (row) row.scrollBy({ left: amount, behavior: 'smooth' });
+}
+
+function updateAirlineScrollButtons() {
+  const row = document.getElementById('airline-filter-row');
+  const btnLeft = document.getElementById('al-scroll-left');
+  const btnRight = document.getElementById('al-scroll-right');
+  if (!row || !btnLeft || !btnRight) return;
+  
+  btnLeft.classList.toggle('show', row.scrollLeft > 5);
+  btnRight.classList.toggle('show', row.scrollLeft < (row.scrollWidth - row.clientWidth - 5));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const alRow = document.getElementById('airline-filter-row');
+  if(alRow) {
+    alRow.addEventListener('scroll', updateAirlineScrollButtons);
+    window.addEventListener('resize', updateAirlineScrollButtons);
+  }
+});

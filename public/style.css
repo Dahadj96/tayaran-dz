@@ -348,8 +348,40 @@ input,select{font-family:inherit;border:none;outline:none;font-size:14px}
 /* ================================================================
    SORT TABS — Google Flights style "Best / Cheapest / Fastest"
    ================================================================ */
+.airline-filter-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1px solid var(--border-dk);
+  color: var(--text-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: all var(--t);
+  opacity: 0;
+  pointer-events: none;
+}
+.scroll-btn svg { width: 16px; height: 16px; }
+.scroll-btn:hover { background: var(--surface-2); color: var(--blue); }
+.scroll-btn.show { opacity: 1; pointer-events: auto; }
+.scroll-btn.scroll-left { left: -16px; }
+.scroll-btn.scroll-right { right: -16px; }
+
 .airline-filter-row{
-  display:flex;gap:10px;margin-bottom:16px;
+  display:flex;gap:10px;
   overflow-x:auto;
   padding-bottom:10px;
   scroll-behavior: smooth;

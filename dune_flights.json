@@ -5,16 +5,16 @@
   },
   "departDate": "2026-06-20",
   "returnDate": null,
-  "storedAt": "2026-06-04T22:39:15.308Z",
+  "storedAt": "2026-06-04T22:42:34.376Z",
   "data": {
     "success": true,
     "statusMessage": "SUCCESS",
-    "searchCode": "6f21d6c9-f9d7-42ec-9d5c-c26ab548e809",
+    "searchCode": "94367bf0-5120-47ff-ac22-ef446a559759",
     "warningDetails": [],
     "data": {
       "offers": [
         {
-          "offerId": "AMS-18313930-1",
+          "offerId": "AMS-83343440-1",
           "detail": {
             "hasCodeshare": false,
             "checkedBaggageIncluded": true,
@@ -24,7 +24,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "229c43b9-7ef3-4d4f-846a-d905c66ef847",
+                "flightKey": "c53c175a-aa1b-466c-ac5b-6a0bbc145e2f",
                 "flightInfo": {
                   "duration": "2H35M",
                   "departureDate": "2026-06-20T10:30:00",
@@ -42,7 +42,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "cb5f0238-d3e4-4243-bd72-b26197502722",
+                  "segmentKey": "b7142d9e-7b99-4fc7-bdf2-99cd7e52fe35",
                   "segmentId": "39",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T10:30:00",
@@ -98,7 +98,7 @@
             }
           ],
           "fare": {
-            "fareKey": "630629a0-2390-4c0c-b671-5f10ddf8a063",
+            "fareKey": "865b23b5-5824-413c-9c25-b6882d6d6ee4",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -120,7 +120,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "e5612afa-e1f8-490a-800c-6590eb31e8e0",
+                "fareBreakdownKey": "23fa7f14-e7d1-4a8d-a320-3e4b45c137af",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -143,7 +143,7 @@
           "supplierId": 163
         },
         {
-          "offerId": "AMS-18313930-2",
+          "offerId": "AMS-83343440-2",
           "detail": {
             "hasCodeshare": false,
             "checkedBaggageIncluded": true,
@@ -153,7 +153,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "002a7373-460a-412f-ad97-6963b949508f",
+                "flightKey": "8ec3c460-7aa7-41b2-b34d-a03076086284",
                 "flightInfo": {
                   "duration": "2H35M",
                   "departureDate": "2026-06-20T17:20:00",
@@ -171,7 +171,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "38a33e1a-699c-49ce-b59c-8b56b571ce59",
+                  "segmentKey": "b5fadc8a-da88-4b9f-a57b-b2ca7bfd4fa5",
                   "segmentId": "40",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T17:20:00",
@@ -227,7 +227,7 @@
             }
           ],
           "fare": {
-            "fareKey": "4071194d-a010-4336-9c43-443e51097c54",
+            "fareKey": "16681bcc-d814-4944-8095-862f1bc97fb0",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -249,7 +249,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "ceb76df0-d3b4-4621-9900-c6ea2cfc1114",
+                "fareBreakdownKey": "09806b8a-c77f-4790-9f0b-809d60835fa0",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -272,7 +272,7 @@
           "supplierId": 163
         },
         {
-          "offerId": "AMS-18313930-4",
+          "offerId": "AMS-83343440-4",
           "detail": {
             "hasCodeshare": false,
             "checkedBaggageIncluded": false,
@@ -282,7 +282,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "59ae1f5a-d76f-4918-af90-625af1b3f951",
+                "flightKey": "32160b85-901c-43c2-92b5-e0805812aee5",
                 "flightInfo": {
                   "duration": "18H55M",
                   "departureDate": "2026-06-20T14:40:00",
@@ -300,7 +300,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "a0b0efbf-b326-4d21-9df7-761a75d66a00",
+                  "segmentKey": "075adc9e-9d2c-4028-9c90-b5d690bda22d",
                   "segmentId": "130",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T14:40:00",
@@ -353,7 +353,7 @@
                   }
                 },
                 {
-                  "segmentKey": "d28a4e06-bc80-4617-9aff-f445ee5efc55",
+                  "segmentKey": "978f99d7-ea1b-4eec-9100-a10907744a5b",
                   "segmentId": "131",
                   "departureAirportCode": "TUN",
                   "departureDateTime": "2026-06-21T07:00:00",
@@ -410,7 +410,7 @@
             }
           ],
           "fare": {
-            "fareKey": "fcdb7b29-e9d6-4826-a83f-f112b61d8e1e",
+            "fareKey": "06cd088e-4271-4232-a249-b4d5d254f695",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -432,7 +432,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "094eae54-5db2-43ec-a7b9-d2ee93948e55",
+                "fareBreakdownKey": "13d552a8-3b3f-4c8b-b9af-d23043daa85e",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -455,7 +455,7 @@
           "supplierId": 163
         },
         {
-          "offerId": "AMS-18313930-3",
+          "offerId": "AMS-83343440-3",
           "detail": {
             "hasCodeshare": false,
             "checkedBaggageIncluded": true,
@@ -465,7 +465,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "19b418eb-889d-4b38-be9c-6816d5898497",
+                "flightKey": "89acf910-51c0-498c-b40a-72cb3c397d94",
                 "flightInfo": {
                   "duration": "11H55M",
                   "departureDate": "2026-06-20T04:25:00",
@@ -483,7 +483,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "5880d2d2-61c1-4b17-931c-87ba57e54446",
+                  "segmentKey": "8c512090-9cf9-4adf-a6f7-2f5b6a36ad58",
                   "segmentId": "122",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T04:25:00",
@@ -535,7 +535,7 @@
                   }
                 },
                 {
-                  "segmentKey": "ae3e4c2d-1da1-4f23-9570-5161137ddbbc",
+                  "segmentKey": "e155fef7-2c3b-4336-a1e4-2f948767a9d4",
                   "segmentId": "123",
                   "departureAirportCode": "FCO",
                   "departureDateTime": "2026-06-20T15:10:00",
@@ -591,7 +591,7 @@
             }
           ],
           "fare": {
-            "fareKey": "89bc2aa8-0422-4fda-98a6-4bd834b43b9f",
+            "fareKey": "89151d15-78f5-4d50-9ece-ea41d935b45c",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -613,7 +613,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "81bd7b91-bc09-462c-be55-a2568e0c3f98",
+                "fareBreakdownKey": "559a3291-4a3b-4dd2-8c33-0922dde19438",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -636,7 +636,7 @@
           "supplierId": 163
         },
         {
-          "offerId": "AMS-18313930-9",
+          "offerId": "AMS-83343440-9",
           "detail": {
             "hasCodeshare": false,
             "checkedBaggageIncluded": false,
@@ -646,7 +646,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "2d5210d6-ff7e-4221-b2a1-5d16e27597bb",
+                "flightKey": "a6b35f3d-4e5d-4f2a-ab1d-ba8ceb72a36f",
                 "flightInfo": {
                   "duration": "23H50M",
                   "departureDate": "2026-06-20T14:40:00",
@@ -664,7 +664,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "203177b0-1f2b-42ba-bb88-8faae62bc3f3",
+                  "segmentKey": "4eb4445f-c70f-494b-ac02-4c0fd73197f3",
                   "segmentId": "112",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T14:40:00",
@@ -717,7 +717,7 @@
                   }
                 },
                 {
-                  "segmentKey": "df6126d8-b1a4-4c8a-9d37-b535e1c2d1e4",
+                  "segmentKey": "05985e22-867e-4805-ad70-655d94961985",
                   "segmentId": "113",
                   "departureAirportCode": "TUN",
                   "departureDateTime": "2026-06-21T11:55:00",
@@ -774,7 +774,7 @@
             }
           ],
           "fare": {
-            "fareKey": "aeedb20b-6604-4848-b868-97eed96db9ab",
+            "fareKey": "a2190de3-ab96-45b8-b894-a59dfed3df67",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -796,7 +796,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "6b643024-125f-49c3-ab69-2329147805bf",
+                "fareBreakdownKey": "0f2a5192-d554-4a8a-827c-e654d5b549d2",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -819,7 +819,7 @@
           "supplierId": 163
         },
         {
-          "offerId": "AMS-18313930-5",
+          "offerId": "AMS-83343440-5",
           "detail": {
             "hasCodeshare": false,
             "checkedBaggageIncluded": false,
@@ -829,7 +829,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "40525c56-8664-4739-a0e4-935c4447669a",
+                "flightKey": "5da9cb9d-6efb-4040-985a-252dc92418fd",
                 "flightInfo": {
                   "duration": "2H30M",
                   "departureDate": "2026-06-20T13:00:00",
@@ -847,7 +847,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "d2ed0352-93cf-4beb-98f9-6c4b6510e986",
+                  "segmentKey": "7c37a34e-de9c-4342-b737-0320c6073351",
                   "segmentId": "28",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T13:00:00",
@@ -903,7 +903,7 @@
             }
           ],
           "fare": {
-            "fareKey": "ea063a1a-0f18-4e03-a400-ea3f52fcdbd1",
+            "fareKey": "24766ce4-984e-467f-b210-cf1f52fbbf02",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -925,7 +925,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "dfd94529-cf20-4322-848e-650671e0368d",
+                "fareBreakdownKey": "ce55944b-aacd-432a-8955-44774c3b7e28",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -948,7 +948,7 @@
           "supplierId": 163
         },
         {
-          "offerId": "AMS-18313930-6",
+          "offerId": "AMS-83343440-6",
           "detail": {
             "hasCodeshare": false,
             "checkedBaggageIncluded": false,
@@ -958,7 +958,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "48c82087-1543-4e1b-9d7d-b3cae7b4ecd2",
+                "flightKey": "389ecd9a-2cb3-4672-abd7-f2ba75a81eb7",
                 "flightInfo": {
                   "duration": "2H40M",
                   "departureDate": "2026-06-20T06:10:00",
@@ -976,7 +976,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "245cfe65-b2ad-4409-90cf-c2dae1fa00ad",
+                  "segmentKey": "d428649a-680c-4bfd-9502-9a568315dd33",
                   "segmentId": "83",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T06:10:00",
@@ -1032,7 +1032,7 @@
             }
           ],
           "fare": {
-            "fareKey": "b9ff04fb-c033-4ea7-8b5d-5f3987081204",
+            "fareKey": "6cafdca3-2ae1-4fd8-b580-c97a28432be9",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -1054,7 +1054,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "80c9635b-fe84-4294-b036-60dfa3b06607",
+                "fareBreakdownKey": "44b310d6-efbe-4f5f-b558-746e89deec3a",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -1077,7 +1077,7 @@
           "supplierId": 163
         },
         {
-          "offerId": "AMS-18313930-7",
+          "offerId": "AMS-83343440-7",
           "detail": {
             "hasCodeshare": false,
             "checkedBaggageIncluded": false,
@@ -1087,7 +1087,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "1d1d0841-b262-4577-b7ed-dbeb75785c17",
+                "flightKey": "7a86fb30-6433-4449-9653-230d466538d8",
                 "flightInfo": {
                   "duration": "2H30M",
                   "departureDate": "2026-06-20T14:30:00",
@@ -1105,7 +1105,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "06972a86-c3e3-4916-9b07-ae0bf1c547ab",
+                  "segmentKey": "87a6aa9e-0a4f-421b-94c1-4858078f4529",
                   "segmentId": "30",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T14:30:00",
@@ -1161,7 +1161,7 @@
             }
           ],
           "fare": {
-            "fareKey": "b850a595-31f6-4508-a7b9-237343418363",
+            "fareKey": "54e9b883-8135-4545-8de3-d5920e26cfce",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -1183,7 +1183,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "e1f84a7e-ed23-46e9-972b-d7cc52c2bda4",
+                "fareBreakdownKey": "7c6c5b2c-397b-4653-9d9e-b8765c44ae80",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -1206,7 +1206,7 @@
           "supplierId": 163
         },
         {
-          "offerId": "AMS-18313930-8",
+          "offerId": "AMS-83343440-8",
           "detail": {
             "hasCodeshare": false,
             "checkedBaggageIncluded": false,
@@ -1216,7 +1216,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "005cdc0e-a4ba-4e68-af52-67fae94401f1",
+                "flightKey": "d7c19772-2505-445a-ad7d-28b33fcef37f",
                 "flightInfo": {
                   "duration": "2H30M",
                   "departureDate": "2026-06-20T17:35:00",
@@ -1234,7 +1234,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "f0dd9b4c-2666-4165-9306-00e283024d97",
+                  "segmentKey": "42f8d2f1-6d31-4c46-8992-cc5e209c3786",
                   "segmentId": "33",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T17:35:00",
@@ -1290,7 +1290,7 @@
             }
           ],
           "fare": {
-            "fareKey": "5163b449-e646-40a9-af21-7790ce9aba2b",
+            "fareKey": "80f0faeb-8f7e-433e-b497-ecc89d0cf591",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -1312,7 +1312,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "233f622f-641e-4b64-b230-3010ee89be24",
+                "fareBreakdownKey": "45f31651-3cd0-4f3c-844e-05a79691f66b",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -1335,7 +1335,7 @@
           "supplierId": 163
         },
         {
-          "offerId": "AMS-18313930-13",
+          "offerId": "AMS-83343440-13",
           "detail": {
             "hasCodeshare": false,
             "checkedBaggageIncluded": true,
@@ -1345,7 +1345,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "9387b2f9-a220-4753-8e00-8e753a63de6a",
+                "flightKey": "56e1420a-0c68-4c44-9dc4-3e3c601a93d3",
                 "flightInfo": {
                   "duration": "2H30M",
                   "departureDate": "2026-06-20T07:15:00",
@@ -1363,7 +1363,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "47712cd7-e867-47b4-8fec-b04ecf71164c",
+                  "segmentKey": "e7929f14-64b1-4690-bc77-841bdd52915d",
                   "segmentId": "25",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T07:15:00",
@@ -1419,7 +1419,7 @@
             }
           ],
           "fare": {
-            "fareKey": "e44cf581-d624-4937-b32c-7e8c1145c972",
+            "fareKey": "21c2320f-0e47-4a12-a1f6-d5f099fdffc1",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -1441,7 +1441,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "162a92a8-3796-4890-b3af-bc78c6bcd866",
+                "fareBreakdownKey": "eaba894a-f4f8-4fcb-9d37-a7807db818b9",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -1464,7 +1464,7 @@
           "supplierId": 163
         },
         {
-          "offerId": "AMS-18313930-14",
+          "offerId": "AMS-83343440-14",
           "detail": {
             "hasCodeshare": false,
             "checkedBaggageIncluded": true,
@@ -1474,7 +1474,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "1bc8bacd-6a5e-481f-9766-91ea0e83f73a",
+                "flightKey": "2aff445a-c270-412a-8f96-a73e0f736ef4",
                 "flightInfo": {
                   "duration": "2H30M",
                   "departureDate": "2026-06-20T08:00:00",
@@ -1492,7 +1492,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "86e2cd51-7f30-408a-bd7d-2676283ff1de",
+                  "segmentKey": "893175c1-2f89-42f2-b8d3-11c26516c0b7",
                   "segmentId": "26",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T08:00:00",
@@ -1548,7 +1548,7 @@
             }
           ],
           "fare": {
-            "fareKey": "18103dfd-6ed8-408f-b195-a22f831bf08c",
+            "fareKey": "d0dab723-9fd8-4ffb-bec2-dbb05ba992bd",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -1570,7 +1570,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "bd55f930-ec54-40ba-b755-36e038e3c918",
+                "fareBreakdownKey": "6a2bb596-df86-44b2-8d8d-85c5573e0561",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -1593,7 +1593,7 @@
           "supplierId": 163
         },
         {
-          "offerId": "AMS-18313930-15",
+          "offerId": "AMS-83343440-15",
           "detail": {
             "hasCodeshare": false,
             "checkedBaggageIncluded": true,
@@ -1603,7 +1603,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "9d0b3ccd-7569-42c8-84dc-33fe852065f9",
+                "flightKey": "21e59325-d4dc-4136-baec-7de79b7d887e",
                 "flightInfo": {
                   "duration": "2H30M",
                   "departureDate": "2026-06-20T10:30:00",
@@ -1621,7 +1621,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "1c7e718e-f0e3-4aea-b505-6b0b097b67fd",
+                  "segmentKey": "fbe74fc2-514a-4572-9710-c8979af59993",
                   "segmentId": "27",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T10:30:00",
@@ -1677,7 +1677,7 @@
             }
           ],
           "fare": {
-            "fareKey": "3b9d9990-0008-4dbf-9b62-1fb8773159c1",
+            "fareKey": "a9615f5b-eb94-46b5-bb8d-696e9e5250d8",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -1699,7 +1699,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "8a50a98c-4c1a-4b92-a79f-640875a1d994",
+                "fareBreakdownKey": "587c0cec-07e3-4a50-8db4-ce34cae80f32",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -1722,7 +1722,7 @@
           "supplierId": 163
         },
         {
-          "offerId": "AMS-18313930-16",
+          "offerId": "AMS-83343440-16",
           "detail": {
             "hasCodeshare": false,
             "checkedBaggageIncluded": true,
@@ -1732,7 +1732,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "66cf4ae8-d435-41f1-aaa1-20e3ec1ff89b",
+                "flightKey": "046dce7c-5010-45b1-910e-ba41694ad46a",
                 "flightInfo": {
                   "duration": "2H30M",
                   "departureDate": "2026-06-20T15:50:00",
@@ -1750,7 +1750,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "cfb720c5-09b9-4062-aec3-5e479053e0eb",
+                  "segmentKey": "1e06cfe8-15d2-4285-b501-055e9bd75b45",
                   "segmentId": "32",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T15:50:00",
@@ -1806,7 +1806,7 @@
             }
           ],
           "fare": {
-            "fareKey": "073f76d4-7a8f-4983-be64-7daae0a8fe27",
+            "fareKey": "0db669fd-4f2a-4ddb-87dd-6cc6d1626660",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -1828,7 +1828,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "35e71817-fec2-4fc4-88bd-0df3def6b785",
+                "fareBreakdownKey": "6050e069-00e0-43fb-9d0a-f2120c414de6",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -1851,7 +1851,7 @@
           "supplierId": 163
         },
         {
-          "offerId": "AMS-18313930-17",
+          "offerId": "AMS-83343440-17",
           "detail": {
             "hasCodeshare": false,
             "checkedBaggageIncluded": true,
@@ -1861,7 +1861,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "0cc26605-8751-4c3f-948a-b07a3072fa72",
+                "flightKey": "e5b1d742-468b-4f43-a099-c3356abd7966",
                 "flightInfo": {
                   "duration": "2H30M",
                   "departureDate": "2026-06-20T18:00:00",
@@ -1879,7 +1879,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "cf15670c-cd63-4d47-a15d-58e17d853ee6",
+                  "segmentKey": "0ff0284c-cbcb-412b-bbcb-00e6167b17d5",
                   "segmentId": "34",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T18:00:00",
@@ -1935,7 +1935,7 @@
             }
           ],
           "fare": {
-            "fareKey": "cbfb1e5e-ba7d-48ee-abf2-3f9b2bc6f069",
+            "fareKey": "6b4fbbb9-4c5f-4e58-82d5-291c6e23d5ba",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -1957,7 +1957,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "90c9b0b1-f4db-4273-aff1-4eec7ce86056",
+                "fareBreakdownKey": "9fe1d54b-7504-4746-9a8e-5df38f2356a5",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -1980,7 +1980,7 @@
           "supplierId": 163
         },
         {
-          "offerId": "AMS-18313930-10",
+          "offerId": "AMS-83343440-10",
           "detail": {
             "hasCodeshare": false,
             "checkedBaggageIncluded": true,
@@ -1990,7 +1990,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "baecc3d4-78f1-402e-9fdb-3096a808db0d",
+                "flightKey": "94a2c393-5bf2-4bf4-8fb0-ff317941444b",
                 "flightInfo": {
                   "duration": "34H35M",
                   "departureDate": "2026-06-20T04:25:00",
@@ -2008,7 +2008,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "c1d3f66a-9a1f-41ee-924c-a7dedbd65b38",
+                  "segmentKey": "f5fd0c60-c6ba-42d5-b10f-9931b4d8a7e6",
                   "segmentId": "65",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T04:25:00",
@@ -2060,7 +2060,7 @@
                   }
                 },
                 {
-                  "segmentKey": "a1dcad50-ca2b-4fd8-9546-a35831069fd2",
+                  "segmentKey": "7146f5ac-d138-45b7-bf98-f5cefb973e1e",
                   "segmentId": "66",
                   "departureAirportCode": "FCO",
                   "departureDateTime": "2026-06-20T21:00:00",
@@ -2112,7 +2112,7 @@
                   }
                 },
                 {
-                  "segmentKey": "cb133709-cab1-422e-8068-6718479649d4",
+                  "segmentKey": "da8de192-04b7-4390-904c-4ab12cc9197c",
                   "segmentId": "67",
                   "departureAirportCode": "LIN",
                   "departureDateTime": "2026-06-21T14:30:00",
@@ -2168,7 +2168,7 @@
             }
           ],
           "fare": {
-            "fareKey": "83a7b211-f360-4d89-a5a9-d82765576d70",
+            "fareKey": "6fc7ae7f-0351-4952-ae64-a1a9702b0fa0",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -2190,7 +2190,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "b65923f7-e603-49bb-ab66-f3a41a69c73e",
+                "fareBreakdownKey": "28df617f-3c49-4864-9d6d-62f00a7233b6",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -2213,7 +2213,7 @@
           "supplierId": 163
         },
         {
-          "offerId": "AMS-18313930-24",
+          "offerId": "AMS-83343440-24",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": false,
@@ -2224,7 +2224,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "aa1e26f0-44a6-44a1-95b5-455493293f83",
+                "flightKey": "e5ec270a-dd12-44fa-be3b-f38c26ed84c2",
                 "flightInfo": {
                   "duration": "22H50M",
                   "departureDate": "2026-06-20T11:45:00",
@@ -2242,7 +2242,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "a3fd31cb-f886-413f-9232-2ca0e7abc87b",
+                  "segmentKey": "119707b0-1b05-4379-a010-58e1b7ad73c7",
                   "segmentId": "110",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T11:45:00",
@@ -2295,7 +2295,7 @@
                   }
                 },
                 {
-                  "segmentKey": "8e7b5cad-c891-45b8-bd07-e874bc0b3728",
+                  "segmentKey": "41e94807-61cb-4a6a-a5f8-53baaaa78380",
                   "segmentId": "111",
                   "departureAirportCode": "SAW",
                   "departureDateTime": "2026-06-21T08:40:00",
@@ -2352,7 +2352,7 @@
             }
           ],
           "fare": {
-            "fareKey": "a1798156-26a0-469b-9b77-894a4d5c8559",
+            "fareKey": "8f0e7c1c-79b9-43aa-9fbc-1ea56e5ccf58",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -2374,7 +2374,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "19ffc5b3-3663-490d-9aeb-89308492f294",
+                "fareBreakdownKey": "34f68a65-b1a7-4d38-8e49-04ddc1cc05cb",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -2540,7 +2540,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-25",
+          "offerId": "AMS-83343440-25",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": false,
@@ -2551,7 +2551,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "91af810e-5d28-413a-8fa4-36c9633283a0",
+                "flightKey": "6d060bdf-58b4-483e-9b34-cea9d1c77f9b",
                 "flightInfo": {
                   "duration": "27H40M",
                   "departureDate": "2026-06-20T11:45:00",
@@ -2569,7 +2569,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "8031a542-84f6-48e1-82f9-edd0f065b89e",
+                  "segmentKey": "dc3b38b2-4f46-4363-a8dc-a6a3e0836dd9",
                   "segmentId": "86",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T11:45:00",
@@ -2622,7 +2622,7 @@
                   }
                 },
                 {
-                  "segmentKey": "6a744d81-bc65-4b76-b384-168e2b0d98fd",
+                  "segmentKey": "59d74958-6a96-49ba-89fd-d8457e76a2a1",
                   "segmentId": "87",
                   "departureAirportCode": "SAW",
                   "departureDateTime": "2026-06-21T13:30:00",
@@ -2679,7 +2679,7 @@
             }
           ],
           "fare": {
-            "fareKey": "ca7e2fc4-fe78-4ff9-921e-bf7f3774c7e5",
+            "fareKey": "abbea289-7901-472c-a968-a6339517055a",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -2701,7 +2701,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "a2260a3a-301a-42ca-9d82-e03a32bdfb4f",
+                "fareBreakdownKey": "76db7ddf-57bf-43cd-b2e7-f7b9547bf8c2",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -2867,7 +2867,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-28",
+          "offerId": "AMS-83343440-28",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": false,
@@ -2878,7 +2878,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "c7b7fcc5-5bbb-4d2c-9ecf-7041f3c4061f",
+                "flightKey": "ed1b1976-069b-49a7-ac54-a388656843e1",
                 "flightInfo": {
                   "duration": "19H55M",
                   "departureDate": "2026-06-20T01:40:00",
@@ -2896,7 +2896,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "77e958c8-0d5d-41ee-a8e6-d9fa53212f45",
+                  "segmentKey": "8bdd2878-6429-429b-b1ae-7d7f5e01a265",
                   "segmentId": "134",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T01:40:00",
@@ -2948,7 +2948,7 @@
                   }
                 },
                 {
-                  "segmentKey": "ac1804c8-c61f-4e7f-897f-215098c15558",
+                  "segmentKey": "38f6bcfd-022c-4092-907d-941819aaa9f4",
                   "segmentId": "135",
                   "departureAirportCode": "FRA",
                   "departureDateTime": "2026-06-20T21:20:00",
@@ -3004,7 +3004,7 @@
             }
           ],
           "fare": {
-            "fareKey": "2a75aa1f-dd75-495a-86cc-1d02bb0ff1b0",
+            "fareKey": "ae50d589-dc3a-44a5-85f6-a7f578e95a87",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -3026,7 +3026,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "388a1647-57eb-40a5-9775-3ddea6fa999c",
+                "fareBreakdownKey": "e7ea1bb5-f0e5-4b60-aebe-8fd25ecf2fca",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -3198,7 +3198,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-29",
+          "offerId": "AMS-83343440-29",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": false,
@@ -3209,7 +3209,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "1445b34a-9ada-4d25-b17c-486490596687",
+                "flightKey": "df13dd6c-ef43-41c5-a4fc-8e7357499c40",
                 "flightInfo": {
                   "duration": "14H35M",
                   "departureDate": "2026-06-20T01:40:00",
@@ -3227,7 +3227,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "335a1f3d-3dc3-4831-acef-761f0b045fe7",
+                  "segmentKey": "a04415ee-6ed9-4115-b594-234e3e30c912",
                   "segmentId": "47",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T01:40:00",
@@ -3279,7 +3279,7 @@
                   }
                 },
                 {
-                  "segmentKey": "3206f8ad-9208-4b38-a5e5-29d6816a63fc",
+                  "segmentKey": "bc5e8e93-cd74-45a3-8a74-3c54258a1e24",
                   "segmentId": "48",
                   "departureAirportCode": "FRA",
                   "departureDateTime": "2026-06-20T07:15:00",
@@ -3331,7 +3331,7 @@
                   }
                 },
                 {
-                  "segmentKey": "f9e59201-c745-41d4-85fc-2891ef6efa55",
+                  "segmentKey": "c674641d-c227-4349-8711-95b3a16f157f",
                   "segmentId": "49",
                   "departureAirportCode": "MUC",
                   "departureDateTime": "2026-06-20T15:40:00",
@@ -3387,7 +3387,7 @@
             }
           ],
           "fare": {
-            "fareKey": "09a66537-d7f3-4272-a2f5-d75d7929d1f1",
+            "fareKey": "4128d867-06cf-49d5-a4a2-b349875e06bb",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -3409,7 +3409,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "df5b5c46-8b97-4da2-87a4-70f8eab58639",
+                "fareBreakdownKey": "7c6947e3-8cec-4723-97d3-a5b3085e410c",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -3617,7 +3617,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-30",
+          "offerId": "AMS-83343440-30",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": false,
@@ -3628,7 +3628,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "9250546b-28fc-4743-8368-43a5e80d4962",
+                "flightKey": "69480d01-7b2f-46b6-aae5-607729c56883",
                 "flightInfo": {
                   "duration": "14H35M",
                   "departureDate": "2026-06-20T01:40:00",
@@ -3646,7 +3646,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "5fd0e532-6fc5-4d0c-a42e-387e8c64648d",
+                  "segmentKey": "e364ca84-b6d9-43cf-8e64-5d3fb19e9864",
                   "segmentId": "50",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T01:40:00",
@@ -3698,7 +3698,7 @@
                   }
                 },
                 {
-                  "segmentKey": "babd8709-52f0-4740-9b3f-0cd288978d2c",
+                  "segmentKey": "baf66c03-b31f-49a4-b284-09ad055d266a",
                   "segmentId": "51",
                   "departureAirportCode": "FRA",
                   "departureDateTime": "2026-06-20T08:15:00",
@@ -3750,7 +3750,7 @@
                   }
                 },
                 {
-                  "segmentKey": "74a8dd7a-cdeb-462b-884a-a3324982dc56",
+                  "segmentKey": "0f0527f7-5732-45db-b87d-66536052ec12",
                   "segmentId": "52",
                   "departureAirportCode": "MUC",
                   "departureDateTime": "2026-06-20T15:40:00",
@@ -3806,7 +3806,7 @@
             }
           ],
           "fare": {
-            "fareKey": "4fcbd932-51b7-4f52-9cb7-ce5fbf8ed535",
+            "fareKey": "8f820d98-0162-435c-85cc-5f1e32d53bbf",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -3828,7 +3828,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "d0f3de98-c95d-453f-bbd5-770b98c6cbc6",
+                "fareBreakdownKey": "e1d214c6-6cc8-409b-9da2-acc988bb429e",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -4036,7 +4036,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-31",
+          "offerId": "AMS-83343440-31",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": false,
@@ -4047,7 +4047,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "40fa1542-50b7-454e-9a01-db3ebc977b67",
+                "flightKey": "9e080e43-d80e-4ee2-a88a-5cba65b6e1e1",
                 "flightInfo": {
                   "duration": "14H35M",
                   "departureDate": "2026-06-20T01:40:00",
@@ -4065,7 +4065,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "8f348b19-674e-4c31-8507-5d0aebf4ae01",
+                  "segmentKey": "f7934f09-d6ff-44d3-bb7f-6afc50330ed4",
                   "segmentId": "53",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T01:40:00",
@@ -4117,7 +4117,7 @@
                   }
                 },
                 {
-                  "segmentKey": "19743097-4a5b-4ac8-9851-8de40e1dc586",
+                  "segmentKey": "939c6826-a5e4-4546-ae74-c1e45235cf42",
                   "segmentId": "54",
                   "departureAirportCode": "FRA",
                   "departureDateTime": "2026-06-20T09:15:00",
@@ -4169,7 +4169,7 @@
                   }
                 },
                 {
-                  "segmentKey": "e47ad833-46c2-45ac-9029-39927f9d175f",
+                  "segmentKey": "a82d0b75-f878-4236-9d7f-f25ad78ade2c",
                   "segmentId": "55",
                   "departureAirportCode": "MUC",
                   "departureDateTime": "2026-06-20T15:40:00",
@@ -4225,7 +4225,7 @@
             }
           ],
           "fare": {
-            "fareKey": "6b437512-9b91-4867-8fab-180b0736af43",
+            "fareKey": "1ce36f72-648e-4b67-be33-3f749cae5afd",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -4247,7 +4247,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "65dfa962-b514-4fdc-9d50-ab35d85edff8",
+                "fareBreakdownKey": "8816947e-c27c-432d-a3d5-95c53f1603ac",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -4455,7 +4455,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-32",
+          "offerId": "AMS-83343440-32",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": false,
@@ -4466,7 +4466,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "8801ede3-c03c-4b82-99f0-5d8258104601",
+                "flightKey": "9895a671-0709-435d-bea8-b1b1bfe88ee9",
                 "flightInfo": {
                   "duration": "14H35M",
                   "departureDate": "2026-06-20T01:40:00",
@@ -4484,7 +4484,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "fb6698a0-6c67-442f-8d42-0c6beaaa81fe",
+                  "segmentKey": "2fef6dfd-f134-41d0-b6ce-f6bd64a772b2",
                   "segmentId": "56",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T01:40:00",
@@ -4536,7 +4536,7 @@
                   }
                 },
                 {
-                  "segmentKey": "f295b78f-ab55-4a67-acda-9c28d3ad492d",
+                  "segmentKey": "cf60681f-f449-4931-992c-a597c8172382",
                   "segmentId": "57",
                   "departureAirportCode": "FRA",
                   "departureDateTime": "2026-06-20T10:15:00",
@@ -4588,7 +4588,7 @@
                   }
                 },
                 {
-                  "segmentKey": "640fe8dc-04ec-4abc-81ce-b23504f9b8a4",
+                  "segmentKey": "76be8547-6cce-4e6d-944e-eea89681ae75",
                   "segmentId": "58",
                   "departureAirportCode": "MUC",
                   "departureDateTime": "2026-06-20T15:40:00",
@@ -4644,7 +4644,7 @@
             }
           ],
           "fare": {
-            "fareKey": "36fbde82-c7f3-4498-b2af-0ede178c6a6e",
+            "fareKey": "370a647c-4df6-4329-8ad6-91f0c1cf1d29",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -4666,7 +4666,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "520d1873-a04d-4604-8ede-da0eb69870d6",
+                "fareBreakdownKey": "61a0aa65-1ea6-47ab-95ca-766cd49e9b66",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -4874,7 +4874,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-33",
+          "offerId": "AMS-83343440-33",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": false,
@@ -4885,7 +4885,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "21a54c6f-54dc-483d-a790-37dc98ef2a9a",
+                "flightKey": "36b53c52-4b76-45e0-a19e-161571455861",
                 "flightInfo": {
                   "duration": "14H35M",
                   "departureDate": "2026-06-20T01:40:00",
@@ -4903,7 +4903,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "ee15b030-c025-4fe3-b642-adaaf1829ad9",
+                  "segmentKey": "f285314e-6c13-49c7-ba08-617a410639b8",
                   "segmentId": "59",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T01:40:00",
@@ -4955,7 +4955,7 @@
                   }
                 },
                 {
-                  "segmentKey": "74046ebb-901b-4569-baec-175224a99c68",
+                  "segmentKey": "1b831377-e979-4a97-aef6-7849eda4a533",
                   "segmentId": "60",
                   "departureAirportCode": "FRA",
                   "departureDateTime": "2026-06-20T12:15:00",
@@ -5007,7 +5007,7 @@
                   }
                 },
                 {
-                  "segmentKey": "134595ad-9490-4cdd-889a-fdcc60966557",
+                  "segmentKey": "e1751deb-625e-4c91-8b35-59726f5b7c16",
                   "segmentId": "61",
                   "departureAirportCode": "MUC",
                   "departureDateTime": "2026-06-20T15:40:00",
@@ -5063,7 +5063,7 @@
             }
           ],
           "fare": {
-            "fareKey": "9a15d57e-8396-4634-bace-5595608d094a",
+            "fareKey": "fb987a3c-71b3-4b4e-9da2-fc11471154fe",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -5085,7 +5085,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "6ba22441-84c3-453d-bce2-5b727c6b8527",
+                "fareBreakdownKey": "7911994f-c43e-4ae5-8270-f4f2483cb231",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -5293,7 +5293,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-34",
+          "offerId": "AMS-83343440-34",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": false,
@@ -5304,7 +5304,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "1f8ac5fe-1e2e-454d-939f-aeb94f7e140f",
+                "flightKey": "b3a6617c-75d7-41b2-b8cc-0f3de9efc928",
                 "flightInfo": {
                   "duration": "14H35M",
                   "departureDate": "2026-06-20T01:40:00",
@@ -5322,7 +5322,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "ac7d3e42-79d9-47f7-b19f-bf61db73473e",
+                  "segmentKey": "696f4248-25d9-47ac-bcf7-a0797d5e76d6",
                   "segmentId": "62",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T01:40:00",
@@ -5374,7 +5374,7 @@
                   }
                 },
                 {
-                  "segmentKey": "f38f7147-7e78-4e23-ac53-19e1e7a1c67b",
+                  "segmentKey": "3598bd5c-976b-4d30-b88d-b518e7f5f691",
                   "segmentId": "63",
                   "departureAirportCode": "FRA",
                   "departureDateTime": "2026-06-20T13:15:00",
@@ -5426,7 +5426,7 @@
                   }
                 },
                 {
-                  "segmentKey": "dba071a6-71dc-4430-98d2-143a1f05b6dc",
+                  "segmentKey": "d1935bde-0df7-4b61-b132-b3a7efdb8181",
                   "segmentId": "64",
                   "departureAirportCode": "MUC",
                   "departureDateTime": "2026-06-20T15:40:00",
@@ -5482,7 +5482,7 @@
             }
           ],
           "fare": {
-            "fareKey": "71ff14e7-7e16-4e66-a0e0-7ef0f79a337e",
+            "fareKey": "eb7e7ea8-227e-4a4f-b4ce-5d3f74f82c5a",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -5504,7 +5504,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "00146b6a-193c-4c69-98cb-5f2fad1161e5",
+                "fareBreakdownKey": "8e450423-a3f9-4271-b7a1-142cccb92020",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -5712,7 +5712,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-35",
+          "offerId": "AMS-83343440-35",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": true,
@@ -5723,7 +5723,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "db3fdc57-782a-4d19-94db-706e79fc47a2",
+                "flightKey": "976fd5fd-11c1-4e13-87c8-41c27f02028e",
                 "flightInfo": {
                   "duration": "20H55M",
                   "departureDate": "2026-06-20T01:40:00",
@@ -5741,7 +5741,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "105d721e-bae5-40bb-866b-bf9a931a9159",
+                  "segmentKey": "7218aadd-5923-48cc-8ed2-40772af63ccf",
                   "segmentId": "136",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T01:40:00",
@@ -5793,7 +5793,7 @@
                   }
                 },
                 {
-                  "segmentKey": "1eaea697-7d7f-4fe2-a66e-1896eb715719",
+                  "segmentKey": "cfc099fe-05ce-4780-ac97-7f1c0034d91c",
                   "segmentId": "137",
                   "departureAirportCode": "FRA",
                   "departureDateTime": "2026-06-20T09:15:00",
@@ -5845,7 +5845,7 @@
                   }
                 },
                 {
-                  "segmentKey": "86235ad1-3611-4101-9d53-114ea89a0b2c",
+                  "segmentKey": "8daa5954-124e-42a7-bb16-e4aa30eb0993",
                   "segmentId": "138",
                   "departureAirportCode": "MUC",
                   "departureDateTime": "2026-06-20T22:00:00",
@@ -5901,7 +5901,7 @@
             }
           ],
           "fare": {
-            "fareKey": "dea465fe-8676-43fa-a072-0b64a786c5db",
+            "fareKey": "80b79424-87c1-49c8-8b22-e6f7dc2aff46",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -5923,7 +5923,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "156ec767-3f78-4b12-b752-b028e7691245",
+                "fareBreakdownKey": "82a5f387-96f9-4bd2-bdf8-c4d1ed173bf3",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -6131,7 +6131,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-36",
+          "offerId": "AMS-83343440-36",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": true,
@@ -6142,7 +6142,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "78834ead-7ad9-4e5d-9934-d0b045349fbd",
+                "flightKey": "8a922af5-4ab1-42f1-941b-6a3ac09c1584",
                 "flightInfo": {
                   "duration": "20H55M",
                   "departureDate": "2026-06-20T01:40:00",
@@ -6160,7 +6160,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "f49b106b-42ef-42b9-8583-09b139636400",
+                  "segmentKey": "c80ee2b3-157b-4b6f-964d-d040d3e1450b",
                   "segmentId": "139",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T01:40:00",
@@ -6212,7 +6212,7 @@
                   }
                 },
                 {
-                  "segmentKey": "34208c7f-4db8-4324-9a8a-8659b87a683d",
+                  "segmentKey": "89d14184-8bdd-4b67-a1f1-4ba550f4d91d",
                   "segmentId": "140",
                   "departureAirportCode": "FRA",
                   "departureDateTime": "2026-06-20T10:15:00",
@@ -6264,7 +6264,7 @@
                   }
                 },
                 {
-                  "segmentKey": "678c4acc-d03d-4ede-9656-a64e11efd783",
+                  "segmentKey": "378b0ee4-9bbc-47d3-a546-f0cf8c69c3b4",
                   "segmentId": "141",
                   "departureAirportCode": "MUC",
                   "departureDateTime": "2026-06-20T22:00:00",
@@ -6320,7 +6320,7 @@
             }
           ],
           "fare": {
-            "fareKey": "f63e3e0d-24a5-409e-9e01-7ab2d3077c52",
+            "fareKey": "ea98a76f-f8cf-4909-88a8-e342b4987df4",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -6342,7 +6342,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "4288b0ae-2208-4f84-b431-db03ae8a97cf",
+                "fareBreakdownKey": "3663c6c9-d16a-441c-9045-47d1a041b3fa",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -6550,7 +6550,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-37",
+          "offerId": "AMS-83343440-37",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": true,
@@ -6561,7 +6561,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "3af6bcc0-f6f6-422a-b693-098b2459c1b4",
+                "flightKey": "dfd0225e-e7bc-476d-81c3-8457ffa6a836",
                 "flightInfo": {
                   "duration": "20H55M",
                   "departureDate": "2026-06-20T01:40:00",
@@ -6579,7 +6579,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "fadbb8a8-d218-462a-8d5b-408667a6063b",
+                  "segmentKey": "37a1c9f0-67d5-412d-861a-121e5524b898",
                   "segmentId": "142",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T01:40:00",
@@ -6631,7 +6631,7 @@
                   }
                 },
                 {
-                  "segmentKey": "cb2b686c-de6d-462b-8cab-342a2e5e9b1e",
+                  "segmentKey": "5c8c08d8-8b02-4b3e-8d05-ecc176ce304c",
                   "segmentId": "143",
                   "departureAirportCode": "FRA",
                   "departureDateTime": "2026-06-20T12:15:00",
@@ -6683,7 +6683,7 @@
                   }
                 },
                 {
-                  "segmentKey": "5f5b84c5-7f70-4af5-8fe8-e8fce9806022",
+                  "segmentKey": "b4831ebd-c347-4ef0-bc5e-1fdb05f4fa55",
                   "segmentId": "144",
                   "departureAirportCode": "MUC",
                   "departureDateTime": "2026-06-20T22:00:00",
@@ -6739,7 +6739,7 @@
             }
           ],
           "fare": {
-            "fareKey": "8e41bd23-9a96-4548-a1ca-03fd252302b2",
+            "fareKey": "e218b1c8-a484-436c-95b0-ff0a2d20b5e7",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -6761,7 +6761,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "0e8eb32b-2dc2-44d2-b1f2-21ab021f8309",
+                "fareBreakdownKey": "a3e23088-d634-40f4-bafc-2924e0a22be7",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -6969,7 +6969,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-38",
+          "offerId": "AMS-83343440-38",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": true,
@@ -6980,7 +6980,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "d960d708-129c-4a64-bb4b-6de1f0c8e7c7",
+                "flightKey": "f47a23e6-6f2e-4521-a13c-182159b37d02",
                 "flightInfo": {
                   "duration": "20H55M",
                   "departureDate": "2026-06-20T01:40:00",
@@ -6998,7 +6998,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "44bfe67f-3313-482a-bc38-9607ad2cce52",
+                  "segmentKey": "702d9d28-21f7-4b31-b34b-3d1bf1c36cce",
                   "segmentId": "145",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T01:40:00",
@@ -7050,7 +7050,7 @@
                   }
                 },
                 {
-                  "segmentKey": "b54eb23e-8e90-4968-8571-367581064856",
+                  "segmentKey": "83cbfb3b-6c2d-4dd2-a47b-790ddc3726d8",
                   "segmentId": "146",
                   "departureAirportCode": "FRA",
                   "departureDateTime": "2026-06-20T13:15:00",
@@ -7102,7 +7102,7 @@
                   }
                 },
                 {
-                  "segmentKey": "2b9d73d1-0bcd-4a68-862b-21e537d51cd3",
+                  "segmentKey": "22f384d8-7782-4f4c-acc1-300d5b6087ab",
                   "segmentId": "147",
                   "departureAirportCode": "MUC",
                   "departureDateTime": "2026-06-20T22:00:00",
@@ -7158,7 +7158,7 @@
             }
           ],
           "fare": {
-            "fareKey": "b6194110-2755-4acb-89eb-ea6541de75eb",
+            "fareKey": "ae6fdefb-aece-4e59-bda2-5308252abe14",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -7180,7 +7180,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "895b411d-95a9-4d42-9cb5-c4801e466c8e",
+                "fareBreakdownKey": "e65d169c-4752-479a-b30a-f3f2b182fc77",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -7388,7 +7388,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-39",
+          "offerId": "AMS-83343440-39",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": true,
@@ -7399,7 +7399,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "3a04ae1f-c932-46a1-9ffe-33940c9432d0",
+                "flightKey": "cb41e7a1-a1cc-452c-aa93-f9bffa94ff5a",
                 "flightInfo": {
                   "duration": "20H55M",
                   "departureDate": "2026-06-20T01:40:00",
@@ -7417,7 +7417,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "db82be59-6424-4925-a2fa-cea347367ccf",
+                  "segmentKey": "9dede4e3-f861-40c5-8d9f-80b967b3293e",
                   "segmentId": "148",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T01:40:00",
@@ -7469,7 +7469,7 @@
                   }
                 },
                 {
-                  "segmentKey": "261c1c1b-370c-4939-9205-92fa23d18b8a",
+                  "segmentKey": "25883028-e87b-49d8-9a1b-e09a4717c337",
                   "segmentId": "149",
                   "departureAirportCode": "FRA",
                   "departureDateTime": "2026-06-20T15:15:00",
@@ -7521,7 +7521,7 @@
                   }
                 },
                 {
-                  "segmentKey": "4bee0139-f508-4d84-9146-df2c821af8ab",
+                  "segmentKey": "67ab15e9-8e84-4c56-925a-cd7be6f90bf1",
                   "segmentId": "150",
                   "departureAirportCode": "MUC",
                   "departureDateTime": "2026-06-20T22:00:00",
@@ -7577,7 +7577,7 @@
             }
           ],
           "fare": {
-            "fareKey": "b59b1824-6049-4271-a1d7-564fdc09b868",
+            "fareKey": "f9735222-b26c-42fb-bb1b-ac70c1f03200",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -7599,7 +7599,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "ae854fc8-ce1d-4563-8024-66f1e29387e7",
+                "fareBreakdownKey": "99070959-cfcd-42b4-af82-a2c2774a4ac3",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -7807,7 +7807,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-40",
+          "offerId": "AMS-83343440-40",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": true,
@@ -7818,7 +7818,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "0bf95477-60bf-426f-aeda-2870eab20b75",
+                "flightKey": "1a6d8763-992e-44f9-8052-9858c57d5afc",
                 "flightInfo": {
                   "duration": "20H55M",
                   "departureDate": "2026-06-20T01:40:00",
@@ -7836,7 +7836,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "2886bc6d-90d5-4ab3-b9eb-d502dc0e5ea0",
+                  "segmentKey": "00f1fc58-f2af-4a50-8c55-ad99582b5956",
                   "segmentId": "151",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T01:40:00",
@@ -7888,7 +7888,7 @@
                   }
                 },
                 {
-                  "segmentKey": "3b15e3fe-19f1-45ca-ba3e-82f84d34d849",
+                  "segmentKey": "388249d7-b0d1-4879-b6dd-562fec6ce19d",
                   "segmentId": "152",
                   "departureAirportCode": "FRA",
                   "departureDateTime": "2026-06-20T16:15:00",
@@ -7940,7 +7940,7 @@
                   }
                 },
                 {
-                  "segmentKey": "d72341c0-7cb6-4a16-88f7-675d68bdf93a",
+                  "segmentKey": "1a3a64d8-9193-42ea-9f09-b7de85207e96",
                   "segmentId": "153",
                   "departureAirportCode": "MUC",
                   "departureDateTime": "2026-06-20T22:00:00",
@@ -7996,7 +7996,7 @@
             }
           ],
           "fare": {
-            "fareKey": "abc8111d-1adc-4869-b8ba-c03e05a6e703",
+            "fareKey": "91d2fe7d-c496-4aad-aec3-afcda91317cb",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -8018,7 +8018,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "64b326c4-e3f0-4c61-be90-73d2269adb1d",
+                "fareBreakdownKey": "02ad13a5-cdd6-48d4-96a6-ee0915938c8e",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -8226,7 +8226,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-41",
+          "offerId": "AMS-83343440-41",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": true,
@@ -8237,7 +8237,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "ee8b8417-4703-44cf-8578-9e7dc4fc7ea8",
+                "flightKey": "1426a9fb-f1f7-461f-8931-c560754f48e6",
                 "flightInfo": {
                   "duration": "20H55M",
                   "departureDate": "2026-06-20T01:40:00",
@@ -8255,7 +8255,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "e07f8a99-7fc2-40b4-be0f-eaacae6af675",
+                  "segmentKey": "5986a609-ece3-40de-bb05-273a6c62a768",
                   "segmentId": "154",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T01:40:00",
@@ -8307,7 +8307,7 @@
                   }
                 },
                 {
-                  "segmentKey": "ea7f1d29-784a-4daf-a16e-709e9586330b",
+                  "segmentKey": "e0e13901-a1ac-41d0-89c7-dd13606e0b8b",
                   "segmentId": "155",
                   "departureAirportCode": "FRA",
                   "departureDateTime": "2026-06-20T17:15:00",
@@ -8359,7 +8359,7 @@
                   }
                 },
                 {
-                  "segmentKey": "6da2ef37-29fa-488e-a13c-1f42d1d88916",
+                  "segmentKey": "5b9203de-923b-4f22-b5fe-31bced03c4af",
                   "segmentId": "156",
                   "departureAirportCode": "MUC",
                   "departureDateTime": "2026-06-20T22:00:00",
@@ -8415,7 +8415,7 @@
             }
           ],
           "fare": {
-            "fareKey": "2241af45-a8d6-4189-bbaa-1e05841a1e1e",
+            "fareKey": "de3206c9-6ff7-4ad7-9b2f-42908942f5f6",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -8437,7 +8437,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "19bb0a48-645d-4d04-ac58-00d17f596feb",
+                "fareBreakdownKey": "781547af-b8a8-4d04-beba-115f47654997",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -8645,7 +8645,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-42",
+          "offerId": "AMS-83343440-42",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": false,
@@ -8656,7 +8656,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "0e68c838-1776-435e-a562-de5840617107",
+                "flightKey": "2b1056d2-961d-4635-b558-174d67908993",
                 "flightInfo": {
                   "duration": "8H55M",
                   "departureDate": "2026-06-20T12:40:00",
@@ -8674,7 +8674,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "f37f2a91-da75-40e8-8dba-2b5b50ea8825",
+                  "segmentKey": "c2e0f5da-5e26-43ae-964e-a2a0e9328c67",
                   "segmentId": "114",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T12:40:00",
@@ -8726,7 +8726,7 @@
                   }
                 },
                 {
-                  "segmentKey": "35ffa727-081e-4088-8a73-d604437d6d1c",
+                  "segmentKey": "1bad59ed-46c5-4aca-834d-b66aa0827cda",
                   "segmentId": "115",
                   "departureAirportCode": "FRA",
                   "departureDateTime": "2026-06-20T21:20:00",
@@ -8782,7 +8782,7 @@
             }
           ],
           "fare": {
-            "fareKey": "a3b2d3b5-4260-49d1-9fb7-254d4744537b",
+            "fareKey": "5fb34a6f-6f3f-4a5e-85ad-57f529360159",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -8804,7 +8804,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "9100e57c-7e39-487e-a390-9c2c3563137e",
+                "fareBreakdownKey": "011e2c40-9024-4d57-88c9-fa6a58cdedf7",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -8976,7 +8976,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-49",
+          "offerId": "AMS-83343440-49",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": false,
@@ -8987,7 +8987,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "b8650688-1e43-4299-aa2e-f01512536e6b",
+                "flightKey": "9c113ccc-1686-4c8b-9aa8-4a3ab657ec5f",
                 "flightInfo": {
                   "duration": "4H50M",
                   "departureDate": "2026-06-20T18:00:00",
@@ -9005,7 +9005,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "c9004f69-9ecc-4599-9ba4-518d577d3c46",
+                  "segmentKey": "bf34bc86-c129-4bd0-a6dd-7c4e116ea4ce",
                   "segmentId": "88",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T18:00:00",
@@ -9057,7 +9057,7 @@
                   }
                 },
                 {
-                  "segmentKey": "bf32cba7-76ee-42b3-bbf3-ed1aa3ffdbbb",
+                  "segmentKey": "4fc1106a-bf1b-4d25-bac8-bfde0fdb5e44",
                   "segmentId": "89",
                   "departureAirportCode": "MAD",
                   "departureDateTime": "2026-06-20T21:45:00",
@@ -9113,7 +9113,7 @@
             }
           ],
           "fare": {
-            "fareKey": "e097d8ce-e819-459c-be48-177ee73b25d0",
+            "fareKey": "bc7911fd-5bb4-4e2d-8a72-6338542a7e39",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -9135,7 +9135,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "46d8f416-6a07-4b11-884b-fee9b60d08f1",
+                "fareBreakdownKey": "c283dfd9-a271-4048-82ad-2b68e677c153",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -9301,7 +9301,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-60",
+          "offerId": "AMS-83343440-60",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": false,
@@ -9312,7 +9312,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "8babf676-d925-4bbe-a050-29349892bead",
+                "flightKey": "e643539c-7a7e-467e-9547-229ac6d906f7",
                 "flightInfo": {
                   "duration": "11H55M",
                   "departureDate": "2026-06-20T09:35:00",
@@ -9330,7 +9330,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "1fc7a217-ceb0-4bf7-a048-57ef8a01e291",
+                  "segmentKey": "a9a41299-d0e2-4579-b5da-72f39a500ddc",
                   "segmentId": "124",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T09:35:00",
@@ -9382,7 +9382,7 @@
                   }
                 },
                 {
-                  "segmentKey": "2855a8e6-1f0f-4097-a2b4-47f84cd1c4a0",
+                  "segmentKey": "4dd82018-9ab4-4d7c-820a-07d4eff9f3c0",
                   "segmentId": "125",
                   "departureAirportCode": "IST",
                   "departureDateTime": "2026-06-20T19:45:00",
@@ -9438,7 +9438,7 @@
             }
           ],
           "fare": {
-            "fareKey": "4ef3580c-722c-4997-815a-c4fa341f5a7c",
+            "fareKey": "5f2fb010-3571-4728-8126-cb0d410b332d",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -9460,7 +9460,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "e9ca853a-d5a4-4285-89b4-13a08f68ae8a",
+                "fareBreakdownKey": "0ab83bb2-20ac-43ef-81ca-9ee9e76fce4b",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -9623,7 +9623,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-61",
+          "offerId": "AMS-83343440-61",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": true,
@@ -9634,7 +9634,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "b4f775b2-d98d-4bc1-b153-b0d99038bc31",
+                "flightKey": "9af71842-1a05-41c6-be93-ff8fff098058",
                 "flightInfo": {
                   "duration": "10H50M",
                   "departureDate": "2026-06-20T22:10:00",
@@ -9652,7 +9652,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "08f56b0d-cac9-4ab4-8f00-3b977bc98f63",
+                  "segmentKey": "0630d15a-237b-41f7-ad33-30b26e2a8bdd",
                   "segmentId": "104",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T22:10:00",
@@ -9704,7 +9704,7 @@
                   }
                 },
                 {
-                  "segmentKey": "ffc651ce-d3e6-40e1-ae18-f8fb2c044fef",
+                  "segmentKey": "ce2b3ac2-bae9-4d91-bd56-ab3b86e5ba61",
                   "segmentId": "105",
                   "departureAirportCode": "IST",
                   "departureDateTime": "2026-06-21T07:15:00",
@@ -9760,7 +9760,7 @@
             }
           ],
           "fare": {
-            "fareKey": "e078d6ff-d73f-47c7-b598-ba8651c725c4",
+            "fareKey": "2c2f8948-3212-4b04-a2ca-3e00e55c89a1",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -9782,7 +9782,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "79a03dfc-8b3f-4e85-a79c-1a59f9ae35c2",
+                "fareBreakdownKey": "f1b94553-e20e-46e5-9074-150593b9166e",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -9945,7 +9945,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-62",
+          "offerId": "AMS-83343440-62",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": true,
@@ -9956,7 +9956,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "92356179-e7aa-4f91-8ff8-f2daedb8c9f9",
+                "flightKey": "249bf1cf-1982-427a-88db-0e13e6b6d01f",
                 "flightInfo": {
                   "duration": "11H50M",
                   "departureDate": "2026-06-20T09:40:00",
@@ -9974,7 +9974,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "cf9a16ca-0096-4a3e-8d6d-4ec5598c9af6",
+                  "segmentKey": "0a39eb37-46ff-4b4d-ae61-a46e93b03f7c",
                   "segmentId": "106",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T09:40:00",
@@ -10026,7 +10026,7 @@
                   }
                 },
                 {
-                  "segmentKey": "a3d98fb0-82a8-4439-aa6d-fb5dfddec4af",
+                  "segmentKey": "a6bcbea7-012e-49ae-a12c-20477f2e52e7",
                   "segmentId": "107",
                   "departureAirportCode": "IST",
                   "departureDateTime": "2026-06-20T19:45:00",
@@ -10082,7 +10082,7 @@
             }
           ],
           "fare": {
-            "fareKey": "3b9136ea-d9d6-4087-a6b8-f408717452d6",
+            "fareKey": "dbe04a2b-66b7-41a8-b70c-5b41b871c27c",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -10104,7 +10104,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "da8d5293-480b-49fe-977a-61469ea262fa",
+                "fareBreakdownKey": "18f8e826-3968-470d-94d4-9ad057670b99",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -10267,7 +10267,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-63",
+          "offerId": "AMS-83343440-63",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": true,
@@ -10278,7 +10278,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "aee65e73-d729-429a-8ed0-e11b3ebe2c41",
+                "flightKey": "6b9ca6de-7209-41a7-aacc-262bd26d1754",
                 "flightInfo": {
                   "duration": "13H40M",
                   "departureDate": "2026-06-20T22:10:00",
@@ -10296,7 +10296,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "4579309c-1c10-4887-baa4-4a33530eea63",
+                  "segmentKey": "99bd7cfb-a3ef-4b1b-9e04-c8f82d4570b5",
                   "segmentId": "84",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T22:10:00",
@@ -10348,7 +10348,7 @@
                   }
                 },
                 {
-                  "segmentKey": "e6959372-74bd-44ba-81ce-d0c94178b00a",
+                  "segmentKey": "4381ef89-b8bd-435d-a281-1abfc6fc0d0f",
                   "segmentId": "85",
                   "departureAirportCode": "IST",
                   "departureDateTime": "2026-06-21T10:10:00",
@@ -10404,7 +10404,7 @@
             }
           ],
           "fare": {
-            "fareKey": "5e101586-2d23-4f3b-967c-0e28b7d1d08a",
+            "fareKey": "ed18d3c4-59d9-4ee1-a3af-2338a0736fc9",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -10426,7 +10426,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "8efbcbd2-3a93-46e1-b628-18028e93616d",
+                "fareBreakdownKey": "6e77ded8-c768-409a-9575-6cae510c9d41",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -10589,7 +10589,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-64",
+          "offerId": "AMS-83343440-64",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": true,
@@ -10600,7 +10600,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "5f13ba0b-ad6e-450f-b985-d9d7b66b3402",
+                "flightKey": "d5ce448e-4db7-4a14-92b5-8c2736ba3036",
                 "flightInfo": {
                   "duration": "15H55M",
                   "departureDate": "2026-06-20T22:10:00",
@@ -10618,7 +10618,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "655c25a3-41ea-4cf3-a8ac-4eb59fc98b25",
+                  "segmentKey": "ad095922-2650-4ee6-99cd-2163ea5b8c68",
                   "segmentId": "128",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T22:10:00",
@@ -10670,7 +10670,7 @@
                   }
                 },
                 {
-                  "segmentKey": "9cc24673-5405-4b83-a6d6-326a06c38244",
+                  "segmentKey": "cf414c22-5111-4e17-9b92-f0601213f8bf",
                   "segmentId": "129",
                   "departureAirportCode": "IST",
                   "departureDateTime": "2026-06-21T12:25:00",
@@ -10726,7 +10726,7 @@
             }
           ],
           "fare": {
-            "fareKey": "4b11672e-1651-4cbc-b9e1-2b32fd1d762d",
+            "fareKey": "a43ed8be-cf33-4f8b-b308-ba4ac688f887",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -10748,7 +10748,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "f3cd60b7-bf21-4ea1-b761-a3ca22a52f91",
+                "fareBreakdownKey": "f42196fa-dd40-427d-a512-dbee9470e49a",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -10911,7 +10911,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-65",
+          "offerId": "AMS-83343440-65",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": true,
@@ -10922,7 +10922,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "909a0b81-548e-4315-aadf-c897f2226028",
+                "flightKey": "bf76fbf6-1aa7-4d7f-af49-a9f5ae773d0b",
                 "flightInfo": {
                   "duration": "18H55M",
                   "departureDate": "2026-06-20T22:10:00",
@@ -10940,7 +10940,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "e5535b91-6a6b-468e-aa1f-1233e2bf8e7c",
+                  "segmentKey": "11d44907-d260-4a22-99bb-4c80adb46f20",
                   "segmentId": "132",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T22:10:00",
@@ -10992,7 +10992,7 @@
                   }
                 },
                 {
-                  "segmentKey": "30e44ce1-93dd-4c28-9c1a-8e6ad90ff49a",
+                  "segmentKey": "b765afd2-af17-4fc3-8a08-5fe634c077dc",
                   "segmentId": "133",
                   "departureAirportCode": "IST",
                   "departureDateTime": "2026-06-21T15:30:00",
@@ -11048,7 +11048,7 @@
             }
           ],
           "fare": {
-            "fareKey": "328c6ab4-5b6e-45a0-848d-4d50501554ff",
+            "fareKey": "ff2ad0cf-cec4-4d31-8786-041d5f4a0d91",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -11070,7 +11070,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "cf9b3f51-b575-408c-977a-e1236e4a7643",
+                "fareBreakdownKey": "44a6adb7-ab33-4d6a-8721-79232f067af0",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -11233,7 +11233,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-66",
+          "offerId": "AMS-83343440-66",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": true,
@@ -11244,7 +11244,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "ad0ce409-c3fb-41dc-9f44-a886f7755eea",
+                "flightKey": "ac319f0c-627d-4340-b65d-c435934e0035",
                 "flightInfo": {
                   "duration": "17H50M",
                   "departureDate": "2026-06-20T22:10:00",
@@ -11262,7 +11262,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "18e9536b-663b-4003-abf1-b7a85f85b1c8",
+                  "segmentKey": "af142261-b313-4df4-a4a7-9631cec8771a",
                   "segmentId": "108",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T22:10:00",
@@ -11314,7 +11314,7 @@
                   }
                 },
                 {
-                  "segmentKey": "e5c890cc-e406-46bf-b395-1dcbeac0d7d4",
+                  "segmentKey": "6842effb-850f-4e8a-aa46-ba820fc579a9",
                   "segmentId": "109",
                   "departureAirportCode": "IST",
                   "departureDateTime": "2026-06-21T14:10:00",
@@ -11370,7 +11370,7 @@
             }
           ],
           "fare": {
-            "fareKey": "6cacaa57-26bd-4dc7-bcb8-8bc665c321dc",
+            "fareKey": "8ac42e3d-bc15-40ea-8ced-fae75a2f32d0",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -11392,7 +11392,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "cccdaa18-821c-430f-ba08-a47a71c9e1c9",
+                "fareBreakdownKey": "01010bb2-dd6f-445b-b504-cf6427f05ca4",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -11555,7 +11555,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-67",
+          "offerId": "AMS-83343440-67",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": true,
@@ -11566,7 +11566,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "c0c0179f-823c-48d9-ae55-8cc513cde7e6",
+                "flightKey": "1c28307a-6778-442e-89e5-efe30c3d1807",
                 "flightInfo": {
                   "duration": "23H20M",
                   "departureDate": "2026-06-20T22:10:00",
@@ -11584,7 +11584,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "091737ad-846f-44c5-ba45-67e4aa9bc1b1",
+                  "segmentKey": "8f18c822-5977-4da6-b935-b1c9b76ae54c",
                   "segmentId": "23",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T22:10:00",
@@ -11636,7 +11636,7 @@
                   }
                 },
                 {
-                  "segmentKey": "84f33b02-79e1-4be4-84ef-468a177cf3f0",
+                  "segmentKey": "823926b5-1535-4250-bb43-5deb8d6a64ab",
                   "segmentId": "24",
                   "departureAirportCode": "IST",
                   "departureDateTime": "2026-06-21T19:45:00",
@@ -11692,7 +11692,7 @@
             }
           ],
           "fare": {
-            "fareKey": "172e8101-f1bf-443f-85b0-4533153f6402",
+            "fareKey": "07788a89-1189-4842-ae43-dc4f9000bb9a",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -11714,7 +11714,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "82ccdd35-1221-47df-837a-4b8f6239ba90",
+                "fareBreakdownKey": "b5365ae9-be6c-4bf6-bd7d-9e57ddf0c052",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -11877,7 +11877,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-68",
+          "offerId": "AMS-83343440-68",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": false,
@@ -11888,7 +11888,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "eae2c422-a053-44d0-b3f1-caff5a58eea3",
+                "flightKey": "c4e7d5f2-82f5-46d1-93cb-c482465e5ee3",
                 "flightInfo": {
                   "duration": "31H10M",
                   "departureDate": "2026-06-20T12:55:00",
@@ -11906,7 +11906,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "c7816ed9-27af-4710-a2eb-35c2dec50915",
+                  "segmentKey": "73fe9255-88ed-4999-a42b-0684a4f02875",
                   "segmentId": "15",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T12:55:00",
@@ -11958,7 +11958,7 @@
                   }
                 },
                 {
-                  "segmentKey": "b9e1332d-cd80-4368-80fc-d507c5518e63",
+                  "segmentKey": "618d2567-1b41-45ac-8620-e540e3997fc7",
                   "segmentId": "16",
                   "departureAirportCode": "CAI",
                   "departureDateTime": "2026-06-21T17:15:00",
@@ -12014,7 +12014,7 @@
             }
           ],
           "fare": {
-            "fareKey": "ec66457b-625e-471d-92f3-4f1d94d03220",
+            "fareKey": "f255a423-90e0-47c3-bb03-5f1581846447",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "NEGOTIATED",
@@ -12036,7 +12036,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "1f44a22f-9821-4ca7-a51e-5c0d399b21fc",
+                "fareBreakdownKey": "e599e297-2fcf-468f-aea1-7900f1cd1ead",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -12198,7 +12198,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-69",
+          "offerId": "AMS-83343440-69",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": false,
@@ -12209,7 +12209,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "24aff50e-24bb-476c-84fa-38498d078770",
+                "flightKey": "be5defb0-8bb8-480a-9728-6ea317d535e0",
                 "flightInfo": {
                   "duration": "19H10M",
                   "departureDate": "2026-06-20T00:55:00",
@@ -12227,7 +12227,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "72f24a39-a697-4ebd-8cc2-d6338c66e3fd",
+                  "segmentKey": "f65faddd-036a-43d9-98fc-327f56d6cdd6",
                   "segmentId": "13",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T00:55:00",
@@ -12279,7 +12279,7 @@
                   }
                 },
                 {
-                  "segmentKey": "45f3ddaa-89fd-4e1c-8491-9b3d79901eb5",
+                  "segmentKey": "bc7086ec-b373-4dd7-a48a-f311c8c9034b",
                   "segmentId": "14",
                   "departureAirportCode": "CAI",
                   "departureDateTime": "2026-06-20T17:15:00",
@@ -12335,7 +12335,7 @@
             }
           ],
           "fare": {
-            "fareKey": "24dd8e00-1ba0-44d1-a261-f28bd7853b88",
+            "fareKey": "579d9979-3d54-4cc4-ab7f-8233245114d2",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "NEGOTIATED",
@@ -12357,7 +12357,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "175d0211-20b7-42d8-8bf5-b04cfd698538",
+                "fareBreakdownKey": "81e2c250-6caf-4b54-a7a6-7161a57d31f3",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -12519,7 +12519,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-70",
+          "offerId": "AMS-83343440-70",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": false,
@@ -12530,7 +12530,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "ca68cab1-bfce-4274-8ac3-a8e8f35ac33d",
+                "flightKey": "bea17900-ab90-4db7-8d5a-f6d22ab0889f",
                 "flightInfo": {
                   "duration": "24H30M",
                   "departureDate": "2026-06-20T12:55:00",
@@ -12548,7 +12548,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "3a6dbda8-228d-42d9-9c1e-9ecd77e471a8",
+                  "segmentKey": "9c2898c2-3758-4d61-9aa4-250b6ed472c9",
                   "segmentId": "37",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T12:55:00",
@@ -12600,7 +12600,7 @@
                   }
                 },
                 {
-                  "segmentKey": "b456b4b2-f4c9-4516-af6d-e5f87346686f",
+                  "segmentKey": "8e170b3c-a309-40b8-92fb-4577f641bf19",
                   "segmentId": "38",
                   "departureAirportCode": "CAI",
                   "departureDateTime": "2026-06-21T10:45:00",
@@ -12656,7 +12656,7 @@
             }
           ],
           "fare": {
-            "fareKey": "1dccfc35-ba91-48e0-9034-4b7dd47f95cf",
+            "fareKey": "d594a18d-16f7-4e0c-96c8-22b64cec0352",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "NEGOTIATED",
@@ -12678,7 +12678,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "d86c9499-3160-41bb-8108-894546f84bf0",
+                "fareBreakdownKey": "4e28676d-341f-4ef0-8ff5-d6237934e29d",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -12840,7 +12840,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-71",
+          "offerId": "AMS-83343440-71",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": false,
@@ -12851,7 +12851,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "62d3f0c1-4a36-4304-bd12-90bd24868df4",
+                "flightKey": "6c48ec9d-7442-4558-b330-1c17403bd2d5",
                 "flightInfo": {
                   "duration": "12H30M",
                   "departureDate": "2026-06-20T00:55:00",
@@ -12869,7 +12869,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "b3e0f277-bb93-4a59-9334-2e15d13fb043",
+                  "segmentKey": "c39e608a-0779-49e4-8555-d94129c52357",
                   "segmentId": "35",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T00:55:00",
@@ -12921,7 +12921,7 @@
                   }
                 },
                 {
-                  "segmentKey": "fa435051-76cf-4797-a982-89bb3f2f6d35",
+                  "segmentKey": "23c7f2c5-a5ac-4f37-8e7b-024392d5029a",
                   "segmentId": "36",
                   "departureAirportCode": "CAI",
                   "departureDateTime": "2026-06-20T10:45:00",
@@ -12977,7 +12977,7 @@
             }
           ],
           "fare": {
-            "fareKey": "02e59bbb-ee32-4d1a-9cef-483e5ac0c335",
+            "fareKey": "39f216db-0748-4b35-926d-aacf01e2d007",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "NEGOTIATED",
@@ -12999,7 +12999,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "67746c97-bacb-40c9-8217-61c042983506",
+                "fareBreakdownKey": "075ef8d4-72ed-4e03-b550-999589b7e6a2",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -13161,7 +13161,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-72",
+          "offerId": "AMS-83343440-72",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": false,
@@ -13172,7 +13172,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "a92cd8a8-7c21-4a86-af5c-24470c234e49",
+                "flightKey": "ebc6ce03-5e23-49b9-9f9b-deeeeb142dbe",
                 "flightInfo": {
                   "duration": "14H55M",
                   "departureDate": "2026-06-20T15:35:00",
@@ -13190,7 +13190,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "18e0cc55-19dd-419a-9e9a-2ae1e07c91dd",
+                  "segmentKey": "5c0e4e63-0c18-4a66-8114-1a4137a5aaa6",
                   "segmentId": "126",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T15:35:00",
@@ -13242,7 +13242,7 @@
                   }
                 },
                 {
-                  "segmentKey": "387cb7f0-a487-4445-a876-39a3b0bf0523",
+                  "segmentKey": "f0b54f08-81dd-4fc6-a157-5db6eaec567b",
                   "segmentId": "127",
                   "departureAirportCode": "DOH",
                   "departureDateTime": "2026-06-21T01:40:00",
@@ -13298,7 +13298,7 @@
             }
           ],
           "fare": {
-            "fareKey": "f4bdfaab-86be-4f76-aa21-c251de4905f1",
+            "fareKey": "ea94f999-144d-40ea-8043-c6437333932d",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -13320,7 +13320,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "4358b1c1-627d-4dd1-b7ed-856453ca873c",
+                "fareBreakdownKey": "e07a195b-ec5d-4172-86e0-50672ab52215",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -13484,7 +13484,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-73",
+          "offerId": "AMS-83343440-73",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": true,
@@ -13495,7 +13495,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "86196f63-a4c8-4aa7-a4bb-a55c507e8d42",
+                "flightKey": "f7854244-0b85-49f2-80b6-e52a0ecb5282",
                 "flightInfo": {
                   "duration": "5H0M",
                   "departureDate": "2026-06-20T09:10:00",
@@ -13513,7 +13513,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "1e7c62b5-5725-4f62-8ac6-d8fe5a6c9bb0",
+                  "segmentKey": "51842e27-8319-4da8-8cf3-bf12e158494f",
                   "segmentId": "1",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T09:10:00",
@@ -13565,7 +13565,7 @@
                   }
                 },
                 {
-                  "segmentKey": "8261830b-8698-4205-b301-890d6a469824",
+                  "segmentKey": "2d6a2350-ee95-4d66-87d6-afbd182b943f",
                   "segmentId": "2",
                   "departureAirportCode": "BCN",
                   "departureDateTime": "2026-06-20T13:10:00",
@@ -13621,7 +13621,7 @@
             }
           ],
           "fare": {
-            "fareKey": "fbf2f15d-de78-4967-9d76-2c4280d0fc27",
+            "fareKey": "63d44e86-7d84-4c2c-905e-5039eb83682d",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -13643,7 +13643,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "5abde19b-3f7b-4d2a-9e42-baf03f841d2f",
+                "fareBreakdownKey": "9a9c028b-23f5-403f-9679-0400c6295403",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
@@ -13809,7 +13809,7 @@
           }
         },
         {
-          "offerId": "AMS-18313930-74",
+          "offerId": "AMS-83343440-74",
           "supplierId": 163,
           "detail": {
             "hasCodeshare": true,
@@ -13820,7 +13820,7 @@
           "journey": [
             {
               "flight": {
-                "flightKey": "b4076b9c-4534-40df-b372-39ee95c366d2",
+                "flightKey": "5b7425a8-c4cd-415c-9eab-1770c8e8f83b",
                 "flightInfo": {
                   "duration": "7H10M",
                   "departureDate": "2026-06-20T07:00:00",
@@ -13838,7 +13838,7 @@
               },
               "flightSegments": [
                 {
-                  "segmentKey": "17636654-8cad-4354-b28b-1a5cc73ab2dd",
+                  "segmentKey": "988b2529-1a55-42ba-a5cb-558f36f67cae",
                   "segmentId": "9",
                   "departureAirportCode": "ALG",
                   "departureDateTime": "2026-06-20T07:00:00",
@@ -13890,7 +13890,7 @@
                   }
                 },
                 {
-                  "segmentKey": "c9b46a20-08c7-43db-9a9b-a740ce47c00c",
+                  "segmentKey": "07a3c3d2-ad1c-49cd-98e6-856415f57073",
                   "segmentId": "10",
                   "departureAirportCode": "BCN",
                   "departureDateTime": "2026-06-20T13:10:00",
@@ -13946,7 +13946,7 @@
             }
           ],
           "fare": {
-            "fareKey": "e22aa3b3-d98e-45ee-a3a3-e39d9e88435c",
+            "fareKey": "166a3df0-59e5-4a8d-a215-972bcf9928aa",
             "currencyCode": "DZD",
             "fareType": {
               "fareCode": "PUBLISHED",
@@ -13968,7 +13968,7 @@
             },
             "fareBreakdown": [
               {
-                "fareBreakdownKey": "db730f48-0fa0-41f8-80d2-e72b30a7c634",
+                "fareBreakdownKey": "cf52c21f-6266-4e41-952e-3acf34091a11",
                 "fareType": "STANDARD",
                 "passengerKeys": [
                   "1"
