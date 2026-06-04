@@ -66,11 +66,11 @@ module.exports = {
 
     if (returnDate) {
       state.datePickerRange1 = [
-        `${departDate}T23:00:00.000Z`,
-        `${returnDate}T23:00:00.000Z`
+        `${departDate}T12:00:00.000Z`,
+        `${returnDate}T12:00:00.000Z`
       ];
     } else {
-      state.datePicker1 = `${departDate}T23:00:00.000Z`;
+      state.datePicker1 = `${departDate}T12:00:00.000Z`;
     }
 
     const encodedState = encodeURIComponent(JSON.stringify(state));

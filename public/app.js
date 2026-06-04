@@ -1638,11 +1638,11 @@ function buildH24Url(from, to, departDate, returnDate, pax) {
 
   if (isRT && returnDate) {
     searchState.datePickerRange1 = [
-      `${departDate}T23:00:00.000Z`,
-      `${returnDate}T23:00:00.000Z`,
+      `${departDate}T12:00:00.000Z`,
+      `${returnDate}T12:00:00.000Z`,
     ];
   } else {
-    searchState.datePicker1 = `${departDate}T23:00:00.000Z`;
+    searchState.datePicker1 = `${departDate}T12:00:00.000Z`;
   }
 
   const encoded = encodeURIComponent(JSON.stringify(searchState));
