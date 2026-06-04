@@ -165,6 +165,86 @@ module.exports = {
     };
   },
 
+  async augmentData(page, initialJson) {
+    if (!initialJson || !initialJson.data || !initialJson.data.offers) return initialJson;
+    
+    const availableAirlines = initialJson.data.filterDependencies?.airlines || [];
+    if (availableAirlines.length === 0) return initialJson;
+    
+    const existingAirlines = new Set();
+    for (const offer of initialJson.data.offers) {
+      if (offer.journey && offer.journey.length > 0 && offer.journey[0].flightSegments && offer.journey[0].flightSegments.length > 0) {
+        existingAirlines.add(offer.journey[0].flightSegments[0].marketingAirline);
+      }
+    }
+    
+    const missingAirlines = availableAirlines
+      .map(a => a.IataCode)
+      .filter(code => code && !existingAirlines.has(code));
+      
+    if (missingAirlines.length === 0) return initialJson;
+    
+    console.log(`[H24Voyages] Missing airlines detected: ${missingAirlines.join(', ')}`);
+    
+    const currentUrl = page.url();
+    const urlObj = new URL(currentUrl);
+    const stateStr = decodeURIComponent(urlObj.search).replace(/^\?/, '').replace(/=$/, '');
+    
+    let state;
+    try {
+      state = JSON.parse(stateStr);
+    } catch(e) {
+      console.log('[H24Voyages] Error parsing URL state:', e.message);
+      return initialJson;
+    }
+    
+    const accumulatedOffers = [];
+
+    const responseHandler = async (response) => {
+      if (response.url().includes('flights/flights/search')) {
+        try {
+          const ct = response.headers()['content-type'] || '';
+          if (ct.includes('application/json')) {
+            const j = await response.json();
+            if (j && j.data && j.data.offers) {
+              accumulatedOffers.push(...j.data.offers);
+            }
+          }
+        } catch (e) {}
+      }
+    };
+    
+    page.on('response', responseHandler);
+
+    for (const airline of missingAirlines) {
+      state.airlines = [airline]; // Query ONE airline at a time
+      const newStateStr = encodeURIComponent(JSON.stringify(state));
+      const newUrl = urlObj.origin + urlObj.pathname + '?' + newStateStr + '=';
+
+      const beforeCount = accumulatedOffers.length;
+      try {
+        await page.goto(newUrl, { waitUntil: 'networkidle2', timeout: 15000 });
+        for (let i = 0; i < 5; i++) {
+          if (accumulatedOffers.length > beforeCount) break;
+          await new Promise(r => setTimeout(r, 1000));
+        }
+      } catch (e) {
+        console.log(`[H24Voyages] Error navigating for ${airline}: ${e.message}`);
+      }
+    }
+    
+    page.off('response', responseHandler);
+    
+    if (accumulatedOffers.length > 0) {
+      initialJson.data.offers.push(...accumulatedOffers);
+      console.log(`[H24Voyages] Added ${accumulatedOffers.length} new offers for missing airlines!`);
+    } else {
+      console.log(`[H24Voyages] No new offers returned for missing airlines.`);
+    }
+    
+    return initialJson;
+  },
+
   buildBookingUrl(from, to, departDate, returnDate, pax) {
     // Same as search URL since the UI supports deep linking perfectly
     return this.buildSearchUrl(from, to, departDate, returnDate, pax);

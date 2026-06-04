@@ -173,7 +173,7 @@ console.log(`[Provider] ${providers.length} provider(s) active: ${providers.map(
 // ─────────────────────────────────────────────────────────────────────────────
 //  Core scraper engine — works for ANY provider plugin
 // ─────────────────────────────────────────────────────────────────────────────
-async function fetchProvider(provider, from, to, departDate, returnDate, pax) {
+async function fetchProvider(provider, from, to, departDate, returnDate, pax, bypassCache = false) {
   const tag         = `[${provider.bookingName}]`;
   const cacheFile   = path.join(__dirname, provider.cacheFile);
   const isRoundTrip = !!returnDate;
@@ -205,10 +205,22 @@ async function fetchProvider(provider, from, to, departDate, returnDate, pax) {
 
     await page.goto(targetUrl, { waitUntil: 'networkidle2', timeout: 30000 });
 
-    // Wait up to 15 seconds for the interception to succeed
-    for (let i = 0; i < 15; i++) {
-      if (interceptedJson) break;
-      await new Promise(r => setTimeout(r, 1000));
+    // Wait for the specific JSON response
+    let waitTime = 0;
+    while (!interceptedJson && waitTime < 25000) {
+      await new Promise(r => setTimeout(r, 500));
+      waitTime += 500;
+    }
+
+    page.removeAllListeners('response');
+
+    if (interceptedJson && provider.augmentData) {
+      console.log(`${tag} Augmenting data via provider script...`);
+      try {
+        interceptedJson = await provider.augmentData(page, interceptedJson);
+      } catch (e) {
+        console.error(`${tag} Augment error:`, e.message);
+      }
     }
 
     await browser.close();
@@ -234,7 +246,7 @@ async function fetchProvider(provider, from, to, departDate, returnDate, pax) {
   }
 
   // ── Disk cache fallback ────────────────────────────────────────────────────
-  if (!interceptedJson) {
+  if (!interceptedJson && !bypassCache) {
     console.log(`${tag} Trying disk cache...`);
     try {
       if (fs.existsSync(cacheFile)) {
@@ -424,6 +436,61 @@ app.get('/api/flights/search', async (req, res) => {
   } catch (err) {
     console.error('[Aggregator] Fatal error:', err.message);
     res.status(500).json({ error: 'Internal Aggregator Server Error', details: err.message });
+  }
+});
+
+/**
+ * GET /api/flights/stream
+ * Server-Sent Events (SSE) endpoint to progressively stream results as providers finish.
+ */
+app.get('/api/flights/stream', async (req, res) => {
+  const { from, to, departDate, returnDate, pax } = req.query;
+
+  if (!from || !to || !departDate) {
+    return res.status(400).json({ error: 'Missing required parameters: from, to, departDate' });
+  }
+
+  const passengerCount = parseInt(pax) || 1;
+
+  // Setup SSE headers
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  
+  // Flush headers immediately
+  res.flushHeaders();
+
+  const collectedResults = [];
+
+  try {
+    const promises = providers.map(async provider => {
+      try {
+        const flights = await fetchProvider(provider, from, to, departDate, returnDate, passengerCount, true /* force bypass cache */);
+        collectedResults.push({ provider: provider.name, flights });
+        
+        // Merge the current collected results
+        const merged = aggregateResults(collectedResults);
+        
+        // Stream update to the client
+        res.write(`data: ${JSON.stringify({ type: 'update', data: merged })}\n\n`);
+      } catch (err) {
+        console.error(`[SSE] Error in provider ${provider.name}:`, err.message);
+      }
+    });
+
+    await Promise.allSettled(promises);
+
+    // Update popular prices at the very end using the final set
+    const finalMerged = aggregateResults(collectedResults);
+    updatePopularPrices(finalMerged, from, to);
+
+    // Tell the client we're done
+    res.write(`data: ${JSON.stringify({ type: 'done' })}\n\n`);
+    res.end();
+  } catch (err) {
+    console.error('[SSE] Fatal error:', err.message);
+    res.write(`data: ${JSON.stringify({ type: 'error', message: err.message })}\n\n`);
+    res.end();
   }
 });
 

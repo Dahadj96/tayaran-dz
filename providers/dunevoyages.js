@@ -174,6 +174,60 @@ module.exports = {
   },
 
   // ── Step 8: Pre-filled booking redirect URL ───────────────────────────────────
+  async augmentData(page, initialJson) {
+    if (!initialJson || !initialJson.data || !initialJson.data.offers) return initialJson;
+    
+    const searchCode = initialJson.data.searchCode || initialJson.searchCode;
+    const availableAirlines = initialJson.data.filterDependencies?.airlines || [];
+    
+    if (!searchCode || availableAirlines.length === 0) return initialJson;
+    
+    // Find airlines we already have in the initial offers
+    const existingAirlines = new Set();
+    for (const offer of initialJson.data.offers) {
+      if (offer.journey && offer.journey.length > 0 && offer.journey[0].flightSegments && offer.journey[0].flightSegments.length > 0) {
+        existingAirlines.add(offer.journey[0].flightSegments[0].marketingAirline);
+      }
+    }
+    
+    // Find missing airlines
+    const missingAirlines = availableAirlines
+      .map(a => a.IataCode)
+      .filter(code => code && !existingAirlines.has(code));
+      
+    if (missingAirlines.length === 0) return initialJson;
+    
+    console.log(`[DuneVoyages] Missing airlines detected: ${missingAirlines.join(', ')}`);
+    
+    // Fetch them inside the browser context
+    const newOffers = await page.evaluate(async (searchCode, airlines) => {
+      const fetchedOffers = [];
+      for (const airline of airlines) {
+        try {
+          const url = `https://vols.dunevoyages.com/server/api/flights/flights/results?searchCode=${searchCode}&airline=${airline}&supplier=&page=1`;
+          const res = await fetch(url, {
+            headers: {
+              'accept': 'application/json',
+              'content-type': 'application/json'
+            }
+          });
+          const json = await res.json();
+          if (json && json.data && json.data.offers && Array.isArray(json.data.offers)) {
+            fetchedOffers.push(...json.data.offers);
+          }
+        } catch(e) {}
+      }
+      return fetchedOffers;
+    }, searchCode, missingAirlines);
+    
+    if (newOffers && newOffers.length > 0) {
+      initialJson.data.offers.push(...newOffers);
+      console.log(`[DuneVoyages] Added ${newOffers.length} new offers!`);
+    }
+    
+    return initialJson;
+  },
+
   buildBookingUrl(from, to, departDate, returnDate, pax) {
     return this.buildSearchUrl(from, to, departDate, returnDate, pax);
   },

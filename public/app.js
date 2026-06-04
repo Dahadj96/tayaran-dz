@@ -286,21 +286,21 @@ const airports = [
 ];
 
 const localAirlines = {
-  AH:{name:'Air Algérie',     logo:'https://static.volz.app/assets/logos/airline_banners/AH.png'},
-  AF:{name:'Air France',      logo:'https://static.volz.app/assets/logos/airline_banners/AF.png'},
-  TK:{name:'Turkish Airlines',logo:'https://static.volz.app/assets/logos/airline_banners/TK.png'},
-  EK:{name:'Emirates',        logo:'https://static.volz.app/assets/logos/airline_banners/EK.png'},
-  QR:{name:'Qatar Airways',   logo:'https://static.volz.app/assets/logos/airline_banners/QR.png'},
-  LH:{name:'Lufthansa',       logo:'https://static.volz.app/assets/logos/airline_banners/LH.png'},
-  TU:{name:'Tunisair',        logo:'https://static.volz.app/assets/logos/airline_banners/TU.png'},
-  MS:{name:'EgyptAir',        logo:'https://static.volz.app/assets/logos/airline_banners/MS.png'},
-  IB:{name:'Iberia',          logo:'https://static.volz.app/assets/logos/airline_banners/IB.png'},
-  VY:{name:'Vueling',         logo:'https://static.volz.app/assets/logos/airline_banners/VY.png'},
-  PC:{name:'Pegasus',         logo:'https://static.volz.app/assets/logos/airline_banners/PC.png'},
-  AZ:{name:'ITA Airways',     logo:'https://static.volz.app/assets/logos/airline_banners/AZ.png'},
-  BJ:{name:'Nouvelair',       logo:'https://static.volz.app/assets/logos/airline_banners/BJ.png'},
-  SF:{name:'Tassili Airlines',logo:'https://static.volz.app/assets/logos/airline_banners/SF.png'},
-  XX:{name:'Unknown Airline', logo:'https://static.volz.app/assets/logos/airline_banners/generic.png'}
+  AH:{name:'Air Algérie',     logo:'https://www.gstatic.com/flights/airline_logos/70px/dark/AH.png'},
+  AF:{name:'Air France',      logo:'https://www.gstatic.com/flights/airline_logos/70px/dark/AF.png'},
+  TK:{name:'Turkish Airlines',logo:'https://www.gstatic.com/flights/airline_logos/70px/dark/TK.png'},
+  EK:{name:'Emirates',        logo:'https://www.gstatic.com/flights/airline_logos/70px/dark/EK.png'},
+  QR:{name:'Qatar Airways',   logo:'https://www.gstatic.com/flights/airline_logos/70px/dark/QR.png'},
+  LH:{name:'Lufthansa',       logo:'https://www.gstatic.com/flights/airline_logos/70px/dark/LH.png'},
+  TU:{name:'Tunisair',        logo:'https://www.gstatic.com/flights/airline_logos/70px/dark/TU.png'},
+  MS:{name:'EgyptAir',        logo:'https://www.gstatic.com/flights/airline_logos/70px/dark/MS.png'},
+  IB:{name:'Iberia',          logo:'https://www.gstatic.com/flights/airline_logos/70px/dark/IB.png'},
+  VY:{name:'Vueling',         logo:'https://www.gstatic.com/flights/airline_logos/70px/dark/VY.png'},
+  PC:{name:'Pegasus',         logo:'https://www.gstatic.com/flights/airline_logos/70px/dark/PC.png'},
+  AZ:{name:'ITA Airways',     logo:'https://www.gstatic.com/flights/airline_logos/70px/dark/AZ.png'},
+  BJ:{name:'Nouvelair',       logo:'https://www.gstatic.com/flights/airline_logos/70px/dark/BJ.png'},
+  SF:{name:'Tassili Airlines',logo:'https://www.gstatic.com/flights/airline_logos/70px/dark/SF.png'},
+  XX:{name:'Unknown Airline', logo:'https://www.gstatic.com/flights/airline_logos/70px/dark/XX.png'}
 };
 
 const airlines = { ...localAirlines };
@@ -309,7 +309,7 @@ if (window.globalAirlinesData) {
     if (!airlines[code]) {
       airlines[code] = {
         name: window.globalAirlinesData[code],
-        logo: `https://static.volz.app/assets/logos/airline_banners/${code}.png`
+        logo: `https://www.gstatic.com/flights/airline_logos/70px/dark/${code}.png`
       };
     }
   });
@@ -358,10 +358,11 @@ const state = {
   filtered: [],      // After filters/sorts applied
   rawFlights: [],    // Stored raw output for dynamic tab swapping
   visibleCount: 15,  // Pagination for results
-  
+  expandedFlightId: null, // Currently open flight card
+
   // Sort
   sortBy: 'best',
-  
+
   // Filters
   filterStops: 'all', // all, direct, 1stop
   filterLuggage: false,
@@ -576,6 +577,8 @@ function extractIATA(val) {
 }
 
 // ===== Search =====
+let activeEventSource = null;
+
 async function doSearch() {
   const from = extractIATA($('input-from')?.value);
   const to = extractIATA($('input-to')?.value);
@@ -588,36 +591,60 @@ async function doSearch() {
 
   showSkeletons(5);
   state.searchDone = true;
+  state.rawFlights = [];
+  state.flights = [];
+  state.filtered = [];
+  
+  const cnt = $('results-count');
+  if (cnt) cnt.innerHTML = `Recherche en cours <span class="loading-dots">...</span>`;
 
   const departStr = toDateString(calendarState.departDate);
   const returnStr = state.tripType === 'roundtrip' ? toDateString(calendarState.returnDate) : '';
   const adults = parseInt($('pax-adults')?.value) || 1;
   const children = parseInt($('pax-children')?.value) || 0;
   const totalPax = adults + children;
-
-  try {
-    const url = `/api/flights/search?from=${from}&to=${to}&departDate=${departStr}&returnDate=${returnStr}&pax=${totalPax}`;
-    const response = await fetch(url);
-    if (!response.ok) throw new Error('Backend query failed');
-    const data = await response.json();
-
-    if (data && data.length > 0) {
-      state.rawFlights = data;
-      state.flights = processFlights(data);
-    } else {
-      console.log('[Aggregator Client] Backend returned 0 results');
-      state.rawFlights = [];
-      state.flights = processFlights([]);
-    }
-    renderAirlineFilterCards();
-    applySort();
-  } catch (error) {
-    console.log('[Aggregator Client] Backend offline or failed:', error.message);
-    state.rawFlights = [];
-    state.flights = processFlights([]);
-    renderAirlineFilterCards();
-    applySort();
+  
+  if (activeEventSource) {
+    activeEventSource.close();
   }
+
+  const url = `/api/flights/stream?from=${from}&to=${to}&departDate=${departStr}&returnDate=${returnStr}&pax=${totalPax}`;
+  activeEventSource = new EventSource(url);
+
+  activeEventSource.onmessage = (event) => {
+    try {
+      const payload = JSON.parse(event.data);
+      if (payload.type === 'update') {
+        state.rawFlights = payload.data;
+        state.flights = processFlights(payload.data);
+        renderAirlineFilterCards();
+        applySort();
+      } else if (payload.type === 'done') {
+        activeEventSource.close();
+        activeEventSource = null;
+        if (state.rawFlights.length === 0) {
+          applySort(); // will trigger no-results screen
+        } else {
+          // Final render to remove loading indicators
+          applySort();
+        }
+      } else if (payload.type === 'error') {
+        console.error('[Aggregator SSE Error]', payload.message);
+        activeEventSource.close();
+        activeEventSource = null;
+        applySort();
+      }
+    } catch (e) {
+      console.error('Failed to parse SSE message', e);
+    }
+  };
+
+  activeEventSource.onerror = (err) => {
+    console.error('[Aggregator Client] SSE connection error', err);
+    activeEventSource.close();
+    activeEventSource = null;
+    applySort();
+  };
 }
 
 // ===== Sort =====
@@ -689,10 +716,31 @@ function renderFlights() {
     if(cnt) cnt.textContent='';
     return;
   }
-  if(cnt) cnt.textContent=`${state.filtered.length} ${t.results_found}`;
+  if(cnt) {
+    cnt.innerHTML = `${state.filtered.length} ${t.results_found}` + (activeEventSource ? ` <span style="font-size: 0.8em; color: var(--text-light); margin-left: 8px;">(Recherche en cours <span class="loading-dots">...</span>)</span>` : '');
+  }
   
   const visibleFlights = state.filtered.slice(0, state.visibleCount);
-  let html = visibleFlights.map((f,i) => buildCard(f,i)).join('');
+  
+  // Smoothly update the container to prevent violent blinking
+  const newHtml = visibleFlights.map((f,i) => buildCard(f,i)).join('');
+  
+  // If we are currently streaming and the container already has content, use a lightweight DOM replacement
+  if (activeEventSource && c.children.length > 0) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = newHtml;
+    
+    // Replace existing or append new smoothly
+    const currentNodes = Array.from(c.children);
+    const newNodes = Array.from(tempDiv.children);
+    
+    // We just replace the innerHTML for simplicity but we prevent scrolling jumps
+    const scrollPos = window.scrollY;
+    c.innerHTML = newHtml;
+    window.scrollTo(0, scrollPos);
+  } else {
+    c.innerHTML = newHtml;
+  }
   
   if (state.filtered.length > state.visibleCount) {
     html += `
@@ -714,153 +762,177 @@ function showMoreFlights() {
 
 function buildCard(f, idx) {
   const t = i18n[state.lang];
-  
-  // If it is round trip, extract legs
   const isRT = !!f.isRoundTrip;
   const outbound = isRT ? f.outbound : f;
   const returnLeg = isRT ? f.returnLeg : null;
-  
+
   const alCode = outbound.airline || f.airline || 'XX';
-  const al = airlines[alCode] || { name: alCode, logo: 'https://static.volz.app/assets/logos/airline_banners/' + alCode + '.png' };
-  // Fix: guard against null prices from single-provider flights
-  const vPrice = f.prices?.volz;
-  const mPrice = f.prices?.mondial;
-  const vBest = (vPrice != null && mPrice != null) ? vPrice <= mPrice : (vPrice != null);
+  const al = airlines[alCode] || { name: alCode, logo: 'https://www.gstatic.com/flights/airline_logos/70px/dark/' + alCode + '.png' };
 
-  const buildLegHTML = (leg, isOutbound) => {
-    const oA = getApt(leg.origin);
-    const dA = getApt(leg.destination);
-    
-    const stopsBadge = leg.stops === 0
-      ? `<span class="direct-pill">${t.stops_direct}</span>`
-      : `<span class="stop-pill">${leg.stops === 1 ? t.stops_1 : t.stops_2}${leg.stopInfo ? ' · ' + leg.stopInfo : ''}</span>`;
-      
-    const tagText = isOutbound ? t.label_depart : t.label_return;
-    const tagClass = isOutbound ? 'leg-tag outbound' : 'leg-tag return';
-
-    return `
-      <div class="card-flight" style="${!isOutbound ? 'margin-top: 14px; border-top: 1px dashed var(--border); padding-top: 14px;' : ''}">
-        <div class="card-times">
-          <span class="${tagClass}">${tagText}</span>
-          <div class="time-main">${leg.departure}</div>
-          <div class="time-sub">${oA?.city[state.lang] || leg.origin} (${leg.origin})</div>
-        </div>
-
-        <div class="card-route-mid">
-          <div class="dur">${IC.clock} ${leg.duration}</div>
-          <div class="route-track">
-            <div class="rd"></div>
-            <div class="rline"></div>
-            <div class="rplane">${IC.plane}</div>
-            <div class="rline"></div>
-            <div class="rd"></div>
-          </div>
-          ${stopsBadge}
-        </div>
-
-        <div class="card-arrival">
-          <span style="height: 15px; display: block;"></span> <!-- balance tag height on arrival side -->
-          <div class="time-main">${leg.arrival}${leg.arrivalDayShift ? `<sup class="day-shift">+${leg.arrivalDayShift}</sup>` : ''}</div>
-          <div class="time-sub">${dA?.city[state.lang] || leg.destination} (${leg.destination})</div>
-        </div>
-      </div>
-    `;
-  };
+  const best = minPrice(f);
+  const safeId = `fc-${(f.id || '').replace(/[^a-z0-9]/gi, '-')}`;
+  const isExpanded = state.expandedFlightId === safeId;
 
   const dStr = toDateString(calendarState.departDate);
   const rStr = state.tripType === 'roundtrip' ? toDateString(calendarState.returnDate) : '';
-  const adults = parseInt($('pax-adults')?.value) || 1;
-  const children = parseInt($('pax-children')?.value) || 0;
-  const totalPax = adults + children;
+  const totalPax = (parseInt($('pax-adults')?.value) || 1) + (parseInt($('pax-children')?.value) || 0);
 
-  const legsHTML = `
-    <div class="legs-container">
-      ${buildLegHTML(outbound, true)}
-      ${isRT && returnLeg ? buildLegHTML(returnLeg, false) : ''}
+  const oApt = getApt(outbound.origin);
+  const dApt = getApt(outbound.destination);
+  const depCity = oApt?.city?.[state.lang] || outbound.origin;
+  const arrCity = dApt?.city?.[state.lang] || outbound.destination;
+  const outStops = outbound.stops !== undefined ? outbound.stops : (f.stops || 0);
+  const outShift = outbound.arrivalDayShift || 0;
+
+  const chevron = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`;
+
+  // ── Compact row ──────────────────────────────────────────────────
+  const compactRow = `
+<div class="flight-row${isExpanded ? ' expanded' : ''}" onclick="toggleFlight('${safeId}')">
+  <div class="fr-airline">
+    <div class="fr-logo-wrap">
+      <img src="${al.logo}" alt="${al.name}"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="fr-logo-fb" style="display:none">${alCode}</div>
     </div>
-  `;
-
-  return `
-<article class="flight-card" style="animation-delay:${idx * .05}s" aria-label="${al.name} ${outbound.flightNo}">
-  <div class="card-row">
-    <!-- Airline logo, Flight No & Name -->
-    <div class="logo-col">
-      <div class="al-logo-wrap">
-        <img src="${al.logo}" alt="${al.name}"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-        <div class="al-logo-fb" style="display:none">${outbound.airline}</div>
-      </div>
-      <div class="flight-no">${isRT && returnLeg ? outbound.flightNo + ' / ' + returnLeg.flightNo : outbound.flightNo}</div>
-      <div class="airline-name">${al.name}</div>
-    </div>
-
-    <!-- Legs container (outbound + optional return) -->
-    ${legsHTML}
+    <div class="fr-airline-name">${al.name}</div>
   </div>
 
-  <!-- Price comparison — cheapest on top, 3-column grid per row -->
-  <div class="card-prices">
-    ${[
-      {
-        price: f.prices.volz,
-        key: 'volz',
-        name: 'Volz.app',
-        url: 'https://volz.app/en',
-        btnLabel: t.book_volz,
-      },
-      {
-        price: f.prices.mondial,
-        key: 'mondial',
-        name: 'MondialBooking',
-        url: 'https://www.mondialbooking.com/fr/flights',
-        btnLabel: t.book_mondial,
-      },
-      {
-        price: f.prices.h24voyages,
-        key: 'h24voyages',
-        name: 'H24 Voyages',
-        url: 'https://vols.h24voyages.com',
-        btnLabel: 'H24 Voyages',
-      },
-      {
-        price: f.prices.dunevoyages,
-        key: 'dunevoyages',
-        name: 'Dune Voyages',
-        url: 'https://www.dunevoyages.com',
-        btnLabel: 'Dune Voyages',
-      },
-    ]
-    .filter(p => p.price !== undefined && p.price !== null)
-    .sort((a, b) => a.price - b.price)
-    .map((p, index) => `
-      <div class="price-cell">
-        <div class="prov-info">
-          <div class="prov-name">${p.name}</div>
-          <div class="prov-sub">${isRT ? 'Total Aller-Retour' : 'CIB · Dahabia'}</div>
-        </div>
-        <div class="price-right-grid">
-          <div class="price-spacer"></div>
-          <div class="price-block">
-            <span class="price-num ${index === 0 ? 'best' : ''}">${p.price.toLocaleString()}<span class="price-cur">DZD</span></span>
-          </div>
-          <a href="${p.url}" target="_blank" rel="noopener"
-             class="book-btn" onclick="handleBookRedirect(event, '${p.key}', '${outbound.origin}', '${outbound.destination}', '${dStr}', '${rStr}', ${totalPax}, '${p.url}')">
-            ${p.btnLabel} ${IC.link}
-          </a>
-        </div>
-      </div>`).join('')}
+  <div class="fr-dep">
+    <div class="fr-time">${outbound.departure}</div>
+    <div class="fr-city">${depCity}</div>
+  </div>
+
+  <div class="fr-meta">
+    <div class="fr-dur">${outbound.duration}</div>
+    <div class="fr-track">
+      <div class="fr-dot"></div>
+      <div class="fr-line"></div>
+      <span class="fr-plane-icon">${IC.plane}</span>
+      <div class="fr-line"></div>
+      <div class="fr-dot"></div>
+    </div>
+    <span class="${outStops === 0 ? 'fr-direct' : 'fr-stop'}">
+      ${outStops === 0 ? t.stops_direct : (outStops === 1 ? t.stops_1 : t.stops_2)}
+    </span>
+  </div>
+
+  <div class="fr-arr">
+    <div class="fr-time">${outbound.arrival}${outShift ? `<sup class="fr-dayshift">+${outShift}</sup>` : ''}</div>
+    <div class="fr-city">${arrCity}</div>
+  </div>
+
+  ${isRT ? `<div class="fr-rt-badge">${t.label_return || 'A/R'}</div>` : ''}
+
+  <div class="fr-price-col">
+    <div class="fr-price">${best.toLocaleString()} <span class="fr-cur">DZD</span></div>
+    <div class="fr-price-label">${t.from_price || 'à partir de'}</div>
+  </div>
+
+  <div class="fr-chevron">${chevron}</div>
+</div>`;
+
+  // ── Detail: leg summaries (round-trip only) ───────────────────────
+  const buildLegRow = (leg, tagClass, tagLabel) => {
+    const o = getApt(leg.origin);
+    const d = getApt(leg.destination);
+    const s = leg.stops !== undefined ? leg.stops : 0;
+    return `
+<div class="detail-leg">
+  <span class="dl-tag ${tagClass}">${tagLabel}</span>
+  <span class="dl-times">${leg.departure} – ${leg.arrival}${leg.arrivalDayShift ? `<sup>+${leg.arrivalDayShift}</sup>` : ''}</span>
+  <span class="dl-route">${o?.city?.[state.lang] || leg.origin} (${leg.origin}) → ${d?.city?.[state.lang] || leg.destination} (${leg.destination})</span>
+  <span class="dl-dur">${leg.duration}</span>
+  <span class="${s === 0 ? 'dl-direct' : 'dl-stop'}">${s === 0 ? t.stops_direct : (s === 1 ? t.stops_1 : t.stops_2)}</span>
+</div>`;
+  };
+
+  const legsHTML = isRT ? `
+<div class="detail-legs">
+  ${buildLegRow(outbound, 'out', t.label_depart)}
+  ${returnLeg ? buildLegRow(returnLeg, 'ret', t.label_return) : ''}
+</div>` : '';
+
+  // ── Detail: provider price rows ───────────────────────────────────
+  const providers = [
+    { key: 'volz',        name: 'Volz.app',       url: 'https://volz.app/en' },
+    { key: 'mondial',     name: 'MondialBooking',  url: 'https://www.mondialbooking.com/fr/flights' },
+    { key: 'h24voyages',  name: 'H24 Voyages',     url: 'https://vols.h24voyages.com' },
+    { key: 'dunevoyages', name: 'Dune Voyages',    url: 'https://www.dunevoyages.com' },
+  ]
+  .filter(p => f.prices?.[p.key] != null)
+  .sort((a, b) => f.prices[a.key] - f.prices[b.key]);
+
+  const providerRowsHTML = providers.map((p, i) => `
+<div class="provider-row${i === 0 ? ' best' : ''}">
+  <div class="pr-name">${p.name}</div>
+  <div class="pr-price">${f.prices[p.key].toLocaleString()}<span class="pr-cur"> DZD</span></div>
+  ${i === 0 ? `<div class="pr-best-badge">${IC.ok} ${t.best_deal || 'Meilleur prix'}</div>` : '<div class="pr-badge-placeholder"></div>'}
+  <div class="pr-spacer"></div>
+  <a href="${p.url}" target="_blank" rel="noopener" class="pr-book"
+     onclick="handleBookRedirect(event,'${p.key}','${outbound.origin}','${outbound.destination}','${dStr}','${rStr}',${totalPax},'${p.url}')">
+    ${p.name} ${IC.link}
+  </a>
+</div>`).join('');
+
+  // Disable entrance animation during dynamic updates to prevent blinking
+  const animStyle = activeEventSource ? '' : `style="animation-delay:${idx * 0.04}s"`;
+
+  return `
+<article class="flight-card" id="${safeId}" ${animStyle} aria-label="${al.name}">
+  ${compactRow}
+  <div class="flight-detail${isExpanded ? ' open' : ''}" id="detail-${safeId}">
+    ${legsHTML}
+    <div class="providers-list">${providerRowsHTML}</div>
   </div>
 </article>`;
 }
 
+// ── Toggle flight detail panel ────────────────────────────────────
+function toggleFlight(id) {
+  const prev = state.expandedFlightId;
+
+  // Collapse previously open card
+  if (prev && prev !== id) {
+    const prevDetail = document.getElementById(`detail-${prev}`);
+    const prevRow    = document.querySelector(`#${prev} .flight-row`);
+    if (prevDetail) prevDetail.classList.remove('open');
+    if (prevRow)    prevRow.classList.remove('expanded');
+  }
+
+  const detail = document.getElementById(`detail-${id}`);
+  const row    = document.querySelector(`#${id} .flight-row`);
+
+  if (prev === id) {
+    // Same card clicked — collapse
+    if (detail) detail.classList.remove('open');
+    if (row)    row.classList.remove('expanded');
+    state.expandedFlightId = null;
+  } else {
+    // Open new card
+    if (detail) detail.classList.add('open');
+    if (row)    row.classList.add('expanded');
+    state.expandedFlightId = id;
+  }
+}
+
 // ===== Skeleton =====
 function showSkeletons(n) {
-  const c=$('flights-container');
-  if(!c) return;
-  c.innerHTML=Array(n).fill(0).map(()=>`
-    <div class="skel">
-      <div class="sl s"></div><div class="sl xl"></div>
-      <div class="sl l" style="margin-top:14px"></div><div class="sl m"></div>
+  const c = $('flights-container');
+  if (!c) return;
+  c.innerHTML = Array(n).fill(0).map(() => `
+    <div class="skel" style="padding:0;overflow:hidden">
+      <div style="display:flex;align-items:center;gap:14px;padding:16px 20px">
+        <div class="sl" style="width:36px;height:36px;border-radius:50%;flex-shrink:0;margin:0"></div>
+        <div class="sl" style="width:90px;height:20px;margin:0"></div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">
+          <div class="sl" style="width:60px;height:10px;margin:0"></div>
+          <div class="sl" style="width:100%;max-width:110px;height:2px;margin:0"></div>
+          <div class="sl" style="width:50px;height:10px;margin:0"></div>
+        </div>
+        <div class="sl" style="width:90px;height:20px;margin:0"></div>
+        <div class="sl" style="width:90px;height:22px;margin:0;margin-left:auto"></div>
+      </div>
     </div>`).join('');
 }
 
