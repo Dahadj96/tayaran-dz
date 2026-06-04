@@ -803,24 +803,24 @@ function buildCard(f, idx) {
     ${[
       {
         price: f.prices.volz,
-        isBest: vBest,
-        name: 'Volz',
+        key: 'volz',
+        name: 'Volz.app',
         url: 'https://volz.app/en',
         btnLabel: t.book_volz,
       },
       {
         price: f.prices.mondial,
-        isBest: !vBest,
-        name: 'Mondial',
+        key: 'mondial',
+        name: 'MondialBooking',
         url: 'https://www.mondialbooking.com/fr/flights',
         btnLabel: t.book_mondial,
       },
       {
         price: f.prices.h24voyages,
-        isBest: false,
+        key: 'h24voyages',
         name: 'H24 Voyages',
         url: 'https://vols.h24voyages.com',
-        btnLabel: 'Réserver',
+        btnLabel: 'H24 Voyages',
       },
     ]
     .filter(p => p.price !== undefined && p.price !== null)
@@ -828,7 +828,7 @@ function buildCard(f, idx) {
     .map((p, index) => `
       <div class="price-cell">
         <div class="prov-info">
-          <div class="prov-name">${p.name.toLowerCase() === 'volz' ? 'Volz.app' : p.name}</div>
+          <div class="prov-name">${p.name}</div>
           <div class="prov-sub">${isRT ? 'Total Aller-Retour' : 'CIB · Dahabia'}</div>
         </div>
         <div class="price-right-grid">
@@ -837,7 +837,7 @@ function buildCard(f, idx) {
             <span class="price-num ${index === 0 ? 'best' : ''}">${p.price.toLocaleString()}<span class="price-cur">DZD</span></span>
           </div>
           <a href="${p.url}" target="_blank" rel="noopener"
-             class="book-btn" onclick="handleBookRedirect(event, '${p.name.toLowerCase()}', '${outbound.origin}', '${outbound.destination}', '${dStr}', '${rStr}', ${totalPax}, '${p.url}')">
+             class="book-btn" onclick="handleBookRedirect(event, '${p.key}', '${outbound.origin}', '${outbound.destination}', '${dStr}', '${rStr}', ${totalPax}, '${p.url}')">
             ${p.btnLabel} ${IC.link}
           </a>
         </div>
@@ -1598,6 +1598,57 @@ function buildMondialUrl(from, to, departDate, returnDate, pax) {
   return `https://www.mondialbooking.com/fr/flights?${params.toString()}`;
 }
 
+/**
+ * Build an H24 Voyages deep-link URL client-side.
+ * Mirrors the logic in providers/h24voyages.js buildSearchUrl().
+ * Works for both one-way and round-trip flights.
+ */
+function buildH24Url(from, to, departDate, returnDate, pax) {
+  const isRT = !!returnDate;
+  const searchState = {
+    tripType: isRT ? 'Round Trip' : 'One Way',
+    passengerDrop: {
+      adults: parseInt(pax) || 1,
+      young: 0,
+      seniors: 0,
+      child: 0,
+      infants: 0,
+    },
+    classe: 'economy',
+    depart1: from,
+    depart1iata: {
+      airport_name: from,
+      country: '',
+      city_name: from,
+      iata_code: from,
+      country_code: 'DZ',
+    },
+    destination1: to,
+    destination1iata: {
+      airport_name: to,
+      country: '',
+      city_name: to,
+      iata_code: to,
+      country_code: 'DZ',
+    },
+    stops: false,
+    baggage: false,
+    refundable: false,
+  };
+
+  if (isRT && returnDate) {
+    searchState.datePickerRange1 = [
+      `${departDate}T23:00:00.000Z`,
+      `${returnDate}T23:00:00.000Z`,
+    ];
+  } else {
+    searchState.datePicker1 = `${departDate}T23:00:00.000Z`;
+  }
+
+  const encoded = encodeURIComponent(JSON.stringify(searchState));
+  return `https://vols.h24voyages.com/flights/results?${encoded}=`;
+}
+
 async function handleBookRedirect(event, provider, from, to, departDate, returnDate, pax, fallbackUrl) {
   event.preventDefault();
   const t = i18n[state.lang];
@@ -1622,6 +1673,8 @@ async function handleBookRedirect(event, provider, from, to, departDate, returnD
     deepLink = buildVolzUrl(from, to, departDate, returnDate, pax);
   } else if (provider === 'mondial') {
     deepLink = buildMondialUrl(from, to, departDate, returnDate, pax);
+  } else if (provider === 'h24voyages') {
+    deepLink = buildH24Url(from, to, departDate, returnDate, pax);
   } else {
     deepLink = fallbackUrl;
   }
