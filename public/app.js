@@ -822,6 +822,13 @@ function buildCard(f, idx) {
         url: 'https://vols.h24voyages.com',
         btnLabel: 'H24 Voyages',
       },
+      {
+        price: f.prices.dunevoyages,
+        key: 'dunevoyages',
+        name: 'Dune Voyages',
+        url: 'https://www.dunevoyages.com',
+        btnLabel: 'Dune Voyages',
+      },
     ]
     .filter(p => p.price !== undefined && p.price !== null)
     .sort((a, b) => a.price - b.price)
@@ -1649,6 +1656,37 @@ function buildH24Url(from, to, departDate, returnDate, pax) {
   return `https://vols.h24voyages.com/flights/results?${encoded}=`;
 }
 
+/**
+ * Build a Dune Voyages deep-link URL client-side.
+ * Mirrors providers/dunevoyages.js buildSearchUrl().
+ * Works for both one-way and round-trip.
+ */
+function buildDuneUrl(from, to, departDate, returnDate, pax) {
+  const isRT = !!returnDate;
+  const searchState = {
+    tripType: isRT ? 'Round Trip' : 'One Way',
+    passengerDrop: { adults: parseInt(pax) || 1, child: 0, infants: 0 },
+    classe: 'economy',
+    depart1: from,
+    depart1iata: { iata_code: from, airport_name: from, city: from, country: 'Algeria', country_code: 'DZ' },
+    destination1: to,
+    destination1iata: { iata_code: to, airport_name: to, city: to, country: '', country_code: '' },
+    stops: false,
+    baggage: false,
+    refundable: false,
+  };
+  if (isRT && returnDate) {
+    searchState.datePickerRange1 = [
+      `${departDate}T00:00:00.000Z`,
+      `${returnDate}T00:00:00.000Z`,
+    ];
+  } else {
+    searchState.datePicker1 = `${departDate}T00:00:00.000Z`;
+  }
+  const encoded = encodeURIComponent(JSON.stringify(searchState));
+  return `https://vols.dunevoyages.com/flights/results?${encoded}=`;
+}
+
 async function handleBookRedirect(event, provider, from, to, departDate, returnDate, pax, fallbackUrl) {
   event.preventDefault();
   const t = i18n[state.lang];
@@ -1675,6 +1713,8 @@ async function handleBookRedirect(event, provider, from, to, departDate, returnD
     deepLink = buildMondialUrl(from, to, departDate, returnDate, pax);
   } else if (provider === 'h24voyages') {
     deepLink = buildH24Url(from, to, departDate, returnDate, pax);
+  } else if (provider === 'dunevoyages') {
+    deepLink = buildDuneUrl(from, to, departDate, returnDate, pax);
   } else {
     deepLink = fallbackUrl;
   }
