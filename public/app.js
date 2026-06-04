@@ -772,7 +772,7 @@ function buildCard(f, idx) {
   const al = airlines[alCode] || { name: alCode, logo: 'https://www.gstatic.com/flights/airline_logos/70px/dark/' + alCode + '.png' };
 
   const best = minPrice(f);
-  const safeId = `fc-${(f.id || '').replace(/[^a-z0-9]/gi, '-')}`;
+  const safeId = `fc-${(f.id || '').replace(/[^a-z0-9]/gi, '-')}-${idx}`;
   const isExpanded = state.expandedFlightId === safeId;
 
   const dStr = toDateString(calendarState.departDate);
