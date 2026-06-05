@@ -789,43 +789,50 @@ function buildCard(f, idx) {
   const chevron = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`;
 
   // ── Compact row ──────────────────────────────────────────────────
+  const buildCompactLeg = (leg, alObj, code) => {
+    const shift = leg.arrivalDayShift || 0;
+    const stops = leg.stops !== undefined ? leg.stops : 0;
+    const dCity = getApt(leg.origin)?.city?.[state.lang] || leg.origin;
+    const aCity = getApt(leg.destination)?.city?.[state.lang] || leg.destination;
+    
+    return `
+    <div class="fr-leg-row">
+      <div class="fr-airline">
+        <div class="fr-logo-wrap">
+          <img src="${alObj.logo}" alt="${alObj.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="fr-logo-fb" style="display:none">${code}</div>
+        </div>
+        <div class="fr-airline-name">${alObj.name}</div>
+      </div>
+      <div class="fr-dep">
+        <div class="fr-time">${leg.departure}</div>
+        <div class="fr-city">${dCity}</div>
+      </div>
+      <div class="fr-meta">
+        <div class="fr-dur">${leg.duration}</div>
+        <div class="fr-track">
+          <div class="fr-dot"></div>
+          <div class="fr-line"></div>
+          <span class="fr-plane-icon">${IC.plane}</span>
+          <div class="fr-line"></div>
+          <div class="fr-dot"></div>
+        </div>
+        <span class="${stops === 0 ? 'fr-direct' : 'fr-stop'}">${stops === 0 ? t.stops_direct : (stops === 1 ? t.stops_1 : t.stops_2)}</span>
+      </div>
+      <div class="fr-arr">
+        <div class="fr-time">${leg.arrival}${shift ? `<sup class="fr-dayshift">+${shift}</sup>` : ''}</div>
+        <div class="fr-city">${aCity}</div>
+      </div>
+    </div>`;
+  };
+
   const compactRow = `
 <div class="flight-row${isExpanded ? ' expanded' : ''}" onclick="toggleFlight('${safeId}')">
-  <div class="fr-airline">
-    <div class="fr-logo-wrap">
-      <img src="${al.logo}" alt="${al.name}"
-           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div class="fr-logo-fb" style="display:none">${alCode}</div>
-    </div>
-    <div class="fr-airline-name">${al.name}</div>
+  <div class="fr-legs-container">
+    ${buildCompactLeg(outbound, al, alCode)}
+    ${isRT && returnLeg ? buildCompactLeg(returnLeg, al, alCode) : ''}
   </div>
-
-  <div class="fr-dep">
-    <div class="fr-time">${outbound.departure}</div>
-    <div class="fr-city">${depCity}</div>
-  </div>
-
-  <div class="fr-meta">
-    <div class="fr-dur">${outbound.duration}</div>
-    <div class="fr-track">
-      <div class="fr-dot"></div>
-      <div class="fr-line"></div>
-      <span class="fr-plane-icon">${IC.plane}</span>
-      <div class="fr-line"></div>
-      <div class="fr-dot"></div>
-    </div>
-    <span class="${outStops === 0 ? 'fr-direct' : 'fr-stop'}">
-      ${outStops === 0 ? t.stops_direct : (outStops === 1 ? t.stops_1 : t.stops_2)}
-    </span>
-  </div>
-
-  <div class="fr-arr">
-    <div class="fr-time">${outbound.arrival}${outShift ? `<sup class="fr-dayshift">+${outShift}</sup>` : ''}</div>
-    <div class="fr-city">${arrCity}</div>
-  </div>
-
-  ${isRT ? `<div class="fr-rt-badge">${t.label_return || 'A/R'}</div>` : ''}
-
+  
   <div class="fr-price-col">
     <div class="fr-price">${best.toLocaleString()} <span class="fr-cur">DZD</span></div>
     <div class="fr-price-label">${t.from_price || 'à partir de'}</div>
