@@ -79,7 +79,7 @@ module.exports = {
 
   interceptFilter(url) {
     // We want the flight search response
-    return url.includes('flights/flights/search');
+    return url.includes('flights/search') && !url.includes('price-calendar');
   },
 
   validateJson(json) {
@@ -165,10 +165,81 @@ module.exports = {
     };
   },
 
-  async augmentData(page, initialJson) {
+  async augmentData(page, initialJson, securityHeaders = {}) {
     if (!initialJson || !initialJson.data || !initialJson.data.offers) return initialJson;
     
+    const searchCode = initialJson.searchCode || initialJson.data.searchCode;
     const availableAirlines = initialJson.data.filterDependencies?.airlines || [];
+    
+    if (!searchCode) {
+      console.log('[H24Voyages] No searchCode found, skipping augmentation.');
+      return initialJson;
+    }
+    
+    const secret = 'your-secret-key-change-in-production';
+    const crypto = require('crypto');
+    
+    const baseHeaders = {
+      'accept': 'application/json',
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
+      'referer': 'https://vols.h24voyages.com/',
+      'origin': 'https://vols.h24voyages.com',
+      ...securityHeaders,
+    };
+    
+    // Helper to fetch a results page using server-side fetch with generated signatures
+    const fetchResultsPage = async (airline, pageNum) => {
+      try {
+        const resultsPath = `/server/api/flightsagg/flights/results?searchCode=${searchCode}&airline=${airline || ''}&supplier=&page=${pageNum}`;
+        const timestamp = Date.now().toString();
+        const message = `GET:${resultsPath}::${timestamp}`;
+        const signature = crypto.createHmac('sha256', secret).update(message).digest('hex');
+
+        const headers = {
+          ...baseHeaders,
+          'x-api-signature': signature,
+          'x-api-timestamp': timestamp,
+        };
+        
+        const url = `https://vols.h24voyages.com${resultsPath}`;
+        const res = await fetch(url, { headers });
+        if (!res.ok) {
+          const errText = await res.text();
+          if (pageNum === 1 && airline) {
+            console.log(`[H24Voyages] Failed to fetch airline ${airline}: HTTP ${res.status}`);
+          }
+          return [];
+        }
+        const json = await res.json();
+        if (json && json.data && json.data.offers && Array.isArray(json.data.offers)) {
+          return json.data.offers;
+        }
+        return [];
+      } catch (e) {
+        return [];
+      }
+    };
+
+    // Fetch remaining pages first (all pages, starting from 1)
+    const totalOffers = initialJson.data.total || 0;
+    const currentOffers = initialJson.data.offers.length;
+    
+    if (totalOffers > currentOffers) {
+      const totalPages = Math.ceil(totalOffers / 50);
+      console.log(`[H24Voyages] Found ${totalOffers} total offers, fetching all ${totalPages} pages...`);
+      
+      const allPageOffers = [];
+      for (let p = 1; p <= totalPages; p++) {
+        const offers = await fetchResultsPage('', p);
+        allPageOffers.push(...offers);
+      }
+      
+      if (allPageOffers.length > 0) {
+        initialJson.data.offers = allPageOffers;
+        console.log(`[H24Voyages] Replaced with ${allPageOffers.length} offers from full fetch!`);
+      }
+    }
+    
     if (availableAirlines.length === 0) return initialJson;
     
     const existingAirlines = new Set();
@@ -186,60 +257,36 @@ module.exports = {
     
     console.log(`[H24Voyages] Missing airlines detected: ${missingAirlines.join(', ')}`);
     
-    const currentUrl = page.url();
-    const urlObj = new URL(currentUrl);
-    const stateStr = decodeURIComponent(urlObj.search).replace(/^\?/, '').replace(/=$/, '');
-    
-    let state;
-    try {
-      state = JSON.parse(stateStr);
-    } catch(e) {
-      console.log('[H24Voyages] Error parsing URL state:', e.message);
-      return initialJson;
-    }
-    
-    const accumulatedOffers = [];
-
-    const responseHandler = async (response) => {
-      if (response.url().includes('flights/flights/search')) {
+    // Fetch each missing airline using server-side fetch
+    const newOffers = [];
+    for (const airline of missingAirlines) {
+      const offers = await fetchResultsPage(airline, 1);
+      newOffers.push(...offers);
+      
+      // Check if this airline has multiple pages
+      if (offers.length > 0) {
+        // We got page 1; try to figure out total from the response
         try {
-          const ct = response.headers()['content-type'] || '';
-          if (ct.includes('application/json')) {
-            const j = await response.json();
-            if (j && j.data && j.data.offers) {
-              accumulatedOffers.push(...j.data.offers);
+          const params = new URLSearchParams({ searchCode, airline, supplier: '', page: '1' });
+          const url = `https://vols.h24voyages.com/server/api/flightsagg/flights/results?${params}`;
+          const res = await fetch(url, { headers: baseHeaders });
+          if (res.ok) {
+            const json = await res.json();
+            if (json.data && json.data.total > json.data.offers.length) {
+              const extraPages = Math.ceil(json.data.total / 50);
+              for (let p = 2; p <= extraPages; p++) {
+                const extra = await fetchResultsPage(airline, p);
+                newOffers.push(...extra);
+              }
             }
           }
         } catch (e) {}
       }
-    };
-    
-    page.on('response', responseHandler);
-
-    for (const airline of missingAirlines) {
-      state.airlines = [airline]; // Query ONE airline at a time
-      const newStateStr = encodeURIComponent(JSON.stringify(state));
-      const newUrl = urlObj.origin + urlObj.pathname + '?' + newStateStr + '=';
-
-      const beforeCount = accumulatedOffers.length;
-      try {
-        await page.goto(newUrl, { waitUntil: 'networkidle2', timeout: 15000 });
-        for (let i = 0; i < 5; i++) {
-          if (accumulatedOffers.length > beforeCount) break;
-          await new Promise(r => setTimeout(r, 1000));
-        }
-      } catch (e) {
-        console.log(`[H24Voyages] Error navigating for ${airline}: ${e.message}`);
-      }
     }
     
-    page.off('response', responseHandler);
-    
-    if (accumulatedOffers.length > 0) {
-      initialJson.data.offers.push(...accumulatedOffers);
-      console.log(`[H24Voyages] Added ${accumulatedOffers.length} new offers for missing airlines!`);
-    } else {
-      console.log(`[H24Voyages] No new offers returned for missing airlines.`);
+    if (newOffers.length > 0) {
+      initialJson.data.offers.push(...newOffers);
+      console.log(`[H24Voyages] Added ${newOffers.length} new offers!`);
     }
     
     return initialJson;

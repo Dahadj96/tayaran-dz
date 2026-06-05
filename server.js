@@ -178,6 +178,7 @@ async function fetchProvider(provider, from, to, departDate, returnDate, pax, by
   const cacheFile   = path.join(__dirname, provider.cacheFile);
   const isRoundTrip = !!returnDate;
   let interceptedJson = null;
+  let capturedSecurityHeaders = {};
 
   // ── Live scrape ────────────────────────────────────────────────────────────
   try {
@@ -190,6 +191,23 @@ async function fetchProvider(provider, from, to, departDate, returnDate, pax, by
     await page.setUserAgent(
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'
     );
+
+    // Capture security headers from the browser's outgoing API requests
+    page.on('request', (request) => {
+      const url = request.url();
+      if (provider.interceptFilter(url) || url.includes('flights/search') || url.includes('flightsagg')) {
+        const headers = request.headers();
+        for (const [k, v] of Object.entries(headers)) {
+          if (k.startsWith('x-') || k === 'authorization') {
+            capturedSecurityHeaders[k] = v;
+          }
+        }
+        // Also capture cookies
+        if (headers['cookie']) {
+          capturedSecurityHeaders['cookie'] = headers['cookie'];
+        }
+      }
+    });
 
     page.on('response', async (response) => {
       if (!provider.interceptFilter(response.url())) return;
@@ -216,8 +234,11 @@ async function fetchProvider(provider, from, to, departDate, returnDate, pax, by
 
     if (interceptedJson && provider.augmentData) {
       console.log(`${tag} Augmenting data via provider script...`);
+      if (Object.keys(capturedSecurityHeaders).length > 0) {
+        console.log(`${tag} Captured ${Object.keys(capturedSecurityHeaders).length} security headers for augmentation.`);
+      }
       try {
-        interceptedJson = await provider.augmentData(page, interceptedJson);
+        interceptedJson = await provider.augmentData(page, interceptedJson, capturedSecurityHeaders);
       } catch (e) {
         console.error(`${tag} Augment error:`, e.message);
       }
@@ -309,11 +330,19 @@ async function fetchProvider(provider, from, to, departDate, returnDate, pax, by
 //  Deduplication / aggregation
 // ─────────────────────────────────────────────────────────────────────────────
 function getComboKey(flight) {
-  // Key = operatingAirline + full departure datetime + arrival time
-  // Using the full date prevents merging flights that happen to depart at the same HH:mm on different days
-  let key = `${flight.outbound.operatingAirline}-${flight.outbound.departureDate}T${flight.outbound.departure}-${flight.outbound.arrival}`;
+  // Normalize codeshares: if marketing carrier is 'VF' (AJet), the physical operator should be treated as 'VF'
+  let outboundOp = flight.outbound.operatingAirline;
+  if (flight.airline === 'VF' && outboundOp === 'TK') {
+    outboundOp = 'VF';
+  }
+
+  let key = `${outboundOp}-${flight.outbound.departureDate}T${flight.outbound.departure}-${flight.outbound.arrival}`;
   if (flight.isRoundTrip && flight.returnLeg) {
-    key += `__${flight.returnLeg.operatingAirline}-${flight.returnLeg.departureDate}T${flight.returnLeg.departure}-${flight.returnLeg.arrival}`;
+    let returnOp = flight.returnLeg.operatingAirline;
+    if (flight.returnLeg.marketingAirline === 'VF' && returnOp === 'TK') {
+      returnOp = 'VF';
+    }
+    key += `__${returnOp}-${flight.returnLeg.departureDate}T${flight.returnLeg.departure}-${flight.returnLeg.arrival}`;
   }
   return key;
 }

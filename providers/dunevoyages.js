@@ -174,15 +174,63 @@ module.exports = {
   },
 
   // ── Step 8: Pre-filled booking redirect URL ───────────────────────────────────
-  async augmentData(page, initialJson) {
+  async augmentData(page, initialJson, securityHeaders = {}) {
     if (!initialJson || !initialJson.data || !initialJson.data.offers) return initialJson;
     
-    const searchCode = initialJson.data.searchCode || initialJson.searchCode;
+    const searchCode = initialJson.searchCode || initialJson.data.searchCode;
     const availableAirlines = initialJson.data.filterDependencies?.airlines || [];
     
-    if (!searchCode || availableAirlines.length === 0) return initialJson;
+    if (!searchCode) {
+      console.log('[DuneVoyages] No searchCode found, skipping augmentation.');
+      return initialJson;
+    }
     
-    // Find airlines we already have in the initial offers
+    const baseHeaders = {
+      'accept': 'application/json',
+      'content-type': 'application/json',
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
+      'referer': 'https://vols.dunevoyages.com/',
+      'origin': 'https://vols.dunevoyages.com',
+      ...securityHeaders,
+    };
+    
+    const fetchResultsPage = async (airline, pageNum) => {
+      try {
+        const url = `https://vols.dunevoyages.com/server/api/flights/flights/results?searchCode=${searchCode}&airline=${airline || ''}&supplier=&page=${pageNum}`;
+        const res = await fetch(url, { headers: baseHeaders });
+        if (!res.ok) return { offers: [], total: 0 };
+        const json = await res.json();
+        if (json && json.data && json.data.offers && Array.isArray(json.data.offers)) {
+          return { offers: json.data.offers, total: json.data.total || 0 };
+        }
+        return { offers: [], total: 0 };
+      } catch (e) {
+        return { offers: [], total: 0 };
+      }
+    };
+
+    // Fetch all pages
+    const totalOffers = initialJson.data.total || 0;
+    const currentOffers = initialJson.data.offers.length;
+    
+    if (totalOffers > currentOffers) {
+      const totalPages = Math.ceil(totalOffers / 50);
+      console.log(`[DuneVoyages] Found ${totalOffers} total offers, fetching all ${totalPages} pages...`);
+      
+      const allPageOffers = [];
+      for (let p = 1; p <= totalPages; p++) {
+        const { offers } = await fetchResultsPage('', p);
+        allPageOffers.push(...offers);
+      }
+      
+      if (allPageOffers.length > 0) {
+        initialJson.data.offers = allPageOffers;
+        console.log(`[DuneVoyages] Replaced with ${allPageOffers.length} offers from full fetch!`);
+      }
+    }
+    
+    if (availableAirlines.length === 0) return initialJson;
+    
     const existingAirlines = new Set();
     for (const offer of initialJson.data.offers) {
       if (offer.journey && offer.journey.length > 0 && offer.journey[0].flightSegments && offer.journey[0].flightSegments.length > 0) {
@@ -190,7 +238,6 @@ module.exports = {
       }
     }
     
-    // Find missing airlines
     const missingAirlines = availableAirlines
       .map(a => a.IataCode)
       .filter(code => code && !existingAirlines.has(code));
@@ -199,28 +246,21 @@ module.exports = {
     
     console.log(`[DuneVoyages] Missing airlines detected: ${missingAirlines.join(', ')}`);
     
-    // Fetch them inside the browser context
-    const newOffers = await page.evaluate(async (searchCode, airlines) => {
-      const fetchedOffers = [];
-      for (const airline of airlines) {
-        try {
-          const url = `https://vols.dunevoyages.com/server/api/flights/flights/results?searchCode=${searchCode}&airline=${airline}&supplier=&page=1`;
-          const res = await fetch(url, {
-            headers: {
-              'accept': 'application/json',
-              'content-type': 'application/json'
-            }
-          });
-          const json = await res.json();
-          if (json && json.data && json.data.offers && Array.isArray(json.data.offers)) {
-            fetchedOffers.push(...json.data.offers);
-          }
-        } catch(e) {}
+    const newOffers = [];
+    for (const airline of missingAirlines) {
+      const { offers, total } = await fetchResultsPage(airline, 1);
+      newOffers.push(...offers);
+      
+      if (total > offers.length) {
+        const extraPages = Math.ceil(total / 50);
+        for (let p = 2; p <= extraPages; p++) {
+          const { offers: extra } = await fetchResultsPage(airline, p);
+          newOffers.push(...extra);
+        }
       }
-      return fetchedOffers;
-    }, searchCode, missingAirlines);
+    }
     
-    if (newOffers && newOffers.length > 0) {
+    if (newOffers.length > 0) {
       initialJson.data.offers.push(...newOffers);
       console.log(`[DuneVoyages] Added ${newOffers.length} new offers!`);
     }

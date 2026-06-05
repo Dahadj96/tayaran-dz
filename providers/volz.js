@@ -66,7 +66,8 @@ module.exports = {
     const sOutLast = jOut.segments[jOut.segments.length - 1];
 
     const carrier          = sOut.carrier || sOut.operatingCarrier || 'XX';
-    const flightNum        = String(sOut.flightNumber || '');
+    const rawFlightNum     = String(sOut.flightNumber || sOut.flight_number || '');
+    const flightNum        = rawFlightNum.includes('-') ? rawFlightNum.split('-')[1] : rawFlightNum;
     const operatingAirline = sOut.operatingCarrier || carrier;
     const duration         = normalizeDuration(jOut.totalDuration || jOut.duration);
     const realOrigin       = sOut.departure?.iataCode   || from.toUpperCase();
@@ -85,8 +86,10 @@ module.exports = {
       const sIn      = jIn.segments[0];
       const sInLast  = jIn.segments[jIn.segments.length - 1];
       const rCarrier = sIn.carrier || sIn.operatingCarrier || 'XX';
+      const rawRflightNum = String(sIn.flightNumber || sIn.flight_number || '');
+      const rFlightNum    = rawRflightNum.includes('-') ? rawRflightNum.split('-')[1] : rawRflightNum;
       returnLeg = {
-        flightNo:        normalizeFlightNumber(rCarrier, String(sIn.flightNumber || '')),
+        flightNo:        normalizeFlightNumber(rCarrier, rFlightNum),
         operatingAirline: sIn.operatingCarrier || rCarrier,
         origin:          sIn.departure?.iataCode    || to.toUpperCase(),
         destination:     sInLast.arrival?.iataCode  || from.toUpperCase(),
@@ -121,7 +124,7 @@ module.exports = {
     };
   },
 
-  async augmentData(page, initialJson) {
+  async augmentData(page, initialJson, securityHeaders = {}) {
     if (!initialJson || !initialJson.data || !initialJson.search_code) return initialJson;
     
     const searchCode = initialJson.search_code;
@@ -133,7 +136,7 @@ module.exports = {
     const existingAirlines = new Set();
     for (const offer of initialJson.data) {
       if (offer.itineraries && offer.itineraries.length > 0 && offer.itineraries[0].segments && offer.itineraries[0].segments.length > 0) {
-        existingAirlines.add(offer.itineraries[0].segments[0].operatingCarrier || offer.itineraries[0].segments[0].carrier);
+        existingAirlines.add(offer.itineraries[0].segments[0].carrier);
       }
     }
     
@@ -141,72 +144,103 @@ module.exports = {
     const missingAirlines = availableAirlines
       .filter(code => code && !existingAirlines.has(code));
       
-    if (missingAirlines.length === 0) return initialJson;
+    const totalOffers = initialJson.total || 0;
+    const currentOffers = initialJson.data ? initialJson.data.length : 0;
     
-    console.log(`[Volz] Missing airlines detected: ${missingAirlines.join(', ')}`);
+    if (missingAirlines.length === 0 && totalOffers <= currentOffers) return initialJson;
     
-    // Fetch them inside the browser context using POST
-    const result = await page.evaluate(async (airlines) => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const tripType = urlParams.get('trip_type') || 'OW';
-      const origin = urlParams.get('origin[0]');
-      const dest = urlParams.get('destination[0]');
-      const depDate = urlParams.get('departure_date[0]');
-      
-      const basePayload = {
-        trip_type: tripType,
-        adults: parseInt(urlParams.get('adults')) || 1,
-        children: parseInt(urlParams.get('children')) || 0,
-        held_infants: parseInt(urlParams.get('held_infants')) || 0,
-        seated_infants: parseInt(urlParams.get('seated_infants')) || 0,
-        max_connections: parseInt(urlParams.get('max_connections')) || 2,
-        refundable: parseInt(urlParams.get('refundable')) || 0,
-        luggage_included: parseInt(urlParams.get('luggage_included')) || 0,
-        cabin: "ECONOMY",
-        destinations: [{ origin: origin, destination: dest, departure_date: depDate }],
-        sort: "price",
-        desc: false,
-        itinerary_stops: {}
-      };
-      
-      if (tripType === 'RT') {
-        const retDate = urlParams.get('return_date[0]');
-        if (retDate) {
-          basePayload.destinations.push({ origin: dest, destination: origin, departure_date: retDate });
-        }
-      }
-
-      const fetchedOffers = [];
-      const errors = [];
-      for (const airline of airlines) {
-        try {
-          const payload = { ...basePayload, air_companies: [airline] };
-          const res = await fetch('https://api.volz.app/v1/flight/availability', {
-            method: 'POST',
-            headers: {
-              'accept': 'application/json',
-              'content-type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-          });
-          const text = await res.text();
-          if (!res.ok) throw new Error(`Status ${res.status}: ${text}`);
-          const json = JSON.parse(text);
-          if (json && json.data && Array.isArray(json.data)) {
-            fetchedOffers.push(...json.data);
-          }
-        } catch(e) {
-          errors.push(`[${airline}] ${e.message}`);
-        }
-      }
-      return { newOffers: fetchedOffers, errors };
-    }, missingAirlines);
-    
-    if (result.errors && result.errors.length > 0) {
-      console.log(`[Volz] Browser fetch errors: ${result.errors.join(' | ')}`);
+    if (missingAirlines.length > 0) {
+      console.log(`[Volz] Missing airlines detected: ${missingAirlines.join(', ')}`);
     }
+    if (totalOffers > currentOffers) {
+      console.log(`[Volz] Found ${totalOffers} total offers (only got ${currentOffers}), fetching pagination...`);
+    }
+
+    const pageUrlStr = page.url();
+    const urlObj = new URL(pageUrlStr);
+    const urlParams = urlObj.searchParams;
+    const tripType = urlParams.get('trip_type') || 'OW';
+    const origin = urlParams.get('origin[0]');
+    const dest = urlParams.get('destination[0]');
+    const depDate = urlParams.get('departure_date[0]');
     
-    const newOffers = result.newOffers || [];
+    const basePayload = {
+      search_code: searchCode,
+      trip_type: tripType,
+      adults: parseInt(urlParams.get('adults')) || 1,
+      children: parseInt(urlParams.get('children')) || 0,
+      held_infants: parseInt(urlParams.get('held_infants')) || 0,
+      seated_infants: parseInt(urlParams.get('seated_infants')) || 0,
+      max_connections: parseInt(urlParams.get('max_connections')) || 2,
+      refundable: parseInt(urlParams.get('refundable')) || 0,
+      luggage_included: parseInt(urlParams.get('luggage_included')) || 0,
+      cabin: "ECONOMY",
+      destinations: [{ origin: origin, destination: dest, departure_date: depDate }],
+    };
+
+    if (tripType === 'RT') {
+      const retDate = urlParams.get('return_date[0]');
+      if (retDate) {
+        basePayload.destinations.push({ origin: dest, destination: origin, departure_date: retDate });
+      }
+    }
+
+    const baseHeaders = {
+      'accept': 'application/json',
+      'content-type': 'application/json',
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
+      'referer': 'https://vols.volz.app/',
+      'origin': 'https://vols.volz.app',
+      ...securityHeaders,
+    };
+
+    const fetchAvailability = async (payload) => {
+      try {
+        const res = await fetch('https://api.volz.app/v1/flight/availability', {
+          method: 'POST',
+          headers: baseHeaders,
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) return { offers: [], total: 0 };
+        const json = await res.json();
+        if (json && json.data && Array.isArray(json.data)) {
+          return { offers: json.data, total: json.total || json.data.length || 0 };
+        }
+        return { offers: [], total: 0 };
+      } catch (e) {
+        return { offers: [], total: 0 };
+      }
+    };
+
+    const fetchedOffers = [];
+
+    // Fetch remaining pages first for the main search
+    if (totalOffers > currentOffers) {
+      const tPages = Math.ceil(totalOffers / 20);
+      for (let p = 2; p <= tPages; p++) {
+        const mainPayload = { ...basePayload, page: p, sort: "price", desc: false, itinerary_stops: {} };
+        const { offers } = await fetchAvailability(mainPayload);
+        fetchedOffers.push(...offers);
+      }
+    }
+
+    // Fetch missing airlines
+    for (const airline of missingAirlines) {
+      const payload = { ...basePayload, air_companies: [airline], sort: "price", desc: false, itinerary_stops: {} };
+      const { offers, total } = await fetchAvailability(payload);
+      fetchedOffers.push(...offers);
+
+      if (total > offers.length) {
+        const exPages = Math.ceil(total / 20);
+        for (let p = 2; p <= exPages; p++) {
+          const payloadEx = { ...payload, page: p };
+          const { offers: extra } = await fetchAvailability(payloadEx);
+          fetchedOffers.push(...extra);
+        }
+      }
+    }
+
+    const newOffers = fetchedOffers;
     
     if (newOffers && newOffers.length > 0) {
       initialJson.data.push(...newOffers);
