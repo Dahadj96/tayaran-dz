@@ -232,9 +232,15 @@ module.exports = {
         allPageOffers.push(...offers);
       }
       
-      if (allPageOffers.length > 0) {
+      if (allPageOffers.length > initialJson.data.offers.length) {
         initialJson.data.offers = allPageOffers;
         console.log(`[DuneVoyages] Replaced with ${allPageOffers.length} offers from full fetch!`);
+      } else if (allPageOffers.length > 0) {
+        // Just append the ones we don't have
+        const existingKeys = new Set(initialJson.data.offers.map(o => o.offerId || JSON.stringify(o)));
+        const newOffers = allPageOffers.filter(o => !existingKeys.has(o.offerId || JSON.stringify(o)));
+        initialJson.data.offers.push(...newOffers);
+        console.log(`[DuneVoyages] Appended ${newOffers.length} new offers from full fetch!`);
       }
     }
     
