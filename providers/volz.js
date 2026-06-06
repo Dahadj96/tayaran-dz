@@ -191,21 +191,7 @@ module.exports = {
         await new Promise(r => setTimeout(r, 1000));
       }
       
-      // Step 2: Try to click all filter checkboxes (like airlines)
-      await page.evaluate(async () => {
-        const checkboxes = Array.from(document.querySelectorAll('input[type="checkbox"], .checkbox, .ant-checkbox-wrapper'));
-        for (const cb of checkboxes) {
-          try {
-            if (cb.offsetHeight > 0) {
-              cb.click();
-              await new Promise(r => setTimeout(r, 500));
-            }
-          } catch(e) {}
-        }
-      });
-      
-      await new Promise(r => setTimeout(r, 3000));
-      
+
       // Step 3: Try standard pagination Next button / Load More button
       for (let p = 0; p < 10; p++) {
         const clicked = await page.evaluate(() => {

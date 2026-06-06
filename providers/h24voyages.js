@@ -204,25 +204,7 @@ module.exports = {
         await new Promise(r => setTimeout(r, 1000));
       }
       
-      // Step 2: Try to click all airline filter checkboxes one by one to force loading
-      // This is often the most reliable way to get all flights when pagination is tricky
-      await page.evaluate(async () => {
-        // Find checkboxes that might be airlines. Usually they are in a filter panel.
-        const checkboxes = Array.from(document.querySelectorAll('.ant-checkbox-wrapper, [type="checkbox"]'));
-        // We will just click the ones that appear to have a label
-        for (const cb of checkboxes) {
-          try {
-            if (cb.offsetHeight > 0) {
-              cb.click();
-              // wait a bit for network request to fire
-              await new Promise(r => setTimeout(r, 500));
-            }
-          } catch(e) {}
-        }
-      });
-      
-      // Wait for any final requests to finish
-      await new Promise(r => setTimeout(r, 3000));
+
       
       // Step 3: Try standard pagination Next button if present
       for (let p = 0; p < 10; p++) {
