@@ -727,25 +727,10 @@ function renderFlights() {
   // Smoothly update the container to prevent violent blinking
   const newHtml = visibleFlights.map((f,i) => buildCard(f,i)).join('');
   
-  // If we are currently streaming and the container already has content, use a lightweight DOM replacement
-  if (activeEventSource && c.children.length > 0) {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = newHtml;
-    
-    // Replace existing or append new smoothly
-    const currentNodes = Array.from(c.children);
-    const newNodes = Array.from(tempDiv.children);
-    
-    // We just replace the innerHTML for simplicity but we prevent scrolling jumps
-    const scrollPos = window.scrollY;
-    c.innerHTML = newHtml;
-    window.scrollTo(0, scrollPos);
-  } else {
-    c.innerHTML = newHtml;
-  }
+  let finalHtml = newHtml;
   
   if (state.filtered.length > state.visibleCount) {
-    html += `
+    finalHtml += `
       <div style="text-align:center; margin:24px 0 48px;">
         <button onclick="showMoreFlights()" style="background:var(--blue); color:#fff; border:none; padding:12px 32px; border-radius:30px; font-weight:600; font-family:'Inter',sans-serif; cursor:pointer; font-size:15px; box-shadow:0 4px 12px rgba(26,115,232,0.3); transition:background 0.2s;" onmouseover="this.style.background='var(--blue-dk)'" onmouseout="this.style.background='var(--blue)'">
           ${state.lang === 'fr' ? 'Afficher plus de résultats' : (state.lang === 'ar' ? 'عرض المزيد من النتائج' : 'Show more results')}
@@ -754,7 +739,22 @@ function renderFlights() {
     `;
   }
   
-  c.innerHTML = html;
+  // If we are currently streaming and the container already has content, use a lightweight DOM replacement
+  if (activeEventSource && c.children.length > 0) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = finalHtml;
+    
+    // Replace existing or append new smoothly
+    const currentNodes = Array.from(c.children);
+    const newNodes = Array.from(tempDiv.children);
+    
+    // We just replace the innerHTML for simplicity but we prevent scrolling jumps
+    const scrollPos = window.scrollY;
+    c.innerHTML = finalHtml;
+    window.scrollTo(0, scrollPos);
+  } else {
+    c.innerHTML = finalHtml;
+  }
 }
 
 function showMoreFlights() {
