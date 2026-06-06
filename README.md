@@ -120,6 +120,8 @@ node server.js
 
 ### Required Files for Railway
 - `server.js`
+- `predictive_pricing.js`
+- `commissions.json`
 - `providers/` (all files)
 - `public/` (all files)
 - `package.json`
@@ -131,6 +133,9 @@ node server.js
 - `node_modules/`
 - `volz_flights.json` (runtime cache)
 - `mondial_flights.json` (runtime cache)
+- `dune_flights.json` (runtime cache)
+- `h24_flights.json` (runtime cache)
+- `popular_prices.json` (runtime cache)
 - `debug_error.log`
 
 ---
@@ -167,6 +172,8 @@ The script will:
 | Full ISO timestamp for deduplication key | Prevents merging flights that share the same HH:mm but depart on different days |
 | `arrivalDayShift` field | Tells the UI to show a `+1` badge for overnight flights |
 | Plugin architecture | Adding a new provider requires zero changes to core engine |
+| Server-Sent Events (SSE) | Streams flights to the UI immediately as each provider finishes, eliminating loading screen dead time |
+| Predictive Pricing Engine | Calculates exact final retail prices using pure GDS base fare and `commissions.json` mapping to bypass hidden provider fees |
 
 ---
 
