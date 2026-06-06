@@ -655,6 +655,18 @@ input,select{font-family:inherit;border:none;outline:none;font-size:14px}
   padding: 3px 9px; border-radius: var(--r-pill);
   white-space: nowrap; flex-shrink: 0;
 }
+.est-badge {
+  font-size: 10px; font-weight: 500;
+  color: var(--text-3); margin-left: 4px;
+  background: var(--surface-2); padding: 2px 6px;
+  border-radius: var(--r-pill); vertical-align: middle;
+}
+.pr-predicted {
+  opacity: 0.8; font-style: italic;
+}
+.predicted-row {
+  background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.01) 10px, rgba(0,0,0,0.01) 20px);
+}
 .pr-badge-placeholder { flex-shrink: 0; }
 .pr-spacer { flex: 1; }
 

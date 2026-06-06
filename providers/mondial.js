@@ -132,6 +132,8 @@ module.exports = {
       stops: realStops,
       hasLuggage,
       price,
+      _basePriceGDS: offer.originalOffer?.price?.total ? parseFloat(offer.originalOffer.price.total) : (offer.fare?.baseFare || 0),
+      _commission: offer.fare?.serviceFees || (offer.fare?.fareBreakdown?.[0]?.paxRate?.serviceFees) || 0,
       outbound,
       returnLeg,
       provider: 'mondial',

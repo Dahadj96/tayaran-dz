@@ -108,6 +108,8 @@ module.exports = {
       stops:      jOut.numOfStops || 0,
       hasLuggage,
       price:      offer.price.acTotal || offer.price.grandTotal || offer.price.total,
+      _basePriceGDS: offer.price.total || 0,
+      _commission: (offer.price.acTotal || offer.price.total || 0) - (offer.price.total || 0),
       outbound: {
         flightNo:         normalizeFlightNumber(carrier, flightNum),
         operatingAirline,

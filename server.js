@@ -17,6 +17,7 @@ const fs      = require('fs');
 const app    = express();
 const config = require('./config.json');
 const PORT   = process.env.PORT || config.port || 5000;
+const predictivePricing = require('./predictive_pricing.js');
 
 app.use(cors());
 app.use(express.json());
@@ -297,22 +298,35 @@ async function fetchProvider(provider, from, to, departDate, returnDate, pax, by
 
   // ── Parse offers ───────────────────────────────────────────────────────────
   try {
-    const offers = provider.getOffers(interceptedJson);
-    if (!offers || !offers.length) {
+    const rawOffers = provider.getOffers(interceptedJson);
+    if (!rawOffers || !rawOffers.length) {
       console.log(`${tag} No offers in data.`);
       return [];
     }
-    console.log(`${tag} Parsing ${offers.length} offers.`);
+    console.log(`${tag} Parsing ${rawOffers.length} offers.`);
 
-    // Build the context object passed to parseOffer()
-    const ctx = { from, to, isRoundTrip, ...sharedHelpers };
+    const flightZone = predictivePricing.getFlightZone(from, to, airportsData);
+    const ctx = {
+      from, to, departDate, returnDate, pax,
+      isRoundTrip,
+      flightZone,
+      ...sharedHelpers
+    };
 
-    return offers.map((offer, idx) => {
+    return rawOffers.map((offer, idx) => {
       try {
         const result = provider.parseOffer(offer, ctx);
+        if (!result) return null;
+        
         // Ensure id and provider are always set
         result.id       = result.id       || `${provider.name}-${idx}`;
         result.provider = result.provider || provider.name;
+        
+        // Self-Learning Commission Table Logic
+        if (result._commission != null && result._commission > 0) {
+          predictivePricing.learnCommission(provider.name, flightZone, result.airline, result._commission);
+        }
+        
         return result;
       } catch (e) {
         console.warn(`${tag} parseOffer failed for offer #${idx}:`, e.message);
@@ -357,6 +371,9 @@ function aggregateResults(allProviderResults) {
       if (combinedMap.has(key)) {
         // Same physical flight found in another provider — just add their price
         combinedMap.get(key).prices[provider] = flight.price;
+        if (flight._basePriceGDS && !combinedMap.get(key)._basePriceGDS) {
+          combinedMap.get(key)._basePriceGDS = flight._basePriceGDS;
+        }
       } else {
         // First time seeing this flight — create the merged entry
         const entry = {
@@ -366,12 +383,18 @@ function aggregateResults(allProviderResults) {
           stops:       flight.stops,
           hasLuggage:  flight.hasLuggage,
           prices:      {},   // Dynamically built from provider names
+          isPredicted: {},   // Track predicted providers
+          _basePriceGDS: null,
           outbound:    flight.outbound,
           returnLeg:   flight.returnLeg,
         };
         // Initialise all provider prices to null
-        providers.forEach(p => { entry.prices[p.name] = null; });
+        providers.forEach(p => { 
+          entry.prices[p.name] = null; 
+          entry.isPredicted[p.name] = false;
+        });
         entry.prices[provider] = flight.price;
+        if (flight._basePriceGDS) entry._basePriceGDS = flight._basePriceGDS;
         combinedMap.set(key, entry);
       }
     });
@@ -461,6 +484,11 @@ app.get('/api/flights/search', async (req, res) => {
     // Asynchronously update popular prices cache if applicable
     updatePopularPrices(merged, from, to);
 
+    // Clean up hidden fields before sending
+    merged.forEach(f => {
+      delete f._basePriceGDS;
+    });
+
     res.json(merged);
   } catch (err) {
     console.error('[Aggregator] Fatal error:', err.message);
@@ -499,6 +527,32 @@ app.get('/api/flights/stream', async (req, res) => {
         
         // Merge the current collected results
         const merged = aggregateResults(collectedResults);
+        
+        // --- Prediction Engine Logic ---
+        const flightZone = predictivePricing.getFlightZone(from, to, airportsData);
+        if (flightZone === 'Zone A' || flightZone === 'Zone C') {
+          const finishedProviders = new Set(collectedResults.map(r => r.provider));
+          const pendingProviders = providers.map(p => p.name).filter(p => !finishedProviders.has(p));
+          
+          if (pendingProviders.length > 0) {
+            merged.forEach(flight => {
+              if (flight._basePriceGDS) {
+                pendingProviders.forEach(pending => {
+                  if (flight.prices[pending] == null) {
+                    const comm = predictivePricing.getCommission(pending, flightZone, flight.airline);
+                    flight.prices[pending] = flight._basePriceGDS + comm;
+                    flight.isPredicted[pending] = true;
+                  }
+                });
+              }
+            });
+          }
+        }
+        
+        // Clean up hidden fields before sending
+        merged.forEach(f => {
+          delete f._basePriceGDS;
+        });
         
         // Stream update to the client
         res.write(`data: ${JSON.stringify({ type: 'update', data: merged })}\n\n`);

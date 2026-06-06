@@ -35,6 +35,8 @@ const i18n = {
     stops_direct:'Non-stop',stops_1:'1 stop',stops_2:'2 stops',
     tag_luggage:'Carry-on',tag_refundable:'Refundable',
     popular_eyebrow:'Popular destinations',popular_title1:'Most',popular_title2:' booked routes',
+    best_deal:'Best price',
+    estimated:'Estimated',
     from_price:'from',
     footer_desc:'Compare Volz and MondialBooking flight prices from Algeria. Pay with CIB, Dahabia, or cash delivery.',
     footer_providers:'Partners',footer_routes:'Destinations',
@@ -66,8 +68,10 @@ const i18n = {
     stops_direct:'Sans escale',stops_1:'1 escale',stops_2:'2 escales',
     tag_luggage:'Bagage cabine',tag_refundable:'Remboursable',
     popular_eyebrow:'Destinations populaires',popular_title1:'Routes',popular_title2:' les plus réservées',
+    best_deal:'Meilleur prix',
+    estimated:'Estimé',
     from_price:'à partir de',
-    footer_desc:'Comparez les vols Volz et MondialBooking depuis l\'Algérie. Paiement CIB, Dahabia et livraison.',
+    footer_desc:'Comparez les prix des vols depuis l\'Algérie. Payez par CIB, Dahabia ou à la livraison.',
     footer_providers:'Partenaires',footer_routes:'Destinations',
     footer_rights:'© 2026 TayaranDZ — Tous droits réservés.',
     no_results_title:'Aucun vol trouvé',no_results_sub:'Essayez d\'autres aéroports ou dates',
@@ -652,8 +656,11 @@ async function doSearch() {
 // ===== Sort =====
 function applySort() {
   let r=[...state.flights];
-  if(state.filterStops==='direct') r=r.filter(f=>f.stops===0);
-  else if(state.filterStops==='1stop') r=r.filter(f=>f.stops<=1);
+  if (state.filterStops === 'direct') {
+    r = r.filter(f => f.isRoundTrip ? (f.outbound.stops === 0 && f.returnLeg.stops === 0) : f.stops === 0);
+  } else if (state.filterStops === '1stop') {
+    r = r.filter(f => f.isRoundTrip ? (f.outbound.stops <= 1 && f.returnLeg.stops <= 1) : f.stops <= 1);
+  }
   if(state.filterLuggage) r=r.filter(f=>f.hasLuggage);
 
   // Airline company filter
