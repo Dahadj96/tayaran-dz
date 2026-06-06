@@ -187,10 +187,16 @@ module.exports = {
       ...securityHeaders,
     };
     
+    // Dynamically resolve API prefix based on trip type in page URL
+    const pageUrl = page.url();
+    const isRoundTrip = pageUrl.includes('Round%20Trip') || pageUrl.includes('tripType%22%3A%22Round%20Trip%22');
+    const apiBase = isRoundTrip ? '/server/api/flights/flights/results' : '/server/api/flightsagg/flights/results';
+    console.log(`[H24Voyages] Augmenting for isRoundTrip=${isRoundTrip}. Using API base: ${apiBase}`);
+
     // Helper to fetch a results page using server-side fetch with generated signatures
     const fetchResultsPage = async (airline, pageNum) => {
       try {
-        const resultsPath = `/server/api/flightsagg/flights/results?searchCode=${searchCode}&airline=${airline || ''}&supplier=&page=${pageNum}`;
+        const resultsPath = `${apiBase}?searchCode=${searchCode}&airline=${airline || ''}&supplier=&page=${pageNum}`;
         const timestamp = Date.now().toString();
         const message = `GET:${resultsPath}::${timestamp}`;
         const signature = crypto.createHmac('sha256', secret).update(message).digest('hex');
