@@ -464,19 +464,22 @@ function processFlights(rawList) {
   if (state.tripType === 'roundtrip') {
     return rawList.map(f => {
       if (f.isRoundTrip && f.outbound && f.returnLeg) {
+        const outStops = f.outbound.stops !== undefined ? f.outbound.stops : f.stops;
+        const retStops = f.returnLeg.stops !== undefined ? f.returnLeg.stops : f.stops;
         return {
           ...f,
+          stops: Math.max(outStops, retStops),
           duration: f.outbound.duration || '0h',
           outbound: {
             ...f.outbound,
             airline: f.airline,
-            stops: f.outbound.stops !== undefined ? f.outbound.stops : f.stops,
+            stops: outStops,
             hasLuggage: f.hasLuggage
           },
           returnLeg: {
             ...f.returnLeg,
             airline: f.airline,
-            stops: f.returnLeg.stops !== undefined ? f.returnLeg.stops : f.stops,
+            stops: retStops,
             hasLuggage: f.hasLuggage
           }
         };
