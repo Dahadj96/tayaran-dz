@@ -67,13 +67,7 @@ module.exports = {
     const airline   = offer.journey?.[0]?.flightSegments?.[0]?.marketingAirline
                    || offer.journey?.[0]?.flightSegments?.[0]?.operatingAirline
                    || 'XX';
-    // Use base price + known commission to ensure frontend matches reality, since Mondial JSON underreports its service fee by 100 DZD on domestic AH
-    const predictivePricing = require('../predictive_pricing');
-    const airportsData = require('../server').airportsData || [];
-    const flightZone = predictivePricing.getFlightZone(from, to, airportsData);
-    const comm = predictivePricing.getCommission('mondial', flightZone, airline);
-    const gdsBase = offer.originalOffer?.price?.total ? parseFloat(offer.originalOffer.price.total) : (offer.fare?.baseFare || 0);
-    const price = gdsBase ? gdsBase + comm : (offer.fare?.totalFare || 0);
+    const price     = offer.fare?.totalFare || 0;
     // Duration & stops from flight info
     const durationMins   = offer.journey?.[0]?.flight?.flightInfo?.durationTime;
     const realDuration   = normalizeDuration(durationMins);

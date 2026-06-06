@@ -536,27 +536,25 @@ app.get('/api/flights/stream', async (req, res) => {
         // Merge the current collected results
         const merged = aggregateResults(collectedResults);
         
-        // --- Prediction & Normalization Engine Logic ---
+        // --- Prediction Engine Logic ---
         const flightZone = predictivePricing.getFlightZone(from, to, airportsData);
         if (flightZone === 'Zone A' || flightZone === 'Zone C') {
-          merged.forEach(flight => {
-            if (flight._basePriceGDS) {
-              providers.forEach(p => {
-                const comm = predictivePricing.getCommission(p.name, flightZone, flight.airline);
-                const predictedPrice = flight._basePriceGDS + comm;
-                
-                // Track if it's purely predicted (pending) or if we are overriding an incorrect scraped price
-                if (flight.prices[p.name] == null) {
-                  flight.prices[p.name] = predictedPrice;
-                  flight.isPredicted[p.name] = true;
-                } else {
-                  // If the scraped price differs from our math, override it to ensure perfect consistency
-                  flight.prices[p.name] = predictedPrice;
-                  // We don't mark it as predicted because it's a finished provider, we just normalized its price.
-                }
-              });
-            }
-          });
+          const finishedProviders = new Set(collectedResults.map(r => r.provider));
+          const pendingProviders = providers.map(p => p.name).filter(p => !finishedProviders.has(p));
+          
+          if (pendingProviders.length > 0) {
+            merged.forEach(flight => {
+              if (flight._basePriceGDS) {
+                pendingProviders.forEach(pending => {
+                  if (flight.prices[pending] == null) {
+                    const comm = predictivePricing.getCommission(pending, flightZone, flight.airline);
+                    flight.prices[pending] = flight._basePriceGDS + comm;
+                    flight.isPredicted[pending] = true;
+                  }
+                });
+              }
+            });
+          }
         }
         
         // Clean up hidden fields before sending

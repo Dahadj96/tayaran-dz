@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const COMMISSIONS_FILE = path.join(__dirname, 'commissions.json');
+const DEFAULT_COMMISSIONS_FILE = path.join(__dirname, 'commissions.default.json');
 
 // Helper to determine the zone of the flight
 function getFlightZone(originIata, destIata, airportsData) {
@@ -30,6 +31,14 @@ function loadCommissions() {
       return JSON.parse(fs.readFileSync(COMMISSIONS_FILE, 'utf-8'));
     } catch (e) {
       console.error('[PredictivePricing] Error reading commissions:', e);
+    }
+  } else if (fs.existsSync(DEFAULT_COMMISSIONS_FILE)) {
+    try {
+      const defaultData = fs.readFileSync(DEFAULT_COMMISSIONS_FILE, 'utf-8');
+      fs.writeFileSync(COMMISSIONS_FILE, defaultData, 'utf-8'); // Create the local editable copy
+      return JSON.parse(defaultData);
+    } catch (e) {
+      console.error('[PredictivePricing] Error initializing default commissions:', e);
     }
   }
   return {};
