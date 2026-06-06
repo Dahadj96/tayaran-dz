@@ -156,92 +156,79 @@ module.exports = {
       console.log(`[Volz] Found ${totalOffers} total offers (only got ${currentOffers}), fetching pagination...`);
     }
 
-    const pageUrlStr = page.url();
-    const urlObj = new URL(pageUrlStr);
-    const urlParams = urlObj.searchParams;
-    const tripType = urlParams.get('trip_type') || 'OW';
-    const origin = urlParams.get('origin[0]');
-    const dest = urlParams.get('destination[0]');
-    const depDate = urlParams.get('departure_date[0]');
+    console.log(`[Volz] Starting UI interaction data augmentation...`);
     
-    const basePayload = {
-      search_code: searchCode,
-      trip_type: tripType,
-      adults: parseInt(urlParams.get('adults')) || 1,
-      children: parseInt(urlParams.get('children')) || 0,
-      held_infants: parseInt(urlParams.get('held_infants')) || 0,
-      seated_infants: parseInt(urlParams.get('seated_infants')) || 0,
-      max_connections: parseInt(urlParams.get('max_connections')) || 2,
-      refundable: parseInt(urlParams.get('refundable')) || 0,
-      luggage_included: parseInt(urlParams.get('luggage_included')) || 0,
-      cabin: "ECONOMY",
-      destinations: [{ origin: origin, destination: dest, departure_date: depDate }],
-    };
-
-    if (tripType === 'RT') {
-      const retDate = urlParams.get('return_date[0]');
-      if (retDate) {
-        basePayload.destinations.push({ origin: dest, destination: origin, departure_date: retDate });
+    const newOffers = [];
+    const seenIds = new Set(initialJson.data.map(o => JSON.stringify(o))); // Volz offers might not have flightId at root, so stringify
+    
+    // Set up response interceptor
+    const responseHandler = async (response) => {
+      const url = response.url();
+      if (url.includes('/flight/availability') && response.request().method() === 'POST') {
+        try {
+          const json = await response.json();
+          if (json && json.data && Array.isArray(json.data)) {
+            for (const offer of json.data) {
+              const id = JSON.stringify(offer);
+              if (!seenIds.has(id)) {
+                seenIds.add(id);
+                newOffers.push(offer);
+              }
+            }
+          }
+        } catch (e) {}
       }
-    }
-
-    const baseHeaders = {
-      'accept': 'application/json',
-      'content-type': 'application/json',
-      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
-      'referer': 'https://vols.volz.app/',
-      'origin': 'https://vols.volz.app',
-      ...securityHeaders,
     };
-
-    const fetchAvailability = async (payload) => {
-      try {
-        const res = await fetch('https://api.volz.app/v1/flight/availability', {
-          method: 'POST',
-          headers: baseHeaders,
-          body: JSON.stringify(payload)
+    
+    page.on('response', responseHandler);
+    
+    try {
+      // Step 1: Scroll to bottom repeatedly
+      for (let i = 0; i < 4; i++) {
+        await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+        await new Promise(r => setTimeout(r, 1000));
+      }
+      
+      // Step 2: Try to click all filter checkboxes (like airlines)
+      await page.evaluate(async () => {
+        const checkboxes = Array.from(document.querySelectorAll('input[type="checkbox"], .checkbox, .ant-checkbox-wrapper'));
+        for (const cb of checkboxes) {
+          try {
+            if (cb.offsetHeight > 0) {
+              cb.click();
+              await new Promise(r => setTimeout(r, 500));
+            }
+          } catch(e) {}
+        }
+      });
+      
+      await new Promise(r => setTimeout(r, 3000));
+      
+      // Step 3: Try standard pagination Next button / Load More button
+      for (let p = 0; p < 10; p++) {
+        const clicked = await page.evaluate(() => {
+          const buttons = Array.from(document.querySelectorAll('button, a'));
+          const nextBtn = buttons.find(b => {
+            const txt = (b.innerText || '').toLowerCase();
+            return txt.includes('plus') || txt.includes('more') || txt.includes('suiv') || b.classList.contains('ant-pagination-next');
+          });
+          
+          if (nextBtn && !nextBtn.disabled && nextBtn.offsetHeight > 0) {
+            nextBtn.click();
+            return true;
+          }
+          return false;
         });
-        if (!res.ok) return { offers: [], total: 0 };
-        const json = await res.json();
-        if (json && json.data && Array.isArray(json.data)) {
-          return { offers: json.data, total: json.total || json.data.length || 0 };
-        }
-        return { offers: [], total: 0 };
-      } catch (e) {
-        return { offers: [], total: 0 };
+        if (!clicked) break;
+        await new Promise(r => setTimeout(r, 2000));
       }
-    };
-
-    const fetchedOffers = [];
-
-    // Fetch remaining pages first for the main search
-    if (totalOffers > currentOffers) {
-      const tPages = Math.ceil(totalOffers / 20);
-      for (let p = 2; p <= tPages; p++) {
-        const mainPayload = { ...basePayload, page: p, sort: "price", desc: false, itinerary_stops: {} };
-        const { offers } = await fetchAvailability(mainPayload);
-        fetchedOffers.push(...offers);
-      }
+    } catch (e) {
+      console.log(`[Volz] UI interaction error: ${e.message}`);
+    } finally {
+      page.off('response', responseHandler);
     }
 
-    // Fetch missing airlines
-    for (const airline of missingAirlines) {
-      const payload = { ...basePayload, air_companies: [airline], sort: "price", desc: false, itinerary_stops: {} };
-      const { offers, total } = await fetchAvailability(payload);
-      fetchedOffers.push(...offers);
-
-      if (total > offers.length) {
-        const exPages = Math.ceil(total / 20);
-        for (let p = 2; p <= exPages; p++) {
-          const payloadEx = { ...payload, page: p };
-          const { offers: extra } = await fetchAvailability(payloadEx);
-          fetchedOffers.push(...extra);
-        }
-      }
-    }
-
-    const newOffers = fetchedOffers;
-    
+    // newOffers already holds the offers captured by the interceptor
     if (newOffers && newOffers.length > 0) {
       initialJson.data.push(...newOffers);
       console.log(`[Volz] Added ${newOffers.length} new offers!`);

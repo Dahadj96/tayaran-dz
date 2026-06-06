@@ -161,13 +161,20 @@ module.exports = {
     const fetchResultsPage = async (airline, pageNum) => {
       try {
         const url = `https://vols.mondialbooking.com/server/api/flights/flights/results?searchCode=${searchCode}&airline=${airline || ''}&supplier=&page=${pageNum}`;
-        const res = await fetch(url, { headers: baseHeaders });
-        if (!res.ok) return { offers: [], total: 0 };
-        const json = await res.json();
-        if (json && json.data && json.data.offers && Array.isArray(json.data.offers)) {
-          return { offers: json.data.offers, total: json.data.total || 0 };
-        }
-        return { offers: [], total: 0 };
+        const result = await page.evaluate(async (fetchUrl) => {
+          try {
+            const res = await fetch(fetchUrl);
+            if (!res.ok) return { offers: [], total: 0 };
+            const json = await res.json();
+            if (json && json.data && json.data.offers && Array.isArray(json.data.offers)) {
+              return { offers: json.data.offers, total: json.data.total || 0 };
+            }
+            return { offers: [], total: 0 };
+          } catch (e) {
+            return { offers: [], total: 0 };
+          }
+        }, url);
+        return result;
       } catch (e) {
         return { offers: [], total: 0 };
       }
