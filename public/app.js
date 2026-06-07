@@ -597,6 +597,7 @@ async function doSearch() {
 
   showSkeletons(5);
   state.searchDone = true;
+  state.searchParams = { from, to };
   state.rawFlights = [];
   state.flights = [];
   state.filtered = [];
@@ -799,8 +800,10 @@ function buildCard(f, idx) {
   const buildCompactLeg = (leg, alObj, code) => {
     const shift = leg.arrivalDayShift || 0;
     const stops = leg.stops !== undefined ? leg.stops : 0;
-    const dCity = getApt(leg.origin)?.city?.[state.lang] || leg.origin;
-    const aCity = getApt(leg.destination)?.city?.[state.lang] || leg.destination;
+    const dCityObj = getApt(leg.origin)?.city?.[state.lang];
+    const aCityObj = getApt(leg.destination)?.city?.[state.lang];
+    const dCity = dCityObj ? `${dCityObj} (${leg.origin})` : leg.origin;
+    const aCity = aCityObj ? `${aCityObj} (${leg.destination})` : leg.destination;
     
     return `
     <div class="fr-leg-row">
@@ -886,7 +889,7 @@ function buildCard(f, idx) {
   ${i === 0 ? `<div class="pr-best-badge">${IC.ok} ${t.best_deal || 'Meilleur prix'}</div>` : '<div class="pr-badge-placeholder"></div>'}
   <div class="pr-spacer"></div>
   <a href="${p.url}" target="_blank" rel="noopener" class="pr-book"
-     onclick="handleBookRedirect(event,'${p.key}','${outbound.origin}','${outbound.destination}','${dStr}','${rStr}',${totalPax},'${p.url}')">
+     onclick="handleBookRedirect(event,'${p.key}','${state.searchParams?.from || outbound.origin}','${state.searchParams?.to || outbound.destination}','${dStr}','${rStr}',${totalPax},'${p.url}')">
     ${p.name} ${IC.link}
   </a>
 </div>`).join('');
