@@ -164,10 +164,19 @@ module.exports = {
     const seenIds = new Set(initialJson.data.map(o => JSON.stringify(o))); // Volz offers might not have flightId at root, so stringify
     
     // Set up response interceptor
+    let capturedPostUrl = '';
+    let capturedPostHeaders = {};
+    let capturedPostBody = null;
+
     const responseHandler = async (response) => {
       const url = response.url();
       if (url.includes('/flight/availability') && response.request().method() === 'POST') {
         try {
+          if (!capturedPostBody) {
+            capturedPostUrl = url;
+            capturedPostHeaders = response.request().headers();
+            capturedPostBody = response.request().postData();
+          }
           const json = await response.json();
           if (json && json.data && Array.isArray(json.data)) {
             for (const offer of json.data) {
@@ -185,30 +194,91 @@ module.exports = {
     page.on('response', responseHandler);
     
     try {
-      // Step 1: Scroll to bottom repeatedly
-      for (let i = 0; i < 4; i++) {
-        await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-        await new Promise(r => setTimeout(r, 1000));
-      }
-      
-
-      // Step 3: Try standard pagination Next button / Load More button
-      for (let p = 0; p < 10; p++) {
-        const clicked = await page.evaluate(() => {
-          const buttons = Array.from(document.querySelectorAll('button, a'));
-          const nextBtn = buttons.find(b => {
-            const txt = (b.innerText || '').toLowerCase();
-            return txt.includes('plus') || txt.includes('more') || txt.includes('suiv') || b.classList.contains('ant-pagination-next');
-          });
-          
-          if (nextBtn && !nextBtn.disabled && nextBtn.offsetHeight > 0) {
-            nextBtn.click();
-            return true;
-          }
-          return false;
+      // Step 1: Trigger a request to capture payload
+      await page.evaluate(() => {
+        const buttons = Array.from(document.querySelectorAll('button, a'));
+        let btn = buttons.find(b => {
+          const txt = (b.innerText || '').toLowerCase();
+          return txt.includes('plus') || txt.includes('more') || txt.includes('suiv') || b.classList.contains('ant-pagination-next');
         });
-        if (!clicked) break;
-        await new Promise(r => setTimeout(r, 2000));
+        if (!btn || btn.disabled) {
+           const airlineTabs = Array.from(document.querySelectorAll('div')).filter(el => {
+               const txt = el.innerText || '';
+               return txt.includes('DZD') && el.querySelector('img'); 
+           });
+           if (airlineTabs.length > 0) btn = airlineTabs[0];
+        }
+        if (btn) btn.click();
+      });
+      await new Promise(r => setTimeout(r, 2000));
+      
+      if (capturedPostBody && capturedPostUrl) {
+        console.log('[Volz] Captured POST payload:', capturedPostBody);
+        console.log('[Volz] Executing programmatic pagination...');
+        const pageSize = currentOffers > 0 ? currentOffers : 20;
+        const extraPages = Math.ceil(totalOffers / pageSize);
+        
+        for (let p = 2; p <= extraPages; p++) {
+          const fetched = await page.evaluate(async (url, headers, bodyStr, pageNum) => {
+            try {
+              // Filter headers to avoid forbidden header names in fetch
+              const safeHeaders = {};
+              for (const [k, v] of Object.entries(headers)) {
+                const lowerK = k.toLowerCase();
+                if (k.startsWith(':') || ['host', 'connection', 'content-length', 'origin', 'referer', 'accept-encoding'].includes(lowerK)) {
+                  continue;
+                }
+                safeHeaders[k] = v;
+              }
+              
+              let bodyObj = JSON.parse(bodyStr);
+              bodyObj.page = pageNum;
+              const res = await fetch(url, {
+                method: 'POST',
+                headers: safeHeaders,
+                body: JSON.stringify(bodyObj)
+              });
+              if (!res.ok) {
+                 return { error: `Fetch failed with status: ${res.status}` };
+              }
+              const json = await res.json();
+              return (json && json.data && Array.isArray(json.data)) ? json.data : [];
+            } catch (e) {
+              return { error: `Fetch error: ${e.message}` };
+            }
+          }, capturedPostUrl, capturedPostHeaders, capturedPostBody, p);
+          
+          if (fetched && fetched.error) {
+            console.log('[Volz] Pagination fetch failed:', fetched.error);
+          } else if (fetched && fetched.length > 0) {
+            for (const offer of fetched) {
+              const id = JSON.stringify(offer);
+              if (!seenIds.has(id)) {
+                seenIds.add(id);
+                newOffers.push(offer);
+              }
+            }
+          }
+        }
+      } else {
+        console.log('[Volz] Could not capture POST payload. Falling back to UI interaction...');
+        // Step 2: Try standard pagination Next button
+        for (let p = 0; p < 10; p++) {
+          const clicked = await page.evaluate(() => {
+            const buttons = Array.from(document.querySelectorAll('button, a'));
+            const nextBtn = buttons.find(b => {
+              const txt = (b.innerText || '').toLowerCase();
+              return txt.includes('plus') || txt.includes('more') || txt.includes('suiv') || b.classList.contains('ant-pagination-next');
+            });
+            if (nextBtn && !nextBtn.disabled && nextBtn.offsetHeight > 0) {
+              nextBtn.click();
+              return true;
+            }
+            return false;
+          });
+          if (!clicked) break;
+          await new Promise(r => setTimeout(r, 2000));
+        }
       }
     } catch (e) {
       console.log(`[Volz] UI interaction error: ${e.message}`);
