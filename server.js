@@ -180,6 +180,7 @@ async function fetchProvider(provider, from, to, departDate, returnDate, pax, by
   const isRoundTrip = !!returnDate;
   let interceptedJson = null;
   let capturedSecurityHeaders = {};
+  let capturedApiRequest = null;
 
   // ── Live scrape ────────────────────────────────────────────────────────────
   try {
@@ -206,6 +207,14 @@ async function fetchProvider(provider, from, to, departDate, returnDate, pax, by
         // Also capture cookies
         if (headers['cookie']) {
           capturedSecurityHeaders['cookie'] = headers['cookie'];
+        }
+        // Capture initial POST request payload for programmatic pagination
+        if (request.method() === 'POST' && request.postData() && !capturedApiRequest) {
+          capturedApiRequest = {
+            url: url,
+            headers: headers,
+            body: request.postData()
+          };
         }
       }
     });
@@ -247,7 +256,7 @@ async function fetchProvider(provider, from, to, departDate, returnDate, pax, by
         console.log(`${tag} Captured ${Object.keys(capturedSecurityHeaders).length} security headers for augmentation.`);
       }
       try {
-        interceptedJson = await provider.augmentData(page, interceptedJson, capturedSecurityHeaders);
+        interceptedJson = await provider.augmentData(page, interceptedJson, capturedSecurityHeaders, capturedApiRequest);
       } catch (e) {
         console.error(`${tag} Augment error:`, e.message);
       }

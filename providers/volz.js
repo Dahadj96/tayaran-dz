@@ -126,167 +126,78 @@ module.exports = {
     };
   },
 
-  async augmentData(page, initialJson, securityHeaders = {}) {
-    if (!initialJson || !initialJson.data || !initialJson.search_code) return initialJson;
+  async augmentData(page, initialJson, securityHeaders = {}, capturedApiRequest = null) {
+    if (!initialJson || !initialJson.data) return initialJson;
     
-    const searchCode = initialJson.search_code;
-    const availableAirlines = initialJson.filters?.cheapests ? Object.keys(initialJson.filters.cheapests) : [];
-    
-    if (availableAirlines.length === 0) return initialJson;
-    
-    // Find airlines we already have in the initial offers
-    const existingAirlines = new Set();
-    for (const offer of initialJson.data) {
-      if (offer.itineraries && offer.itineraries.length > 0 && offer.itineraries[0].segments && offer.itineraries[0].segments.length > 0) {
-        existingAirlines.add(offer.itineraries[0].segments[0].carrier);
-      }
-    }
-    
-    // Find missing airlines
-    const missingAirlines = availableAirlines
-      .filter(code => code && !existingAirlines.has(code));
-      
-    const totalOffers = initialJson.total || 0;
+    // We already have some initial offers
     const currentOffers = initialJson.data ? initialJson.data.length : 0;
-    
-    if (missingAirlines.length === 0 && totalOffers <= currentOffers) return initialJson;
-    
-    if (missingAirlines.length > 0) {
-      console.log(`[Volz] Missing airlines detected: ${missingAirlines.join(', ')}`);
-    }
-    if (totalOffers > currentOffers) {
-      console.log(`[Volz] Found ${totalOffers} total offers (only got ${currentOffers}), fetching pagination...`);
-    }
-
-    console.log(`[Volz] Starting UI interaction data augmentation...`);
+    if (currentOffers === 0) return initialJson;
     
     const newOffers = [];
-    const seenIds = new Set(initialJson.data.map(o => JSON.stringify(o))); // Volz offers might not have flightId at root, so stringify
+    const seenIds = new Set(initialJson.data.map(o => JSON.stringify(o)));
     
-    // Set up response interceptor
-    let capturedPostUrl = '';
-    let capturedPostHeaders = {};
-    let capturedPostBody = null;
-
-    const responseHandler = async (response) => {
-      const url = response.url();
-      if (url.includes('/flight/availability') && response.request().method() === 'POST') {
-        try {
-          if (!capturedPostBody) {
-            capturedPostUrl = url;
-            capturedPostHeaders = response.request().headers();
-            capturedPostBody = response.request().postData();
-          }
-          const json = await response.json();
-          if (json && json.data && Array.isArray(json.data)) {
-            for (const offer of json.data) {
-              const id = JSON.stringify(offer);
-              if (!seenIds.has(id)) {
-                seenIds.add(id);
-                newOffers.push(offer);
-              }
-            }
-          }
-        } catch (e) {}
-      }
-    };
-    
-    page.on('response', responseHandler);
-    
-    try {
-      // Step 1: Trigger a request to capture payload
-      await page.evaluate(() => {
-        const buttons = Array.from(document.querySelectorAll('button, a'));
-        let btn = buttons.find(b => {
-          const txt = (b.innerText || '').toLowerCase();
-          return txt.includes('plus') || txt.includes('more') || txt.includes('suiv') || b.classList.contains('ant-pagination-next');
-        });
-        if (!btn || btn.disabled) {
-           const airlineTabs = Array.from(document.querySelectorAll('div')).filter(el => {
-               const txt = el.innerText || '';
-               return txt.includes('DZD') && el.querySelector('img'); 
-           });
-           if (airlineTabs.length > 0) btn = airlineTabs[0];
-        }
-        if (btn) btn.click();
-      });
-      await new Promise(r => setTimeout(r, 2000));
+    if (capturedApiRequest && capturedApiRequest.body) {
+      console.log('[Volz] Executing direct programmatic pagination from initial request...');
       
-      if (capturedPostBody && capturedPostUrl) {
-        console.log('[Volz] Captured POST payload:', capturedPostBody);
-        console.log('[Volz] Executing programmatic pagination...');
-        const pageSize = currentOffers > 0 ? currentOffers : 20;
-        const extraPages = Math.ceil(totalOffers / pageSize);
-        
-        for (let p = 2; p <= extraPages; p++) {
-          const fetched = await page.evaluate(async (url, headers, bodyStr, pageNum) => {
-            try {
-              // Filter headers to avoid forbidden header names in fetch
-              const safeHeaders = {};
-              for (const [k, v] of Object.entries(headers)) {
-                const lowerK = k.toLowerCase();
-                if (k.startsWith(':') || ['host', 'connection', 'content-length', 'origin', 'referer', 'accept-encoding'].includes(lowerK)) {
-                  continue;
-                }
-                safeHeaders[k] = v;
+      // Loop up to 50 pages (1000 flights max) to be safe, break when no more flights
+      for (let p = 2; p <= 50; p++) {
+        const fetched = await page.evaluate(async (url, headers, bodyStr, pageNum) => {
+          try {
+            // Filter headers to avoid forbidden header names in fetch
+            const safeHeaders = {};
+            for (const [k, v] of Object.entries(headers)) {
+              const lowerK = k.toLowerCase();
+              if (k.startsWith(':') || ['host', 'connection', 'content-length', 'origin', 'referer', 'accept-encoding'].includes(lowerK)) {
+                continue;
               }
-              
-              let bodyObj = JSON.parse(bodyStr);
-              bodyObj.page = pageNum;
-              const res = await fetch(url, {
-                method: 'POST',
-                headers: safeHeaders,
-                body: JSON.stringify(bodyObj)
-              });
-              if (!res.ok) {
-                 return { error: `Fetch failed with status: ${res.status}` };
-              }
-              const json = await res.json();
-              return (json && json.data && Array.isArray(json.data)) ? json.data : [];
-            } catch (e) {
-              return { error: `Fetch error: ${e.message}` };
+              safeHeaders[k] = v;
             }
-          }, capturedPostUrl, capturedPostHeaders, capturedPostBody, p);
-          
-          if (fetched && fetched.error) {
-            console.log('[Volz] Pagination fetch failed:', fetched.error);
-          } else if (fetched && fetched.length > 0) {
-            for (const offer of fetched) {
-              const id = JSON.stringify(offer);
-              if (!seenIds.has(id)) {
-                seenIds.add(id);
-                newOffers.push(offer);
-              }
+            
+            let bodyObj = JSON.parse(bodyStr);
+            bodyObj.page = pageNum;
+            
+            const res = await fetch(url, {
+              method: 'POST',
+              headers: safeHeaders,
+              body: JSON.stringify(bodyObj)
+            });
+            
+            if (!res.ok) {
+               return { error: `Fetch failed with status: ${res.status}` };
+            }
+            const json = await res.json();
+            return (json && json.data && Array.isArray(json.data)) ? json.data : [];
+          } catch (e) {
+            return { error: `Fetch error: ${e.message}` };
+          }
+        }, capturedApiRequest.url, capturedApiRequest.headers, capturedApiRequest.body, p);
+        
+        if (fetched && fetched.error) {
+          console.log(`[Volz] Pagination fetch failed on page ${p}:`, fetched.error);
+          break; // Stop paginating if server blocks us
+        } else if (fetched && fetched.length > 0) {
+          let addedCount = 0;
+          for (const offer of fetched) {
+            const id = JSON.stringify(offer);
+            if (!seenIds.has(id)) {
+              seenIds.add(id);
+              newOffers.push(offer);
+              addedCount++;
             }
           }
-        }
-      } else {
-        console.log('[Volz] Could not capture POST payload. Falling back to UI interaction...');
-        // Step 2: Try standard pagination Next button
-        for (let p = 0; p < 10; p++) {
-          const clicked = await page.evaluate(() => {
-            const buttons = Array.from(document.querySelectorAll('button, a'));
-            const nextBtn = buttons.find(b => {
-              const txt = (b.innerText || '').toLowerCase();
-              return txt.includes('plus') || txt.includes('more') || txt.includes('suiv') || b.classList.contains('ant-pagination-next');
-            });
-            if (nextBtn && !nextBtn.disabled && nextBtn.offsetHeight > 0) {
-              nextBtn.click();
-              return true;
-            }
-            return false;
-          });
-          if (!clicked) break;
-          await new Promise(r => setTimeout(r, 2000));
+          if (addedCount === 0) {
+            console.log(`[Volz] Page ${p} returned duplicate flights, stopping pagination.`);
+            break;
+          }
+        } else {
+          console.log(`[Volz] Page ${p} returned empty, finished pagination.`);
+          break; // Reached the end
         }
       }
-    } catch (e) {
-      console.log(`[Volz] UI interaction error: ${e.message}`);
-    } finally {
-      page.off('response', responseHandler);
+    } else {
+      console.log('[Volz] No captured POST payload available. Skipping pagination.');
     }
 
-    // newOffers already holds the offers captured by the interceptor
     if (newOffers && newOffers.length > 0) {
       initialJson.data.push(...newOffers);
       console.log(`[Volz] Added ${newOffers.length} new offers!`);
