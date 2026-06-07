@@ -199,9 +199,9 @@ module.exports = {
     const fetchResultsPage = async (airline, pageNum) => {
       try {
         const url = `https://vols.dunevoyages.com/server/api/flights/flights/results?searchCode=${searchCode}&airline=${airline || ''}&supplier=&page=${pageNum}`;
-        const result = await page.evaluate(async (fetchUrl) => {
+        const result = await page.evaluate(async (fetchUrl, headers) => {
           try {
-            const res = await fetch(fetchUrl);
+            const res = await fetch(fetchUrl, { headers });
             if (!res.ok) return { offers: [], total: 0 };
             const json = await res.json();
             if (json && json.data && json.data.offers && Array.isArray(json.data.offers)) {
@@ -211,7 +211,7 @@ module.exports = {
           } catch (e) {
             return { offers: [], total: 0 };
           }
-        }, url);
+        }, url, baseHeaders);
         return result;
       } catch (e) {
         return { offers: [], total: 0 };
@@ -222,9 +222,10 @@ module.exports = {
     const totalOffers = initialJson.data.total || 0;
     const currentOffers = initialJson.data.offers.length;
     
-    if (totalOffers > currentOffers) {
-      const totalPages = Math.ceil(totalOffers / 50);
-      console.log(`[DuneVoyages] Found ${totalOffers} total offers, fetching all ${totalPages} pages...`);
+    if (totalOffers > currentOffers && currentOffers > 0) {
+      const pageSize = currentOffers;
+      const totalPages = Math.ceil(totalOffers / pageSize);
+      console.log(`[DuneVoyages] Found ${totalOffers} total offers (size ${pageSize}), fetching all ${totalPages} pages...`);
       
       const allPageOffers = [];
       for (let p = 1; p <= totalPages; p++) {
@@ -232,10 +233,7 @@ module.exports = {
         allPageOffers.push(...offers);
       }
       
-      if (allPageOffers.length > initialJson.data.offers.length) {
-        initialJson.data.offers = allPageOffers;
-        console.log(`[DuneVoyages] Replaced with ${allPageOffers.length} offers from full fetch!`);
-      } else if (allPageOffers.length > 0) {
+      if (allPageOffers.length > 0) {
         // Just append the ones we don't have
         const existingKeys = new Set(initialJson.data.offers.map(o => o.offerId || JSON.stringify(o)));
         const newOffers = allPageOffers.filter(o => !existingKeys.has(o.offerId || JSON.stringify(o)));
@@ -266,8 +264,9 @@ module.exports = {
       const { offers, total } = await fetchResultsPage(airline, 1);
       newOffers.push(...offers);
       
-      if (total > offers.length) {
-        const extraPages = Math.ceil(total / 50);
+      if (total > offers.length && offers.length > 0) {
+        const pageSize = offers.length;
+        const extraPages = Math.ceil(total / pageSize);
         for (let p = 2; p <= extraPages; p++) {
           const { offers: extra } = await fetchResultsPage(airline, p);
           newOffers.push(...extra);
