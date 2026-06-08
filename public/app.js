@@ -1283,7 +1283,8 @@ function renderCalendar() {
         <div class="cal-hdr">
           <button type="button" class="${prevBtnClass}" id="cal-prev-btn" aria-label="Mois précédent">${chevronLeft}</button>
           <span class="cal-month-title">${months[m1Month]} ${m1Year}</span>
-          <span style="width:32px"></span>
+          <span class="cal-spacer-desktop" style="width:32px"></span>
+          <button type="button" class="cal-nav-btn cal-next-btn-mobile" id="cal-next-btn-mobile" aria-label="Mois suivant">${chevronRight}</button>
         </div>
         <div class="cal-weekdays">
           ${weekdays.map(w => `<span class="cal-wkdy">${w}</span>`).join('')}
@@ -1321,7 +1322,7 @@ function renderCalendar() {
     renderCalendar();
   });
 
-  $('cal-next-btn')?.addEventListener('click', (e) => {
+  const nextBtnHandler = (e) => {
     e.stopPropagation();
     calendarState.currentMonth++;
     if (calendarState.currentMonth > 11) {
@@ -1329,7 +1330,10 @@ function renderCalendar() {
       calendarState.currentYear++;
     }
     renderCalendar();
-  });
+  };
+
+  $('cal-next-btn')?.addEventListener('click', nextBtnHandler);
+  $('cal-next-btn-mobile')?.addEventListener('click', nextBtnHandler);
 
   container.querySelectorAll('.cal-day:not(.disabled)').forEach(dayEl => {
     const dateStr = dayEl.dataset.date;

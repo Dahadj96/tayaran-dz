@@ -1192,6 +1192,10 @@ footer{
 }
 
 /* Responsive adjust */
+.cal-next-btn-mobile {
+  display: none !important;
+}
+
 @media (max-width: 660px) {
   .cal-dropdown {
     width: 290px;
@@ -1203,6 +1207,12 @@ footer{
   }
   .cal-month-panel:last-child {
     display: none; /* Hide second month panel on mobile to fit nicely! */
+  }
+  .cal-next-btn-mobile {
+    display: flex !important;
+  }
+  .cal-spacer-desktop {
+    display: none !important;
   }
 }
 
