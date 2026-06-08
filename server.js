@@ -182,7 +182,40 @@ async function fetchProvider(provider, from, to, departDate, returnDate, pax, by
   let capturedSecurityHeaders = {};
   let capturedApiRequest = null;
 
-  // ── Live scrape ────────────────────────────────────────────────────────────
+  // ── 1. Check Disk Cache First ──────────────────────────────────────────────
+  if (!bypassCache) {
+    try {
+      if (fs.existsSync(cacheFile)) {
+        const stored = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
+        if (stored.route) {
+          const dateMatch = stored.departDate === departDate &&
+                            (stored.returnDate || null) === (returnDate || null);
+          const routeMatch = stored.route.from === from.toUpperCase() &&
+                             stored.route.to   === to.toUpperCase();
+          if (routeMatch && dateMatch) {
+            // Check cache age (30 minutes TTL)
+            const cacheAge = Date.now() - new Date(stored.storedAt).getTime();
+            if (cacheAge < 30 * 60 * 1000) {
+              console.log(`${tag} Loaded from cache (route + date match, < 30m old).`);
+              const offers = provider.getOffers(stored.data);
+              console.log(`${tag} Parsing ${offers.length} cached offers.`);
+              const parsed = offers.map(o => provider.parseOffer(o, {
+                from, to, departDate, returnDate, pax, isRoundTrip,
+                ...sharedHelpers
+              })).filter(Boolean);
+              return parsed;
+            } else {
+              console.log(`${tag} Cache expired (> 30m old), forcing live scrape.`);
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.error(`${tag} Cache read failed:`, e.message);
+    }
+  }
+
+  // ── 2. Live scrape ─────────────────────────────────────────────────────────
   try {
     console.log(`${tag} Fetching via JSON interception: ${from} -> ${to}`);
     const targetUrl = provider.buildSearchUrl(from, to, departDate, returnDate, pax);
@@ -284,9 +317,9 @@ async function fetchProvider(provider, from, to, departDate, returnDate, pax, by
     logDebugError(provider.name, err);
   }
 
-  // ── Disk cache fallback ────────────────────────────────────────────────────
-  if (!interceptedJson && !bypassCache) {
-    console.log(`${tag} Trying disk cache...`);
+  // ── 3. Disk cache fallback (if live scrape failed entirely) ────────────────
+  if (!interceptedJson) {
+    console.log(`${tag} Trying disk cache fallback...`);
     try {
       if (fs.existsSync(cacheFile)) {
         const stored = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
@@ -297,14 +330,14 @@ async function fetchProvider(provider, from, to, departDate, returnDate, pax, by
                              stored.route.to   === to.toUpperCase();
           if (routeMatch && dateMatch) {
             interceptedJson = stored.data;
-            console.log(`${tag} Loaded from cache (route + date match).`);
+            console.log(`${tag} Loaded from cache fallback (route + date match).`);
           } else {
             console.log(`${tag} Cache mismatch — skipping.`);
           }
         }
       }
     } catch (e) {
-      console.error(`${tag} Cache read failed:`, e.message);
+      console.error(`${tag} Cache read fallback failed:`, e.message);
     }
   }
 
@@ -539,7 +572,7 @@ app.get('/api/flights/stream', async (req, res) => {
   try {
     const promises = providers.map(async provider => {
       try {
-        const flights = await fetchProvider(provider, from, to, departDate, returnDate, passengerCount, true /* force bypass cache */);
+        const flights = await fetchProvider(provider, from, to, departDate, returnDate, passengerCount);
         collectedResults.push({ provider: provider.name, flights });
         
         // Merge the current collected results
